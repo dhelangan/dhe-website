@@ -6,8 +6,8 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="bg-zinc-50 dark:bg-black">
-      <div className="mx-auto w-full max-w-6xl px-5 py-12 sm:py-16">
+    <div className="bg-background">
+      <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
         <div className="grid gap-10">
           <PageHeader
             title="Contact"
@@ -15,9 +15,9 @@ export default function ContactPage() {
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <section className="rounded-3xl border border-black/10 bg-white p-8 shadow-sm dark:border-white/10 dark:bg-zinc-950">
+            <section className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 ">
               <h2 className="text-lg font-semibold tracking-tight">Send a message</h2>
-              <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+              <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                 This is a static form placeholder. Hook it up to your preferred
                 provider (email, API route, or CRM).
               </p>
@@ -47,16 +47,16 @@ export default function ContactPage() {
                 </label>
                 <button
                   type="button"
-                  className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200 dark:hover:text-black"
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
                 >
                   Send (placeholder)
                 </button>
               </form>
             </section>
 
-            <section className="rounded-3xl border border-black/10 bg-white p-8 shadow-sm dark:border-white/10 dark:bg-zinc-950">
+            <section className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 ">
               <h2 className="text-lg font-semibold tracking-tight">Quick links</h2>
-              <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+              <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                 Prefer email? Reach us at{' '}
                 <a
                   href="mailto:hello@dhelangan.studio"
@@ -85,3 +85,5 @@ export default function ContactPage() {
     </div>
   );
 }
+
+

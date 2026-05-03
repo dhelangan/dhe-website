@@ -1,13 +1,22 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #e6e6e6;
   --foreground: #171717;
+
+  --accent-orange: #ff802b;
+  --accent-red: #ff0201;
+  --surface: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-surface: var(--surface);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-red: var(--accent-red);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -16,6 +25,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --surface: #0f0f0f;
   }
 }
 
@@ -23,4 +34,15 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.intro {
+    background-color: orange;
+    background-image: url(/thumbnails/dhelangan.png);
+    background-position: right -20px center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    background-origin: content-box;
+    background-blend-mode: soft-light;
 }

@@ -32,11 +32,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full overflow-x-hidden">
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main className="container mx-auto mt-24">{children}</main>
         <SiteFooter />
       </body>
     </html>
   );
 }
+

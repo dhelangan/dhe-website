@@ -27,71 +27,81 @@ type TeamMember = {
 
 const pinnedGames: PinnedGame[] = [
   {
-    title: "Pinned Game: Ember Guild",
+    title: "Lorem Ipsum Ichi",
     tagline: "A cozy tactics board game with big-hearted heroes.",
     coverSrc: "/thumbnails/pinned-ember-guild.svg",
     tags: ["Board", "Tactics", "Co-op"],
   },
   {
-    title: "Pinned Game: Neon Drift",
+    title: "Lorem Ipsum Ni",
     tagline: "A fast-paced arcade racer for short, satisfying sessions.",
     coverSrc: "/thumbnails/pinned-neon-drift.svg",
     tags: ["Digital", "Racing", "Arcade"],
   },
   {
-    title: "Pinned Game: Skybound Stories",
+    title: "Lorem Ipsum San",
     tagline: "Narrative adventures you can replay with new choices.",
     coverSrc: "/thumbnails/pinned-skybound-stories.svg",
     tags: ["Digital", "Story", "Choice"],
-  },
+  }
 ];
 
 const boardPosts: Post[] = [
   {
-    title: "Devlog: Balancing First Turns",
-    subtitle: "How we tuned opening moves to feel meaningful without being swingy.",
+    title: "Lorem Ipsum 1",
+    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
     href: "/blog",
     badge: "Board",
   },
-  {
-    title: "Prototype Spotlight: Pocket Dungeons",
-    subtitle: "A compact dungeon-crawler you can teach in 3 minutes.",
-    imageSrc: "/thumbnails/board-prototype.svg",
-    href: "/portfolio",
-    badge: "Prototype",
-  },
-  {
-    title: "Playtest Notes: Table Presence",
-    subtitle: "Small component decisions that make a big impact on readability.",
-    imageSrc: "/thumbnails/board-components.svg",
+ {
+    title: "Lorem Ipsum 2",
+    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    imageSrc: "/thumbnails/board-balancing.svg",
     href: "/blog",
-    badge: "Design",
-  },
+    badge: "Board",
+  },{
+    title: "Lorem Ipsum 3",
+    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    imageSrc: "/thumbnails/board-balancing.svg",
+    href: "/blog",
+    badge: "Board",
+  },{
+    title: "Lorem Ipsum 4",
+    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    imageSrc: "/thumbnails/board-balancing.svg",
+    href: "/blog",
+    badge: "Board",
+  }
 ];
 
 const digitalPosts: Post[] = [
   {
-    title: "Build Update: Controller Feel",
-    subtitle: "Our approach to input buffering, coyote time, and juice.",
+    title: "Lorem Ipsum 5",
+    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
     href: "/blog",
     badge: "Digital",
   },
   {
-    title: "Tools: Rapid Level Greyboxing",
-    subtitle: "A lightweight workflow for iterating on layouts quickly.",
-    imageSrc: "/thumbnails/digital-greybox.svg",
-    href: "/services",
-    badge: "Workflow",
-  },
-  {
-    title: "Art Pass: Stylized Lighting",
-    subtitle: "Keeping scenes readable while still feeling cinematic.",
-    imageSrc: "/thumbnails/digital-lighting.svg",
-    href: "/portfolio",
-    badge: "Art",
-  },
+    title: "Lorem Ipsum 6",
+    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    imageSrc: "/thumbnails/digital-controller.svg",
+    href: "/blog",
+    badge: "Digital",
+  },{
+    title: "Lorem Ipsum 7",
+    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    imageSrc: "/thumbnails/digital-controller.svg",
+    href: "/blog",
+    badge: "Digital",
+  },{
+    title: "Lorem Ipsum 8",
+    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    imageSrc: "/thumbnails/digital-controller.svg",
+    href: "/blog",
+    badge: "Digital",
+  }
 ];
 
 const team: TeamMember[] = [
@@ -123,18 +133,19 @@ const team: TeamMember[] = [
 
 export default function Home() {
   return (
-    <div className="bg-zinc-50 dark:bg-black">
-      <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:py-14">
-        <div className="grid gap-10">
-          <section className="grid gap-5">
+    <div className="bg-background lg:px-18 sm:px-0 md:px-4">
+      <div className="block mx-auto w-full px-4">
+        <div className="space-y-8">
+
+          <section className="intro rounded p-4 block space-y-8">
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                Tabletop + Digital Game Studio
+              <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                Board Game + Video Game Studio
               </p>
               <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                We build playful worlds—on the table and on the screen.
+                We build playful worlds<br/>on the board and on the screen.
               </h1>
-              <p className="max-w-2xl text-base leading-7 text-zinc-700 dark:text-zinc-300">
+              <p className="max-w-2xl text-base leading-7 text-zinc-800 dark:text-zinc-200">
                 Dhelangan Studio crafts board games, interactive experiences, and
                 production-ready prototypes. Explore our pinned project, browse
                 recent posts, and meet the team.
@@ -144,24 +155,24 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/portfolio"
-                className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200 dark:hover:text-black"
+                className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
               >
                 View Portfolio
               </Link>
               <Link
                 href="/services"
-                className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-5 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
               >
                 Our Services
               </Link>
             </div>
           </section>
 
-          <section className="grid gap-4">
+          <section className="block">
             <div className="flex items-end justify-between gap-4">
-              <div>
+              <div className="mb-4">
                 <h2 className="text-xl font-semibold tracking-tight">Pinned Game</h2>
-                <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
                   A spotlight on what we’re building right now.
                 </p>
               </div>
@@ -187,20 +198,20 @@ export default function Home() {
                       <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                         {game.title}
                       </h3>
-                      <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                      <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                         {game.tagline}
                       </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3">
                       <Link
                         href="/portfolio"
-                        className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200 dark:hover:text-black"
+                        className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
                       >
                         See Details
                       </Link>
                       <Link
                         href="/contact"
-                        className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-5 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                        className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
                       >
                         Partner With Us
                       </Link>
@@ -222,10 +233,10 @@ export default function Home() {
             />
           </section>
 
-          <section className="grid gap-6">
-            <div>
+          <section className="block">
+            <div className="mb-4">
               <h2 className="text-xl font-semibold tracking-tight">Latest Posts</h2>
-              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
                 Board game notes alongside digital production updates.
               </p>
             </div>
@@ -267,10 +278,10 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="grid gap-4 rounded-3xl border border-black/10 bg-white p-8 shadow-sm dark:border-white/10 dark:bg-zinc-950">
+          <section className="block rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10">
             <div className="grid gap-2">
               <h2 className="text-xl font-semibold tracking-tight">About Us</h2>
-              <p className="max-w-3xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+              <p className="max-w-3xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                 We’re a small studio focused on strong game feel, readable systems,
                 and charming presentation. From tabletop prototyping to digital
                 vertical slices, we help ideas become playable.
@@ -279,23 +290,23 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/about-us"
-                className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-5 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
               >
                 Learn more
               </Link>
               <Link
                 href="/services"
-                className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200 dark:hover:text-black"
+                className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
               >
                 See services
               </Link>
             </div>
           </section>
 
-          <section className="grid gap-4">
-            <div>
+          <section className="block">
+            <div className="mb-4">
               <h2 className="text-xl font-semibold tracking-tight">Meet the Team</h2>
-              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
                 A cross-discipline crew of makers.
               </p>
             </div>
@@ -318,7 +329,7 @@ export default function Home() {
                       <h3 className="text-2xl font-semibold tracking-tight">
                         {member.name}
                       </h3>
-                      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                      <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
                         {member.role}
                       </p>
                     </div>
@@ -327,14 +338,14 @@ export default function Home() {
                         <Link
                           key={link.href}
                           href={link.href}
-                          className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-5 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                          className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
                         >
                           {link.label}
                         </Link>
                       ))}
                       <Link
                         href="/contact"
-                        className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200 dark:hover:text-black"
+                        className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
                       >
                         Work with us
                       </Link>
@@ -345,18 +356,18 @@ export default function Home() {
             />
           </section>
 
-          <section className="grid gap-4 rounded-3xl border border-black/10 bg-white p-8 text-center shadow-sm dark:border-white/10 dark:bg-zinc-950">
+          <section className="block rounded-3xl border border-black/10 bg-surface p-8 text-center shadow-sm dark:border-white/10">
             <h2 className="text-xl font-semibold tracking-tight">
               Have a project in mind?
             </h2>
-            <p className="mx-auto max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            <p className="mx-auto max-w-2xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
               Let’s talk about prototypes, co-development, or publishing support.
               We’ll reply with next steps and a quick discovery call.
             </p>
             <div className="flex justify-center">
               <Link
                 href="/contact"
-                className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200 dark:hover:text-black"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
               >
                 Contact Us
               </Link>
@@ -367,4 +378,6 @@ export default function Home() {
     </div>
   );
 }
+
+
 

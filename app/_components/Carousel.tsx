@@ -45,7 +45,7 @@ export default function Carousel({
 
   return (
     <section aria-label={label} className="w-full">
-      <div className="relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm dark:border-white/10 dark:bg-zinc-950">
+      <div className="relative max-w-full overflow-hidden rounded-2xl border border-black/10 bg-surface shadow-sm dark:border-white/10">
         <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${index * 100}%)` }}
@@ -115,3 +115,5 @@ export default function Carousel({
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
 }
+
+

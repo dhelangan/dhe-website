@@ -28,8 +28,8 @@ const posts = [
 
 export default function BlogPage() {
   return (
-    <div className="bg-zinc-50 dark:bg-black">
-      <div className="mx-auto w-full max-w-6xl px-5 py-12 sm:py-16">
+    <div className="bg-background">
+      <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
         <div className="grid gap-10">
           <PageHeader
             title="Blog"
@@ -41,7 +41,7 @@ export default function BlogPage() {
               <Link
                 key={post.title}
                 href={post.href}
-                className="rounded-3xl border border-black/10 bg-white p-7 shadow-sm transition-colors hover:bg-zinc-50 dark:border-white/10 dark:bg-zinc-950 dark:hover:bg-zinc-900/30"
+                className="rounded-3xl border border-black/10 bg-surface p-7 shadow-sm transition-colors hover:bg-zinc-50 dark:border-white/10  dark:hover:bg-zinc-900/30"
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-lg font-semibold tracking-tight">{post.title}</h2>
@@ -49,7 +49,7 @@ export default function BlogPage() {
                     {post.tag}
                   </span>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                   {post.excerpt}
                 </p>
               </Link>
@@ -60,3 +60,5 @@ export default function BlogPage() {
     </div>
   );
 }
+
+
