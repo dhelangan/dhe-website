@@ -4,7 +4,7 @@ export const metadata = {
   title: "News",
 };
 
-export default function BlogRedirectPage() {
-  redirect("/news");
+export default function NewsIndexPage() {
+  redirect("/news/page/1");
 }
 

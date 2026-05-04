@@ -9,7 +9,7 @@ const navItems = [
   { href: "/about-us", label: "About Us" },
   { href: "/services", label: "Services" },
   { href: "/portfolio", label: "Portfolio" },
-  { href: "/blog", label: "Blog" },
+  { href: "/news", label: "News" },
 ] as const;
 
 export default function SiteHeader() {
@@ -165,5 +165,4 @@ function MailIcon({ className }: IconProps) {
     </svg>
   );
 }
-
 

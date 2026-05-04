@@ -3,6 +3,9 @@ import Link from "next/link";
 import Carousel from "./_components/Carousel";
 import TeamCarousel from "./_components/TeamCarousel";
 import ContentCard from "./_components/ContentCard";
+import NewsCard from "./_components/NewsCard";
+
+import { getLatestNews } from "@/lib/news";
 
 type PinnedGame = {
   title: string;
@@ -54,26 +57,26 @@ const boardPosts: Post[] = [
     title: "Lorem Ipsum 1",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/blog",
+    href: "/news",
     badge: "Board",
   },
  {
     title: "Lorem Ipsum 2",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/blog",
+    href: "/news",
     badge: "Board",
   },{
     title: "Lorem Ipsum 3",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/blog",
+    href: "/news",
     badge: "Board",
   },{
     title: "Lorem Ipsum 4",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/blog",
+    href: "/news",
     badge: "Board",
   }
 ];
@@ -83,26 +86,26 @@ const digitalPosts: Post[] = [
     title: "Lorem Ipsum 5",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/blog",
+    href: "/news",
     badge: "Digital",
   },
   {
     title: "Lorem Ipsum 6",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/blog",
+    href: "/news",
     badge: "Digital",
   },{
     title: "Lorem Ipsum 7",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/blog",
+    href: "/news",
     badge: "Digital",
   },{
     title: "Lorem Ipsum 8",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/blog",
+    href: "/news",
     badge: "Digital",
   }
 ];
@@ -122,7 +125,7 @@ const team: TeamMember[] = [
     imageSrc: "/thumbnails/team-designer.svg",
     bio: "Designs systems that are learnable, readable, and full of interesting choices.",
     highlights: ["Balance passes", "Rules writing", "Moment-to-moment decisions"],
-    links: [{ label: "Blog", href: "/blog", detailTitle: "Design Notes", detailBody: "Articles and devlogs covering design decisions and playtests." }],
+    links: [{ label: "News", href: "/news", detailTitle: "News", detailBody: "Updates and announcements from the studio." }],
   },
   {
     name: "Sinta Ayu",
@@ -154,7 +157,7 @@ const team: TeamMember[] = [
     imageSrc: "/thumbnails/team-designer.svg",
     bio: "Designs systems that are learnable, readable, and full of interesting choices.",
     highlights: ["Balance passes", "Rules writing", "Moment-to-moment decisions"],
-    links: [{ label: "Blog", href: "/blog", detailTitle: "Design Notes", detailBody: "Articles and devlogs covering design decisions and playtests." }],
+    links: [{ label: "News", href: "/news", detailTitle: "News", detailBody: "Updates and announcements from the studio." }],
   },
   {
     name: "Sinta Blesak",
@@ -175,6 +178,8 @@ const team: TeamMember[] = [
 ];
 
 export default function Home() {
+  const latestNews = getLatestNews(3);
+
   return (
     <div className="bg-background lg:px-18 sm:px-0 md:px-4">
       <div className="block mx-auto w-full px-4">
@@ -289,7 +294,7 @@ export default function Home() {
                 <div className="flex items-baseline justify-between">
                   <h3 className="text-base font-semibold tracking-tight">Board Games</h3>
                   <Link
-                    href="/blog"
+                    href="/news"
                     className="text-sm font-medium text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
                   >
                     View all
@@ -306,7 +311,7 @@ export default function Home() {
                 <div className="flex items-baseline justify-between">
                   <h3 className="text-base font-semibold tracking-tight">Digital Games</h3>
                   <Link
-                    href="/blog"
+                    href="/news"
                     className="text-sm font-medium text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
                   >
                     View all
@@ -318,6 +323,32 @@ export default function Home() {
                   ))}
                 </div>
               </div>
+            </div>
+          </section>
+
+          <section className="block">
+            <div className="mb-4">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Latest <span className="text-accent-orange">News</span>
+              </h1>
+              <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
+                Updates and announcements from the studio.
+              </p>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-3">
+              {latestNews.map((item) => (
+                <NewsCard key={item.title} title={item.title} date={item.date} imageSrc={item.imageSrc} />
+              ))}
+            </div>
+
+            <div className="mt-5 flex justify-center">
+              <Link
+                href="/news"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
+              >
+                More news
+              </Link>
             </div>
           </section>
 
@@ -399,11 +430,5 @@ export default function Home() {
     </div>
   );
 }
-
-
-
-
-
-
 
 
