@@ -1,5 +1,10 @@
-﻿import Link from "next/link";
+import Image from "next/image";
+import Link from "next/link";
+
 import PageHeader from "../_components/PageHeader";
+import TeamGrid from "../_components/TeamGrid";
+
+import { team } from "@/lib/team";
 
 export const metadata = {
   title: "About Us",
@@ -16,7 +21,7 @@ export default function AboutUsPage() {
           />
 
           <section className="grid gap-4 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 ">
-            <h2 className="text-lg font-semibold tracking-tight">What we do</h2>
+            <h2 className="text-lg font-semibold tracking-tight">What we do?</h2>
             <p className="text-sm leading-6 text-zinc-800 dark:text-zinc-200">
               We prototype, design, and produce games—from paper tests to playable
               digital slices. Our process is iterative, playtest-driven, and
@@ -39,7 +44,12 @@ export default function AboutUsPage() {
           </section>
 
           <section className="grid gap-4">
-            <h2 className="text-lg font-semibold tracking-tight">Our values</h2>
+             <div>
+             <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Value</span></h1>
+            <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                The core values of us.
+              </p>
+               </div>
             <div className="grid gap-4 sm:grid-cols-3">
               {[
                 {
@@ -68,6 +78,52 @@ export default function AboutUsPage() {
             </div>
           </section>
 
+          <section className="grid gap-4">
+            <div>
+               <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Team</span></h1>
+              <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                The people behind the playtests, prototypes, and polish.
+              </p>
+            </div>
+
+            <TeamGrid members={team} />
+          </section>
+
+          <section className="grid gap-4">
+            <div>
+               <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Gallery</span></h1>
+              <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                Snapshots from our projects and process.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                "/thumbnails/pinned-ember-guild.svg",
+                "/thumbnails/pinned-neon-drift.svg",
+                "/thumbnails/pinned-skybound-stories.svg",
+                "/thumbnails/digital-controller.svg",
+                "/thumbnails/board-balancing.svg",
+                "/thumbnails/team-creative.svg",
+                "/thumbnails/team-designer.svg",
+                "/thumbnails/team-engineer.svg",
+              ].map((src) => (
+                <div
+                  key={src}
+                  className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] shadow-sm dark:border-white/10 dark:bg-white/[.06]"
+                >
+                  <Image
+                    src={src}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+
           <section className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10  sm:flex-row sm:items-center">
             <div>
               <h2 className="text-lg font-semibold tracking-tight">Want to collaborate?</h2>
@@ -87,5 +143,4 @@ export default function AboutUsPage() {
     </div>
   );
 }
-
 
