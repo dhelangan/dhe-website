@@ -57,26 +57,26 @@ const boardPosts: Post[] = [
     title: "Lorem Ipsum 1",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/news",
+    href: "/portfolio?type=board",
     badge: "Board",
   },
  {
     title: "Lorem Ipsum 2",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/news",
+    href: "/portfolio?type=board",
     badge: "Board",
   },{
     title: "Lorem Ipsum 3",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/news",
+    href: "/portfolio?type=board",
     badge: "Board",
   },{
     title: "Lorem Ipsum 4",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/news",
+    href: "/portfolio?type=board",
     badge: "Board",
   }
 ];
@@ -86,26 +86,26 @@ const digitalPosts: Post[] = [
     title: "Lorem Ipsum 5",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/news",
+    href: "/portfolio?type=digital",
     badge: "Digital",
   },
   {
     title: "Lorem Ipsum 6",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/news",
+    href: "/portfolio?type=digital",
     badge: "Digital",
   },{
     title: "Lorem Ipsum 7",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/news",
+    href: "/portfolio?type=digital",
     badge: "Digital",
   },{
     title: "Lorem Ipsum 8",
     subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/news",
+    href: "/portfolio?type=digital",
     badge: "Digital",
   }
 ];
@@ -294,7 +294,7 @@ export default function Home() {
                 <div className="flex items-baseline justify-between">
                   <h3 className="text-base font-semibold tracking-tight">Board Games</h3>
                   <Link
-                    href="/news"
+                    href="/portfolio?type=board"
                     className="text-sm font-medium text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
                   >
                     View all
@@ -311,7 +311,7 @@ export default function Home() {
                 <div className="flex items-baseline justify-between">
                   <h3 className="text-base font-semibold tracking-tight">Digital Games</h3>
                   <Link
-                    href="/news"
+                    href="/portfolio?type=digital"
                     className="text-sm font-medium text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
                   >
                     View all
@@ -430,5 +430,3 @@ export default function Home() {
     </div>
   );
 }
-
-

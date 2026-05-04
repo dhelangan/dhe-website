@@ -1,96 +1,100 @@
-﻿import Image from "next/image";
-import Link from "next/link";
 import PageHeader from "../_components/PageHeader";
+import PortfolioCard from "../_components/PortfolioCard";
+
+import PortfolioFilters from "./_components/PortfolioFilters";
+
+import {
+  filterPortfolio,
+  getAllPortfolio,
+  sortPortfolio,
+  type PortfolioPlatform,
+  type PortfolioSort,
+  type PortfolioStatus,
+  type PortfolioType,
+} from "@/lib/portfolio";
 
 export const metadata = {
   title: "Portfolio",
 };
 
-const projects = [
-  {
-    title: "Ember Guild",
-    type: "Board Game",
-    summary: "Co-op tactics with cozy progression and modular scenarios.",
-    imageSrc: "/thumbnails/pinned-ember-guild.svg",
-  },
-  {
-    title: "Neon Drift",
-    type: "Digital Game",
-    summary: "Arcade racing built for tight handling and quick restarts.",
-    imageSrc: "/thumbnails/pinned-neon-drift.svg",
-  },
-  {
-    title: "Skybound Stories",
-    type: "Interactive Narrative",
-    summary: "Choice-driven adventures with strong replayability.",
-    imageSrc: "/thumbnails/pinned-skybound-stories.svg",
-  },
-];
+function normalizeMulti(value: string | string[] | undefined) {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
+}
 
-export default function PortfolioPage() {
+function isPortfolioType(value: string): value is PortfolioType {
+  return value === "board" || value === "digital";
+}
+
+function isPortfolioStatus(value: string): value is PortfolioStatus {
+  return value === "in-development" || value === "released";
+}
+
+function isPortfolioPlatform(value: string): value is PortfolioPlatform {
+  return value === "tabletop" || value === "pc" || value === "mobile" || value === "vr-ar" || value === "web3";
+}
+
+function isPortfolioSort(value: string): value is PortfolioSort {
+  return value === "newest" || value === "oldest" || value === "title-asc" || value === "title-desc";
+}
+
+export default async function PortfolioPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedSearchParams = (await searchParams) ?? {};
+
+  const rawType = resolvedSearchParams.type;
+  const rawStatus = resolvedSearchParams.status;
+  const rawSort = resolvedSearchParams.sort;
+  const rawPlatforms = normalizeMulti(resolvedSearchParams.platform);
+  const rawGenres = normalizeMulti(resolvedSearchParams.genre);
+
+  const type = typeof rawType === "string" && isPortfolioType(rawType) ? rawType : undefined;
+  const status = typeof rawStatus === "string" && isPortfolioStatus(rawStatus) ? rawStatus : undefined;
+  const sort: PortfolioSort = typeof rawSort === "string" && isPortfolioSort(rawSort) ? rawSort : "newest";
+  const platforms: PortfolioPlatform[] = rawPlatforms.filter(isPortfolioPlatform);
+  const genres = rawGenres.filter((g) => typeof g === "string" && g.trim().length > 0);
+
+  const all = getAllPortfolio();
+  const genreOptions = Array.from(new Set(all.flatMap((p) => p.genres)));
+
+  const filtered = filterPortfolio(all, { type, status, platforms, genres });
+  const sorted = sortPortfolio(filtered, sort);
+
   return (
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
-        <div className="grid gap-10">
+        <div className="grid gap-8">
           <PageHeader
             title="Portfolio"
             description="A selection of tabletop and digital work—prototypes, slices, and in-progress projects."
           />
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <div
-                key={project.title}
-                className="overflow-hidden rounded-3xl border border-black/10 bg-surface shadow-sm dark:border-white/10 "
-              >
-                <div className="relative aspect-[4/3] bg-zinc-100 dark:bg-zinc-900">
-                  <Image
-                    src={project.imageSrc}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
-                  />
-                </div>
-                <div className="grid gap-2 p-6">
-                  <div className="text-xs font-medium text-zinc-800 dark:text-zinc-200">
-                    {project.type}
-                  </div>
-                  <h2 className="text-lg font-semibold tracking-tight">{project.title}</h2>
-                  <p className="text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                    {project.summary}
-                  </p>
-                </div>
-              </div>
+          <PortfolioFilters
+            initialType={type}
+            initialStatus={status}
+            initialPlatforms={platforms}
+            initialGenres={genres}
+            initialSort={sort}
+            genreOptions={genreOptions}
+          />
+
+          <div className="grid gap-4">
+            {sorted.map((item) => (
+              <PortfolioCard key={item.title} item={item} />
             ))}
           </div>
 
-          <div className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10  sm:flex-row sm:items-center">
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight">Need a playable prototype?</h2>
-              <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
-                We can help you validate an idea quickly.
-              </p>
+          {sorted.length === 0 ? (
+            <div className="rounded-3xl border border-black/10 bg-surface p-8 text-sm text-zinc-700 dark:border-white/10 dark:text-zinc-300">
+              No projects match those filters.
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/services"
-                className="inline-flex h-11 items-center justify-center rounded-full border border-black/10 bg-background px-6 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-surface/[.06]"
-              >
-                View services
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-              >
-                Contact
-              </Link>
-            </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </div>
   );
 }
-
 

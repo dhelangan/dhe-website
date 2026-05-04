@@ -1,0 +1,160 @@
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import {
+  formatPortfolioPlatform,
+  formatPortfolioStatus,
+  formatPortfolioType,
+  getAllPortfolio,
+  getPortfolioBySlug,
+  slugifyPortfolioTitle,
+} from "@/lib/portfolio";
+
+export async function generateStaticParams() {
+  return getAllPortfolio().map((item) => ({
+    title: slugifyPortfolioTitle(item.title),
+  }));
+}
+
+function YouTubeEmbed({ url }: { url: string }) {
+  let embedUrl: string | null = null;
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") {
+      const id = parsed.pathname.split("/").filter(Boolean)[0];
+      if (id) embedUrl = `https://www.youtube.com/embed/${id}`;
+    } else if (host === "youtube.com" || host === "m.youtube.com") {
+      const id = parsed.searchParams.get("v");
+      if (id) embedUrl = `https://www.youtube.com/embed/${id}`;
+    }
+  } catch {
+    embedUrl = null;
+  }
+
+  if (!embedUrl) return null;
+
+  return (
+    <div className="overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
+      <div className="relative aspect-video w-full">
+        <iframe
+          className="absolute inset-0 h-full w-full"
+          src={embedUrl}
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      </div>
+    </div>
+  );
+}
+
+function StoreButton({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex h-11 items-center justify-center rounded-full border border-black/10 bg-background px-6 text-sm font-semibold transition-colors hover:bg-black/[.04] dark:border-white/10 dark:bg-zinc-950 dark:hover:bg-white/[.06]"
+    >
+      {label}
+    </a>
+  );
+}
+
+export default async function PortfolioReadPage({
+  params,
+}: {
+  params: Promise<{ title: string }>;
+}) {
+  const { title } = await params;
+  const item = getPortfolioBySlug(title);
+  if (!item) notFound();
+
+  return (
+    <div className="bg-background">
+      <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
+        <div className="grid gap-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link
+              href="/portfolio"
+              className="text-sm font-semibold text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
+            >
+              ← Back to portfolio
+            </Link>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full border border-black/10 bg-surface px-2 py-0.5 text-xs font-semibold dark:border-white/10">
+                {formatPortfolioType(item.type)}
+              </span>
+              <span className="rounded-full border border-black/10 bg-surface px-2 py-0.5 text-xs font-semibold dark:border-white/10">
+                {formatPortfolioStatus(item.status)}
+              </span>
+              {item.platforms.map((p) => (
+                <span
+                  key={p}
+                  className="rounded-full border border-black/10 bg-surface px-2 py-0.5 text-xs font-semibold dark:border-white/10"
+                >
+                  {formatPortfolioPlatform(p)}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <header className="grid gap-2">
+            <h1 className="text-3xl font-semibold tracking-tight">{item.title}</h1>
+            <p className="max-w-3xl text-base leading-7 text-zinc-700 dark:text-zinc-300">
+              {item.summary}
+            </p>
+          </header>
+
+          {item.youtubeUrl ? <YouTubeEmbed url={item.youtubeUrl} /> : null}
+
+          <section className="grid gap-4">
+            <h2 className="text-lg font-semibold tracking-tight">Gallery</h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {item.gallerySrcs.map((src) => (
+                <div
+                  key={src}
+                  className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]"
+                >
+                  <Image
+                    src={src}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <article className="grid gap-4 text-sm leading-7 text-zinc-800 dark:text-zinc-200">
+            {item.content.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </article>
+
+          {item.availableOn ? (
+            <section className="rounded-3xl border border-black/10 bg-surface p-6 shadow-sm dark:border-white/10">
+              <h2 className="text-lg font-semibold tracking-tight">Available on</h2>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {item.availableOn.itch ? <StoreButton href={item.availableOn.itch} label="Itch.io" /> : null}
+                {item.availableOn.steam ? <StoreButton href={item.availableOn.steam} label="Steam" /> : null}
+                {item.availableOn.googlePlay ? (
+                  <StoreButton href={item.availableOn.googlePlay} label="Google Play" />
+                ) : null}
+                {item.availableOn.other?.map((o) => (
+                  <StoreButton key={o.href} href={o.href} label={o.label} />
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+

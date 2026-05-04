@@ -1,4 +1,6 @@
-﻿import Link from "next/link";
+import Link from "next/link";
+
+import ThemeToggle from "./ThemeToggle";
 
 const establishedYear = 2021;
 
@@ -6,7 +8,7 @@ export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-surface border-t mt-10 border-black/10 dark:border-white/10">
+    <footer className="mt-10 border-t border-black/10 bg-surface dark:border-white/10">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-5">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-3">
@@ -15,13 +17,11 @@ export default function SiteFooter() {
             </div>
             <div className="leading-tight">
               <div className="font-semibold tracking-tight">Dhelangan Studio</div>
-              <div className="text-sm text-zinc-700 dark:text-zinc-300">
-                Est. {establishedYear}
-              </div>
+              <div className="text-sm text-zinc-700 dark:text-zinc-300">Est. {establishedYear}</div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
             <Link
               href="/privacy-policy"
               className="text-zinc-800 transition-colors hover:text-accent-red dark:text-zinc-200"
@@ -52,6 +52,7 @@ export default function SiteFooter() {
             >
               YouTube
             </a>
+            <ThemeToggle />
           </div>
         </div>
 
@@ -63,3 +64,4 @@ export default function SiteFooter() {
     </footer>
   );
 }
+
