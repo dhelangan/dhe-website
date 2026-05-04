@@ -65,7 +65,7 @@ export default async function PortfolioPage({
 
   return (
     <div className="bg-background">
-      <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
+      <div className="mx-auto w-full max-w-6xl px-4 p-0">
         <div className="grid gap-8">
           <PageHeader
             title="Portfolio"

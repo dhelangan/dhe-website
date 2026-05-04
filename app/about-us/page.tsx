@@ -8,10 +8,10 @@ export const metadata = {
 export default function AboutUsPage() {
   return (
     <div className="bg-background">
-      <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
+      <div className="mx-auto w-full max-w-6xl px-4 py-0">
         <div className="grid gap-10">
           <PageHeader
-            title="About Dhelangan Studio"
+            title="About Us"
             description="We’re a small game studio building tabletop and digital experiences with clear systems, strong feel, and welcoming worlds."
           />
 

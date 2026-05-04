@@ -1,41 +1,53 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Theme = "light" | "dark";
 
 function getSystemTheme(): Theme {
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "light";
-    const stored = window.localStorage.getItem("theme");
-    if (stored === "light" || stored === "dark") return stored;
-    return getSystemTheme();
-  });
+  const [theme, setTheme] = useState<Theme | null>(null);
 
+  // Resolve theme AFTER mount
   useEffect(() => {
+    const stored = window.localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark") {
+      setTheme(stored);
+    } else {
+      setTheme(getSystemTheme());
+    }
+  }, []);
+
+  // Apply class
+  useEffect(() => {
+    if (!theme) return;
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
+  // Listen system changes (only if no manual override)
   useEffect(() => {
+    if (!theme) return;
+
     const stored = window.localStorage.getItem("theme");
-    if (stored === "light" || stored === "dark") return;
+    if (stored) return;
 
-    const mql = window.matchMedia?.("(prefers-color-scheme: dark)");
-    if (!mql) return;
-
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => setTheme(mql.matches ? "dark" : "light");
-    mql.addEventListener?.("change", onChange);
-    return () => mql.removeEventListener?.("change", onChange);
-  }, []);
 
-  const label = useMemo(
-    () => (theme === "dark" ? "Switch to light mode" : "Switch to dark mode"),
-    [theme]
-  );
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, [theme]);
+
+  // Prevent rendering before hydration match
+  if (!theme) return null;
+
+  const label =
+    theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
 
   return (
     <button
@@ -50,14 +62,16 @@ export default function ThemeToggle() {
       title={label}
     >
       {theme === "dark" ? <SunIcon className="size-4" /> : <MoonIcon className="size-4" />}
-      <span className="hidden sm:inline">{theme === "dark" ? "Light" : "Dark"}</span>
+      <span className="hidden sm:inline">
+        {theme === "dark" ? "Light" : "Dark"}
+      </span>
     </button>
   );
 }
 
 function SunIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true" suppressHydrationWarning>
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2v2" />
       <path d="M12 20v2" />
@@ -73,7 +87,7 @@ function SunIcon({ className }: { className?: string }) {
 
 function MoonIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true" suppressHydrationWarning>
       <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
     </svg>
   );

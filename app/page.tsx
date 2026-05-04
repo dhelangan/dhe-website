@@ -181,7 +181,7 @@ export default function Home() {
   const latestNews = getLatestNews(3);
 
   return (
-    <div className="bg-background lg:px-18 sm:px-0 md:px-4">
+    <div className="bg-background pt-4 lg:px-18 sm:px-0 md:px-4">
       <div className="block mx-auto w-full px-4">
         <div className="space-y-8">
 
