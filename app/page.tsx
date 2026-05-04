@@ -1,6 +1,7 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
 import Carousel from "./_components/Carousel";
+import TeamCarousel from "./_components/TeamCarousel";
 import ContentCard from "./_components/ContentCard";
 
 type PinnedGame = {
@@ -22,7 +23,9 @@ type TeamMember = {
   name: string;
   role: string;
   imageSrc: string;
-  links?: { label: string; href: string }[];
+  bio?: string;
+  highlights?: string[];
+  links?: { label: string; href: string; detailTitle?: string; detailBody?: string }[];
 };
 
 const pinnedGames: PinnedGame[] = [
@@ -109,26 +112,66 @@ const team: TeamMember[] = [
     name: "Dhela Ngan",
     role: "Creative Director",
     imageSrc: "/thumbnails/team-creative.svg",
-    links: [{ label: "Portfolio", href: "/portfolio" }],
+    bio: "Leads the studio vision and keeps every project grounded in playability.",
+    highlights: ["Creative direction & tone", "Pitch decks & prototypes", "Playtest facilitation"],
+    links: [{ label: "Portfolio", href: "/portfolio", detailTitle: "Portfolio", detailBody: "Selected work, prototypes, and shipped credits." }],
   },
   {
     name: "Raka Pramana",
     role: "Game Designer",
     imageSrc: "/thumbnails/team-designer.svg",
-    links: [{ label: "Blog", href: "/blog" }],
+    bio: "Designs systems that are learnable, readable, and full of interesting choices.",
+    highlights: ["Balance passes", "Rules writing", "Moment-to-moment decisions"],
+    links: [{ label: "Blog", href: "/blog", detailTitle: "Design Notes", detailBody: "Articles and devlogs covering design decisions and playtests." }],
   },
   {
     name: "Sinta Ayu",
     role: "Engineer",
     imageSrc: "/thumbnails/team-engineer.svg",
-    links: [{ label: "Services", href: "/services" }],
+    bio: "Builds prototypes fast and polishes interactions until they feel great.",
+    highlights: ["Gameplay engineering", "Tools & pipelines", "Performance & polish"],
+    links: [{ label: "Services", href: "/services", detailTitle: "Services", detailBody: "How we help teams ship prototypes and slices." }],
   },
   {
     name: "Bagus Hartono",
     role: "Artist",
     imageSrc: "/thumbnails/team-artist.svg",
-    links: [{ label: "Shop", href: "/shop" }],
+    bio: "Shapes the visual style: characters, UI clarity, and key art.",
+    highlights: ["Art direction", "Illustration & UI", "Brand consistency"],
+    links: [{ label: "Shop", href: "/shop", detailTitle: "Shop", detailBody: "Print-and-play packs, merch, and downloads." }],
   },
+  {
+    name: "Dhela Mana",
+    role: "Creative Director",
+    imageSrc: "/thumbnails/team-creative.svg",
+    bio: "Leads the studio vision and keeps every project grounded in playability.",
+    highlights: ["Creative direction & tone", "Pitch decks & prototypes", "Playtest facilitation"],
+    links: [{ label: "Portfolio", href: "/portfolio", detailTitle: "Portfolio", detailBody: "Selected work, prototypes, and shipped credits." }],
+  },
+  {
+    name: "Raka Reeaa",
+    role: "Game Designer",
+    imageSrc: "/thumbnails/team-designer.svg",
+    bio: "Designs systems that are learnable, readable, and full of interesting choices.",
+    highlights: ["Balance passes", "Rules writing", "Moment-to-moment decisions"],
+    links: [{ label: "Blog", href: "/blog", detailTitle: "Design Notes", detailBody: "Articles and devlogs covering design decisions and playtests." }],
+  },
+  {
+    name: "Sinta Blesak",
+    role: "Engineer",
+    imageSrc: "/thumbnails/team-engineer.svg",
+    bio: "Builds prototypes fast and polishes interactions until they feel great.",
+    highlights: ["Gameplay engineering", "Tools & pipelines", "Performance & polish"],
+    links: [{ label: "Services", href: "/services", detailTitle: "Services", detailBody: "How we help teams ship prototypes and slices." }],
+  },
+  {
+    name: "Bagus Derta",
+    role: "Artist",
+    imageSrc: "/thumbnails/team-artist.svg",
+    bio: "Shapes the visual style: characters, UI clarity, and key art.",
+    highlights: ["Art direction", "Illustration & UI", "Brand consistency"],
+    links: [{ label: "Shop", href: "/shop", detailTitle: "Shop", detailBody: "Print-and-play packs, merch, and downloads." }],
+  }
 ];
 
 export default function Home() {
@@ -137,15 +180,15 @@ export default function Home() {
       <div className="block mx-auto w-full px-4">
         <div className="space-y-8">
 
-          <section className="intro rounded p-4 block space-y-8">
+          <section className="intro rounded-lg p-4 block space-y-8">
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+              <p className="text-sm font-bold text-black">
                 Board Game + Video Game Studio
               </p>
-              <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              <h1 className="text-4xl font-extrabold tracking-tight text-black my-6 sm:text-4xl">
                 We build playful worlds<br/>on the board and on the screen.
               </h1>
-              <p className="max-w-2xl text-base leading-7 text-zinc-800 dark:text-zinc-200">
+              <p className="max-w-2xl text-base leading-7 text-black">
                 Dhelangan Studio crafts board games, interactive experiences, and
                 production-ready prototypes. Explore our pinned project, browse
                 recent posts, and meet the team.
@@ -171,7 +214,7 @@ export default function Home() {
           <section className="block">
             <div className="flex items-end justify-between gap-4">
               <div className="mb-4">
-                <h2 className="text-xl font-semibold tracking-tight">Pinned Game</h2>
+                <h1 className="text-2xl font-semibold tracking-tight">Featured <span className="text-accent-orange">Game</span></h1>
                 <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
                   A spotlight on what we’re building right now.
                 </p>
@@ -235,9 +278,9 @@ export default function Home() {
 
           <section className="block">
             <div className="mb-4">
-              <h2 className="text-xl font-semibold tracking-tight">Latest Posts</h2>
+              <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Works</span></h1>
               <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
-                Board game notes alongside digital production updates.
+                Board games alongside digital products.
               </p>
             </div>
 
@@ -278,85 +321,63 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="block rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10">
-            <div className="grid gap-2">
-              <h2 className="text-xl font-semibold tracking-tight">About Us</h2>
-              <p className="max-w-3xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                We’re a small studio focused on strong game feel, readable systems,
-                and charming presentation. From tabletop prototyping to digital
-                vertical slices, we help ideas become playable.
-              </p>
+          <section className="block rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10">
+            <div className="group lg:flex lg:space-x-4 md:space-y-4 sm:space-y-4 md:block sm:block">
+              <div className="min-w-0 lg:flex-1 md:w-full sm:w-full">
+                <div className="block space-y-4">
+                  <h2 className="text-xl font-semibold tracking-tight">About Us</h2>
+                  <p className="max-w-3xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                   We’re DHELANGAN STUDIO – “ Dhelangan is a game development studio based in Yogyakarta, Indonesia. We thrive to deliver well-designed games and the best service for gamification we provide. “
+                  </p>
+                  <h2 className="text-xl font-semibold tracking-tight">Address</h2>
+                  <p className="max-w-3xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                   Jl. XX I No.67, Desa XX, Kab XX, Kec XX, Daerah Istimewa Yogyakarta XXXXX
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 mt-4 mb-4">
+                  <Link
+                    href="/about-us"
+                    className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                  >
+                    Learn more
+                  </Link>
+                </div>
+              </div>
+
+               <div className="lg:flex-1 md:w-full sm:w-full relative aspect-[2/1] overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]">
+                    <Image
+                      src="/thumbnails/team-creative.svg"
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 640px) 40vw, 100vw"
+                      priority
+                    />
+                  </div>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/about-us"
-                className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
-              >
-                Learn more
-              </Link>
-              <Link
-                href="/services"
-                className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-              >
-                See services
-              </Link>
-            </div>
+           
           </section>
 
           <section className="block">
             <div className="mb-4">
-              <h2 className="text-xl font-semibold tracking-tight">Meet the Team</h2>
+              <h1 className="text-2xl font-semibold tracking-tight">Meet the <span className="text-accent-orange">Team</span></h1>
               <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
                 A cross-discipline crew of makers.
               </p>
             </div>
 
-            <Carousel
+            <TeamCarousel members={team} />
+            {/* <Carousel
               label="Team members"
               slides={team.map((member) => (
-                <div key={member.name} className="grid gap-6 p-6 sm:grid-cols-[0.35fr_0.65fr] sm:items-center sm:gap-10 sm:p-8">
-                  <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-black/10 bg-zinc-100 dark:border-white/10 dark:bg-zinc-900">
-                    <Image
-                      src={member.imageSrc}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 640px) 24vw, 100vw"
-                    />
-                  </div>
-                  <div className="grid gap-4">
-                    <div>
-                      <h3 className="text-2xl font-semibold tracking-tight">
-                        {member.name}
-                      </h3>
-                      <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
-                        {member.role}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3">
-                      {member.links?.map((link) => (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                      <Link
-                        href="/contact"
-                        className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-                      >
-                        Work with us
-                      </Link>
-                    </div>
-                  </div>
+                <div key={member.name} className="block">
                 </div>
               ))}
-            />
+            /> */}
           </section>
 
-          <section className="block rounded-3xl border border-black/10 bg-surface p-8 text-center shadow-sm dark:border-white/10">
+          <section className="block space-y-8 rounded-3xl border border-black/10 bg-surface p-8 text-center shadow-sm dark:border-white/10">
             <h2 className="text-xl font-semibold tracking-tight">
               Have a project in mind?
             </h2>
@@ -378,6 +399,11 @@ export default function Home() {
     </div>
   );
 }
+
+
+
+
+
 
 
 

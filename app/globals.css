@@ -23,10 +23,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #101011;
     --foreground: #ededed;
 
-    --surface: #0f0f0f;
+    --surface: #1f1825;
   }
 }
 
@@ -37,7 +37,7 @@ body {
 }
 
 .intro {
-    background-color: orange;
+    background-color: #f5b603;
     background-image: url(/thumbnails/dhelangan.png);
     background-position: right -20px center;
     background-repeat: no-repeat;

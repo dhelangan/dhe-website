@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useCallback, useEffect, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
 type CarouselProps = {
   label: string;
@@ -22,6 +22,11 @@ export default function Carousel({
   );
   const baseId = useId();
 
+  const pointerId = useRef<number | null>(null);
+  const pointerStartX = useRef<number | null>(null);
+  const pointerStartY = useRef<number | null>(null);
+  const pointerDeltaX = useRef(0);
+
   const goTo = useCallback(
     (nextIndex: number) => {
       if (count === 0) return;
@@ -41,13 +46,68 @@ export default function Carousel({
     return () => clearInterval(handle);
   }, [autoplayMs, count]);
 
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (count <= 1) return;
+    if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
+
+    const target = e.target as HTMLElement | null;
+    if (target?.closest("button, a, input, textarea, select")) return;
+
+    pointerId.current = e.pointerId;
+    pointerStartX.current = e.clientX;
+    pointerStartY.current = e.clientY;
+    pointerDeltaX.current = 0;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (count <= 1) return;
+    if (pointerId.current !== e.pointerId) return;
+    if (pointerStartX.current === null || pointerStartY.current === null) return;
+
+    const dx = e.clientX - pointerStartX.current;
+    const dy = e.clientY - pointerStartY.current;
+
+    // Only treat as swipe when horizontal intent is clear.
+    if (Math.abs(dx) > Math.abs(dy)) pointerDeltaX.current = dx;
+  };
+
+  const endSwipe = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerId.current !== e.pointerId) return;
+
+    pointerId.current = null;
+    pointerStartX.current = null;
+    pointerStartY.current = null;
+
+    const dx = pointerDeltaX.current;
+    pointerDeltaX.current = 0;
+
+    const threshold = 55;
+    if (dx > threshold) prev();
+    else if (dx < -threshold) next();
+  };
+
+  const cancelSwipe = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerId.current !== e.pointerId) return;
+    pointerId.current = null;
+    pointerStartX.current = null;
+    pointerStartY.current = null;
+    pointerDeltaX.current = 0;
+  };
+
   if (count === 0) return null;
 
   return (
     <section aria-label={label} className="w-full">
-      <div className="relative max-w-full overflow-hidden rounded-2xl border border-black/10 bg-surface shadow-sm dark:border-white/10">
+      <div
+        className="relative max-w-full overflow-hidden rounded-2xl border border-black/10 bg-surface shadow-sm touch-pan-y dark:border-white/10"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endSwipe}
+        onPointerCancel={cancelSwipe}
+      >
         <div
-          className="flex transition-transform duration-500 ease-out"
+          className="flex transition-transform duration-500 ease-out will-change-transform"
           style={{ transform: `translateX(-${index * 100}%)` }}
         >
           {safeSlides.map((slide, slideIndex) => (
@@ -67,7 +127,7 @@ export default function Carousel({
             <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background/80 to-transparent dark:from-black/60" />
             <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background/80 to-transparent dark:from-black/60" />
 
-            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 p-4">
+            <div className="bg-background block inset-x-0 bottom-0 z-20 flex items-center justify-between gap-4 p-4 pointer-events-auto">
               <div className="flex items-center gap-2">
                 {Array.from({ length: count }).map((_, dotIndex) => (
                   <button
@@ -75,7 +135,7 @@ export default function Carousel({
                     type="button"
                     onClick={() => goTo(dotIndex)}
                     className={[
-                      "h-2.5 w-2.5 rounded-full ring-1 ring-black/10 transition-colors dark:ring-white/10",
+                      "touch-manipulation h-2.5 w-2.5 rounded-full ring-1 ring-black/10 transition-colors dark:ring-white/10",
                       dotIndex === index
                         ? "bg-foreground"
                         : "bg-zinc-300 dark:bg-zinc-700",
@@ -90,18 +150,22 @@ export default function Carousel({
                 <button
                   type="button"
                   onClick={prev}
-                  className="inline-flex h-9 items-center justify-center rounded-full border border-black/10 bg-background px-3 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                  className="touch-manipulation inline-flex h-9 items-center justify-center rounded-full border border-black/10 bg-background px-3 text-xs font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
                   aria-label="Previous slide"
                 >
-                  Prev
+                  <svg className="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 1 1.3 6.326a.91.91 0 0 0 0 1.348L7 13"/>
+</svg>
                 </button>
                 <button
                   type="button"
                   onClick={next}
-                  className="inline-flex h-9 items-center justify-center rounded-full border border-black/10 bg-background px-3 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                  className="touch-manipulation inline-flex h-9 items-center justify-center rounded-full border border-black/10 bg-background px-3 text-xs font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
                   aria-label="Next slide"
                 >
-                  Next
+                  <svg className="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"/>
+</svg>
                 </button>
               </div>
             </div>
@@ -115,5 +179,6 @@ export default function Carousel({
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
 }
+
 
 

@@ -25,7 +25,7 @@ export default function SiteHeader() {
   }, []);
 
   return (
-    <header className="fixed w-full top-0 z-50 border-b border-black/10 bg-background/90 backdrop-blur dark:border-white/10 drop-shadow-lg">
+    <header className="fixed w-full top-0 z-50 border-b border-black/10 bg-surface/80 backdrop-blur dark:border-white/10 drop-shadow-lg">
       <div className="mx-auto flex w-full max-w-6xl min-w-0 items-center justify-between gap-2 px-3 py-3 sm:gap-3 sm:px-5 sm:py-4">
         <Link
           href="/"
@@ -33,10 +33,10 @@ export default function SiteHeader() {
           onClick={() => setOpen(false)}
         >
           <Image src="/logo.png" alt="Dhelangan Studio Logo" width={48} height={48} />
-          <span className="hidden sm:inline">Dhelangan Studio</span>
+          <span className="hidden text-lg font-extrabold tracking-widest sm:inline">Dhelangan Studio</span>
         </Link>
 
-        <nav className="hidden items-center gap-5 text-sm font-medium text-zinc-700 dark:text-zinc-300 md:flex">
+        <nav className="hidden items-center gap-5 text-md font-bold uppercase text-zinc-700 dark:text-zinc-300 md:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -165,4 +165,5 @@ function MailIcon({ className }: IconProps) {
     </svg>
   );
 }
+
 
