@@ -55,7 +55,7 @@ export default function TeamGrid({ members }: TeamGridProps) {
             <div className="mt-4 flex flex-wrap gap-2">
               <button
                 type="button"
-                className="touch-manipulation inline-flex h-9 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
+                className="mx-auto item-center mt-4 touch-manipulation inline-flex h-9 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
                 onClick={() => setModal({ open: true, member })}
               >
                 Details

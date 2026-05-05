@@ -20,7 +20,7 @@ export default async function NewsReadPage({
   if (!newsItem) notFound();
 
   return (
-    <div className="bg-background">
+    <div className="bg-background pt-4">
       <div className="mx-auto w-full max-w-3xl px-4 p-0">
         <div className="grid gap-6">
           <div className="flex items-center justify-between gap-3">
