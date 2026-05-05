@@ -6,7 +6,7 @@ import ContentCard from "./_components/ContentCard";
 import NewsCard from "./_components/NewsCard";
 
 import { getLatestNews } from "@/lib/news";
-import { team } from "@/lib/team";
+import { getTeamMembers } from "@/lib/team";
 
 type PinnedGame = {
   title: string;
@@ -102,8 +102,9 @@ const digitalPosts: Post[] = [
   }
 ];
 
-export default function Home() {
+export default async function Home() {
   const latestNews = getLatestNews(3);
+  const team = await getTeamMembers();
 
   return (
     <div className="bg-background pt-4 lg:px-18 sm:px-0 md:px-4">

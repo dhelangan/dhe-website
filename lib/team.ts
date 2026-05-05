@@ -9,136 +9,98 @@ export type TeamMember = {
   name: string;
   role: string;
   imageSrc: string;
+  division?: string[];
   bio?: string;
   highlights?: string[];
   links?: TeamLink[];
 };
 
-export const team: TeamMember[] = [
-  {
-    name: "Dhela Ngan",
-    role: "Creative Director",
-    imageSrc: "/thumbnails/team-creative.svg",
-    bio: "Leads the studio vision and keeps every project grounded in playability.",
-    highlights: ["Creative direction & tone", "Pitch decks & prototypes", "Playtest facilitation"],
-    links: [
-      {
-        label: "Instagram",
-        href: "https://instagram.com",
-        detailTitle: "Instagram Page",
-        detailBody: "Follow on our Instagram",
-      },
-      {
-        label: "X",
-        href: "https://x.com",
-        detailTitle: "X Page",
-        detailBody: "Follow on our X",
-      },
-    ],
-  },
-  {
-    name: "Raka Pramana",
-    role: "Game Designer",
-    imageSrc: "/thumbnails/team-designer.svg",
-    bio: "Designs systems that are learnable, readable, and full of interesting choices.",
-    highlights: ["Balance passes", "Rules writing", "Moment-to-moment decisions"],
-    links: [
-      {
-        label: "News",
-        href: "/news",
-        detailTitle: "News",
-        detailBody: "Updates and announcements from the studio.",
-      },
-    ],
-  },
-  {
-    name: "Sinta Ayu",
-    role: "Engineer",
-    imageSrc: "/thumbnails/team-engineer.svg",
-    bio: "Builds prototypes fast and polishes interactions until they feel great.",
-    highlights: ["Gameplay engineering", "Tools & pipelines", "Performance & polish"],
-    links: [
-      {
-        label: "Services",
-        href: "/services",
-        detailTitle: "Services",
-        detailBody: "How we help teams ship prototypes and slices.",
-      },
-    ],
-  },
-  {
-    name: "Bagus Hartono",
-    role: "Artist",
-    imageSrc: "/thumbnails/team-artist.svg",
-    bio: "Shapes the visual style: characters, UI clarity, and key art.",
-    highlights: ["Art direction", "Illustration & UI", "Brand consistency"],
-    links: [
-      {
-        label: "Shop",
-        href: "/shop",
-        detailTitle: "Shop",
-        detailBody: "Print-and-play packs, merch, and downloads.",
-      },
-    ],
-  },
-  {
-    name: "Dhela Mana",
-    role: "Creative Director",
-    imageSrc: "/thumbnails/team-creative.svg",
-    bio: "Leads the studio vision and keeps every project grounded in playability.",
-    highlights: ["Creative direction & tone", "Pitch decks & prototypes", "Playtest facilitation"],
-    links: [
-      {
-        label: "Portfolio",
-        href: "/portfolio",
-        detailTitle: "Portfolio",
-        detailBody: "Selected work, prototypes, and shipped credits.",
-      },
-    ],
-  },
-  {
-    name: "Raka Reeaa",
-    role: "Game Designer",
-    imageSrc: "/thumbnails/team-designer.svg",
-    bio: "Designs systems that are learnable, readable, and full of interesting choices.",
-    highlights: ["Balance passes", "Rules writing", "Moment-to-moment decisions"],
-    links: [
-      {
-        label: "News",
-        href: "/news",
-        detailTitle: "News",
-        detailBody: "Updates and announcements from the studio.",
-      },
-    ],
-  },
-  {
-    name: "Sinta Blesak",
-    role: "Engineer",
-    imageSrc: "/thumbnails/team-engineer.svg",
-    bio: "Builds prototypes fast and polishes interactions until they feel great.",
-    highlights: ["Gameplay engineering", "Tools & pipelines", "Performance & polish"],
-    links: [
-      {
-        label: "Services",
-        href: "/services",
-        detailTitle: "Services",
-        detailBody: "How we help teams ship prototypes and slices.",
-      },
-    ],
-  },
-  {
-    name: "Bagus Derta",
-    role: "Artist",
-    imageSrc: "/thumbnails/team-artist.svg",
-    bio: "Shapes the visual style: characters, UI clarity, and key art.",
-    highlights: ["Art direction", "Illustration & UI", "Brand consistency"],
-    links: [
-      {
-        label: "Shop",
-        href: "/shop",
-        detailTitle: "Shop",
-        detailBody: "Print-and-play packs, merch, and downloads.",
-      },
-    ],
-  },
-];
+export type TeamApiMember = {
+  id?: string;
+  active?: boolean;
+  name: string;
+  role: string;
+  imageSrc: string | null;
+  bio?: string;
+  highlights?: string[];
+  links?: string[];
+  division?: string[];
+};
+
+function getBaseUrlFromHeaders(headers: Headers): string | null {
+  const host = headers.get("x-forwarded-host") ?? headers.get("host");
+  if (!host) return null;
+
+  const proto = headers.get("x-forwarded-proto") ?? "http";
+  return `${proto}://${host}`;
+}
+
+function toTeamLink(raw: string): TeamLink | null {
+  const value = raw.trim();
+  if (!value) return null;
+
+  const colonIndex = value.indexOf(":");
+  if (colonIndex <= 0) return null;
+
+  const label = value.slice(0, colonIndex).trim();
+  let href = value.slice(colonIndex + 1).trim();
+  if (!label || !href) return null;
+
+  if (label.toLowerCase() === "email" && !href.startsWith("mailto:")) {
+    href = href.includes("@") ? `mailto:${href}` : href;
+  }
+  if (
+    (label.toLowerCase() === "instagram" || label.toLowerCase() === "x" || label.toLowerCase() === "twitter") &&
+    href.startsWith("@")
+  ) {
+    href =
+      label.toLowerCase() === "instagram"
+        ? `https://instagram.com/${href.slice(1)}`
+        : `https://x.com/${href.slice(1)}`;
+  }
+  if (!href.startsWith("http") && !href.startsWith("mailto:") && href.startsWith("www.")) {
+    href = `https://${href}`;
+  }
+
+  return { label, href };
+}
+
+function toTeamMember(apiMember: TeamApiMember): TeamMember {
+  const imageSrc = apiMember.imageSrc ?? "/thumbnails/team-creative.svg";
+  const links = (apiMember.links ?? []).map(toTeamLink).filter((l): l is TeamLink => Boolean(l));
+
+  return {
+    name: apiMember.name,
+    role: apiMember.role,
+    imageSrc,
+    division: apiMember.division,
+    bio: apiMember.bio,
+    highlights: apiMember.highlights,
+    links: links.length ? links : undefined,
+  };
+}
+
+export async function getTeamMembers(): Promise<TeamMember[]> {
+  let url: URL | string = "/api/team";
+
+  // In Server Components, `fetch('/api/...')` may throw "Failed to parse URL..."
+  // because it requires an absolute URL. Build it from request headers when possible.
+  if (typeof window === "undefined") {
+    try {
+      const { headers } = await import("next/headers");
+      const h = await headers();
+      const baseUrl = getBaseUrlFromHeaders(h);
+      if (baseUrl) url = new URL("/api/team", baseUrl);
+    } catch {
+      // Fallback to relative URL (works in browser or some runtimes).
+    }
+  }
+
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) {
+    throw new Error(`Failed to load team members: ${res.status} ${res.statusText}`);
+  }
+
+  const data = (await res.json()) as TeamApiMember[];
+  return (data ?? []).map(toTeamMember);
+}

@@ -4,13 +4,14 @@ import Link from "next/link";
 import PageHeader from "../_components/PageHeader";
 import TeamGrid from "../_components/TeamGrid";
 
-import { team } from "@/lib/team";
+import { getTeamMembers } from "@/lib/team";
 
 export const metadata = {
   title: "About Us",
 };
 
-export default function AboutUsPage() {
+export default async function AboutUsPage() {
+  const team = await getTeamMembers();
   return (
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 py-0">
