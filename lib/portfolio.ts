@@ -3,6 +3,7 @@ export type PortfolioStatus = "in-development" | "released";
 export type PortfolioPlatform = "tabletop" | "pc" | "mobile" | "vr-ar" | "web3";
 
 export type PortfolioItem = {
+  id?: string;
   title: string;
   date: string; // ISO-8601
   type: PortfolioType;
@@ -14,12 +15,34 @@ export type PortfolioItem = {
   gallerySrcs: string[];
   youtubeUrl?: string;
   content: string[];
+  featured?: boolean;
   availableOn?: {
     itch?: string;
     steam?: string;
     googlePlay?: string;
     other?: { label: string; href: string }[];
   };
+};
+
+export type PortfolioApiItem = {
+  id?: string;
+  published?: boolean;
+  title: string;
+  date: string;
+  type?: string;
+  status?: string;
+  platforms?: string[];
+  genres?: string[];
+  summary?: string;
+  thumbnailSrc?: string | null;
+  gallerySrcs?: string[];
+  youtubeUrl?: string | null;
+  content?: string[];
+  steam?: string | null;
+  itch?: string | null;
+  googlePlay?: string | null;
+  other?: string[] | null;
+  featured?: boolean;
 };
 
 export function slugifyPortfolioTitle(value: string) {
@@ -55,93 +78,115 @@ export function formatPortfolioPlatform(platform: PortfolioPlatform) {
 }
 
 export const portfolioPlatforms: PortfolioPlatform[] = ["tabletop", "pc", "mobile", "vr-ar", "web3"];
-
 export const portfolioTypes: PortfolioType[] = ["board", "digital"];
-
 export const portfolioStatuses: PortfolioStatus[] = ["in-development", "released"];
 
-const portfolio: PortfolioItem[] = [
-  {
-    title: "Ember Guild",
-    date: "2026-04-15",
-    type: "board",
-    status: "in-development",
-    platforms: ["tabletop"],
-    genres: ["card based", "roguelite", "co-op"],
-    summary: "Co-op tactics with cozy progression and modular scenarios.",
-    thumbnailSrc: "/thumbnails/pinned-ember-guild.svg",
-    gallerySrcs: [
-      "/thumbnails/pinned-ember-guild.svg",
-      "/thumbnails/board-balancing.svg",
-      "/thumbnails/pinned-skybound-stories.svg",
-      "/thumbnails/pinned-neon-drift.svg",
-    ],
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    content: [
-      "Ember Guild is a tabletop co-op tactics experience with modular scenarios and a focus on readability.",
-      "We’re iterating on encounter pacing, onboarding clarity, and session-to-session progression.",
-    ],
-    availableOn: {
-      other: [{ label: "Press kit", href: "https://example.com" }],
-    },
-  },
-  {
-    title: "Neon Drift",
-    date: "2026-03-09",
-    type: "digital",
-    status: "released",
-    platforms: ["pc", "mobile"],
-    genres: ["casual", "hypercasual", "racing"],
-    summary: "Arcade racing built for tight handling and quick restarts.",
-    thumbnailSrc: "/thumbnails/pinned-neon-drift.svg",
-    gallerySrcs: [
-      "/thumbnails/pinned-neon-drift.svg",
-      "/thumbnails/digital-controller.svg",
-      "/thumbnails/pinned-skybound-stories.svg",
-      "/thumbnails/team-engineer.svg",
-    ],
-    content: [
-      "Neon Drift is designed for short sessions with fast resets and clear feedback.",
-      "We focused on controller feel, readability, and a progression loop that rewards mastery.",
-    ],
-    availableOn: {
-      steam: "https://store.steampowered.com",
-      itch: "https://itch.io",
-      googlePlay: "https://play.google.com/store",
-      other: [{ label: "Official site", href: "https://example.com" }],
-    },
-  },
-  {
-    title: "Skybound Stories",
-    date: "2026-02-02",
-    type: "digital",
-    status: "in-development",
-    platforms: ["pc"],
-    genres: ["visual novel", "narrative"],
-    summary: "Choice-driven adventures with strong replayability.",
-    thumbnailSrc: "/thumbnails/pinned-skybound-stories.svg",
-    gallerySrcs: [
-      "/thumbnails/pinned-skybound-stories.svg",
-      "/thumbnails/team-artist.svg",
-      "/thumbnails/team-creative.svg",
-      "/thumbnails/team-designer.svg",
-    ],
-    content: [
-      "Skybound Stories is an interactive narrative built around meaningful choices and replayable routes.",
-      "We’re currently testing pacing, clarity of consequence, and accessibility for long reading sessions.",
-    ],
-    availableOn: {
-      itch: "https://itch.io",
-    },
-  },
-];
-
-export function getAllPortfolio() {
-  return [...portfolio].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+function getBaseUrlFromHeaders(headers: Headers): string | null {
+  const host = headers.get("x-forwarded-host") ?? headers.get("host");
+  if (!host) return null;
+  const proto = headers.get("x-forwarded-proto") ?? "http";
+  return `${proto}://${host}`;
 }
 
-export function getPortfolioBySlug(slug: string) {
-  return getAllPortfolio().find((item) => slugifyPortfolioTitle(item.title) === slug) ?? null;
+function normalizeType(value: string | undefined): PortfolioType {
+  const v = (value ?? "").trim().toLowerCase();
+  if (v === "board" || v === "board game" || v === "tabletop") return "board";
+  return "digital";
+}
+
+function normalizeStatus(value: string | undefined): PortfolioStatus {
+  const v = (value ?? "").trim().toLowerCase().replace(/\s+/g, "-");
+  if (v === "released" || v === "release") return "released";
+  return "in-development";
+}
+
+function normalizePlatform(value: string): PortfolioPlatform | null {
+  const v = value.trim().toLowerCase();
+  if (!v) return null;
+  if (v.includes("tabletop") || v.includes("board")) return "tabletop";
+  if (v.includes("pc")) return "pc";
+  if (v.includes("mobile") || v.includes("android") || v.includes("ios")) return "mobile";
+  if (v.includes("vr") || v.includes("ar")) return "vr-ar";
+  if (v.includes("web3")) return "web3";
+  return null;
+}
+
+function parseOtherLinks(other: string[] | null | undefined): { label: string; href: string }[] | undefined {
+  if (!other?.length) return undefined;
+  const parsed = other
+    .map((raw) => {
+      const value = raw.trim();
+      if (!value) return null;
+      const idx = value.indexOf(":");
+      if (idx <= 0) return null;
+      const label = value.slice(0, idx).trim();
+      const href = value.slice(idx + 1).trim();
+      if (!label || !href) return null;
+      return { label, href };
+    })
+    .filter((x): x is { label: string; href: string } => Boolean(x));
+  return parsed.length ? parsed : undefined;
+}
+
+function toPortfolioItem(apiItem: PortfolioApiItem): PortfolioItem {
+  const platforms = (apiItem.platforms ?? [])
+    .map(normalizePlatform)
+    .filter((p): p is PortfolioPlatform => Boolean(p));
+
+  const availableOnOther = parseOtherLinks(apiItem.other ?? undefined);
+  const availableOn =
+    apiItem.steam || apiItem.itch || apiItem.googlePlay || availableOnOther
+      ? {
+          steam: apiItem.steam ?? undefined,
+          itch: apiItem.itch ?? undefined,
+          googlePlay: apiItem.googlePlay ?? undefined,
+          other: availableOnOther,
+        }
+      : undefined;
+
+  return {
+    id: apiItem.id,
+    title: apiItem.title,
+    date: apiItem.date,
+    type: normalizeType(apiItem.type),
+    status: normalizeStatus(apiItem.status),
+    platforms,
+    genres: apiItem.genres ?? [],
+    summary: apiItem.summary ?? "",
+    thumbnailSrc: apiItem.thumbnailSrc ?? "/thumbnails/pinned-ember-guild.svg",
+    gallerySrcs: apiItem.gallerySrcs ?? [],
+    youtubeUrl: apiItem.youtubeUrl ?? undefined,
+    content: apiItem.content ?? [],
+    featured: apiItem.featured ?? undefined,
+    availableOn,
+  };
+}
+
+export async function getAllPortfolio(): Promise<PortfolioItem[]> {
+  let url: URL | string = "/api/portfolio";
+
+  if (typeof window === "undefined") {
+    try {
+      const { headers } = await import("next/headers");
+      const h = await headers();
+      const baseUrl = getBaseUrlFromHeaders(h);
+      if (baseUrl) url = new URL("/api/portfolio", baseUrl);
+    } catch {
+      // ignore
+    }
+  }
+
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Failed to load portfolio: ${res.status} ${res.statusText}`);
+
+  const data = (await res.json()) as PortfolioApiItem[];
+  const items = (data ?? []).map(toPortfolioItem);
+  return items.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+}
+
+export async function getPortfolioBySlug(slug: string) {
+  const all = await getAllPortfolio();
+  return all.find((item) => slugifyPortfolioTitle(item.title) === slug) ?? null;
 }
 
 export type PortfolioSort = "newest" | "oldest" | "title-asc" | "title-desc";
@@ -165,12 +210,15 @@ export function sortPortfolio(items: PortfolioItem[], sort: PortfolioSort) {
   }
 }
 
-export function filterPortfolio(items: PortfolioItem[], filters: {
-  type?: PortfolioType;
-  status?: PortfolioStatus;
-  platforms?: PortfolioPlatform[];
-  genres?: string[];
-}) {
+export function filterPortfolio(
+  items: PortfolioItem[],
+  filters: {
+    type?: PortfolioType;
+    status?: PortfolioStatus;
+    platforms?: PortfolioPlatform[];
+    genres?: string[];
+  },
+) {
   return items.filter((item) => {
     if (filters.type && item.type !== filters.type) return false;
     if (filters.status && item.status !== filters.status) return false;

@@ -6,15 +6,12 @@ import {
   formatPortfolioPlatform,
   formatPortfolioStatus,
   formatPortfolioType,
-  getAllPortfolio,
   getPortfolioBySlug,
-  slugifyPortfolioTitle,
 } from "@/lib/portfolio";
 
 export async function generateStaticParams() {
-  return getAllPortfolio().map((item) => ({
-    title: slugifyPortfolioTitle(item.title),
-  }));
+  // Data is fetched from `/api/portfolio` at runtime; avoid static generation here.
+  return [];
 }
 
 function YouTubeEmbed({ url }: { url: string }) {
@@ -69,7 +66,7 @@ export default async function PortfolioReadPage({
   params: Promise<{ title: string }>;
 }) {
   const { title } = await params;
-  const item = getPortfolioBySlug(title);
+  const item = await getPortfolioBySlug(title);
   if (!item) notFound();
 
   return (
@@ -157,4 +154,3 @@ export default async function PortfolioReadPage({
     </div>
   );
 }
-

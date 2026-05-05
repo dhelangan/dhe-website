@@ -21,7 +21,7 @@ export default function ContentCard({
       href={href}
       className="group flex gap-4 rounded-2xl border border-black/10 bg-surface p-4 shadow-sm transition-colors hover:bg-black/[.03] dark:border-white/10"
     >
-      <div className="relative aspect-[4/3] w-28 overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]">
+      <div className="relative aspect-[4/3] w-40 overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]">
         <Image
           src={imageSrc}
           alt=""

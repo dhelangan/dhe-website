@@ -57,7 +57,7 @@ export default async function PortfolioPage({
   const platforms: PortfolioPlatform[] = rawPlatforms.filter(isPortfolioPlatform);
   const genres = rawGenres.filter((g) => typeof g === "string" && g.trim().length > 0);
 
-  const all = getAllPortfolio();
+  const all = await getAllPortfolio();
   const genreOptions = Array.from(new Set(all.flatMap((p) => p.genres)));
 
   const filtered = filterPortfolio(all, { type, status, platforms, genres });
@@ -97,4 +97,3 @@ export default async function PortfolioPage({
     </div>
   );
 }
-

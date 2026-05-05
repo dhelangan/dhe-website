@@ -14,7 +14,7 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
       href={`/portfolio/read/${slugifyPortfolioTitle(item.title)}`}
       className="group flex w-full gap-4 overflow-hidden rounded-3xl border border-black/10 bg-surface p-4 shadow-sm transition-colors hover:bg-black/[.03] dark:border-white/10"
     >
-      <div className="relative aspect-[4/3] w-28 shrink-0 overflow-hidden rounded-2xl bg-black/[.06] dark:bg-white/[.06] sm:w-40">
+      <div className="relative aspect-[4/3] w-30 shrink-0 overflow-hidden rounded-2xl bg-black/[.06] dark:bg-white/[.06] sm:w-80">
         <Image
           src={item.thumbnailSrc}
           alt=""

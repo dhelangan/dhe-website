@@ -7,11 +7,13 @@ import NewsCard from "./_components/NewsCard";
 
 import { getLatestNews } from "@/lib/news";
 import { getTeamMembers } from "@/lib/team";
+import { getAllPortfolio, slugifyPortfolioTitle } from "@/lib/portfolio";
 
 type PinnedGame = {
   title: string;
   tagline: string;
   coverSrc: string;
+  href: string;
   tags: string[];
 };
 
@@ -23,88 +25,43 @@ type Post = {
   badge?: string;
 };
 
-const pinnedGames: PinnedGame[] = [
-  {
-    title: "Lorem Ipsum Ichi",
-    tagline: "A cozy tactics board game with big-hearted heroes.",
-    coverSrc: "/thumbnails/pinned-ember-guild.svg",
-    tags: ["Board", "Tactics", "Co-op"],
-  },
-  {
-    title: "Lorem Ipsum Ni",
-    tagline: "A fast-paced arcade racer for short, satisfying sessions.",
-    coverSrc: "/thumbnails/pinned-neon-drift.svg",
-    tags: ["Digital", "Racing", "Arcade"],
-  },
-  {
-    title: "Lorem Ipsum San",
-    tagline: "Narrative adventures you can replay with new choices.",
-    coverSrc: "/thumbnails/pinned-skybound-stories.svg",
-    tags: ["Digital", "Story", "Choice"],
-  }
-];
-
-const boardPosts: Post[] = [
-  {
-    title: "Lorem Ipsum 1",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/portfolio?type=board",
-    badge: "Board",
-  },
- {
-    title: "Lorem Ipsum 2",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/portfolio?type=board",
-    badge: "Board",
-  },{
-    title: "Lorem Ipsum 3",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/portfolio?type=board",
-    badge: "Board",
-  },{
-    title: "Lorem Ipsum 4",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageSrc: "/thumbnails/board-balancing.svg",
-    href: "/portfolio?type=board",
-    badge: "Board",
-  }
-];
-
-const digitalPosts: Post[] = [
-  {
-    title: "Lorem Ipsum 5",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/portfolio?type=digital",
-    badge: "Digital",
-  },
-  {
-    title: "Lorem Ipsum 6",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/portfolio?type=digital",
-    badge: "Digital",
-  },{
-    title: "Lorem Ipsum 7",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/portfolio?type=digital",
-    badge: "Digital",
-  },{
-    title: "Lorem Ipsum 8",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageSrc: "/thumbnails/digital-controller.svg",
-    href: "/portfolio?type=digital",
-    badge: "Digital",
-  }
-];
-
 export default async function Home() {
   const latestNews = getLatestNews(3);
   const team = await getTeamMembers();
+  const portfolio = await getAllPortfolio();
+
+  const featuredItems = portfolio.filter((p) => p.featured);
+  const pinnedGames: PinnedGame[] = (featuredItems.length ? featuredItems : portfolio)
+    .slice(0, 6)
+    .map((item) => ({
+      title: item.title,
+      tagline: item.summary,
+      coverSrc: item.thumbnailSrc,
+      href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
+      tags: item.genres.slice(0, 3),
+    }));
+
+  const boardPosts: Post[] = portfolio
+    .filter((p) => p.type === "board")
+    .slice(0, 4)
+    .map((item) => ({
+      title: item.title,
+      subtitle: item.summary,
+      imageSrc: item.thumbnailSrc,
+      href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
+      badge: "Board",
+    }));
+
+  const digitalPosts: Post[] = portfolio
+    .filter((p) => p.type === "digital")
+    .slice(0, 4)
+    .map((item) => ({
+      title: item.title,
+      subtitle: item.summary,
+      imageSrc: item.thumbnailSrc,
+      href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
+      badge: "Digital",
+    }));
 
   return (
     <div className="bg-background pt-4 lg:px-18 sm:px-0 md:px-4">
@@ -178,7 +135,7 @@ export default async function Home() {
                     </div>
                     <div className="flex flex-wrap items-center gap-3">
                       <Link
-                        href="/portfolio"
+                        href={game.href}
                         className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
                       >
                         See Details
@@ -216,8 +173,8 @@ export default async function Home() {
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
-              <div className="grid gap-3">
-                <div className="flex items-baseline justify-between">
+              <div className="grid gap-3 items-start content-start">
+                <div className="flex items-baseline justify-between h-8">
                   <h3 className="text-base font-semibold tracking-tight">Board Games</h3>
                   <Link
                     href="/portfolio?type=board"
@@ -226,15 +183,17 @@ export default async function Home() {
                     View all
                   </Link>
                 </div>
-                <div className="grid gap-3">
-                  {boardPosts.map((post) => (
-                    <ContentCard key={post.title} {...post} />
-                  ))}
+                <div className="h-full">
+                  <div className="grid gap-3 items-stretch">
+                    {boardPosts.map((post) => (
+                      <ContentCard key={post.title} {...post} />
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="grid gap-3">
-                <div className="flex items-baseline justify-between">
+              <div className="grid gap-3 items-start content-start">
+                <div className="flex items-baseline justify-between h-8">
                   <h3 className="text-base font-semibold tracking-tight">Digital Games</h3>
                   <Link
                     href="/portfolio?type=digital"
