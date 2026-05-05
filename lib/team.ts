@@ -23,16 +23,16 @@ export const team: TeamMember[] = [
     highlights: ["Creative direction & tone", "Pitch decks & prototypes", "Playtest facilitation"],
     links: [
       {
-        label: "Portfolio",
-        href: "/portfolio",
-        detailTitle: "Portfolio",
-        detailBody: "Selected work, prototypes, and shipped credits.",
+        label: "Instagram",
+        href: "https://instagram.com",
+        detailTitle: "Instagram Page",
+        detailBody: "Follow on our Instagram",
       },
       {
         label: "X",
-        href: "/portfolio",
-        detailTitle: "X",
-        detailBody: "Selected X, X, and XXX.",
+        href: "https://x.com",
+        detailTitle: "X Page",
+        detailBody: "Follow on our X",
       },
     ],
   },

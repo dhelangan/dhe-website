@@ -44,41 +44,6 @@ export default function AboutUsPage() {
           </section>
 
           <section className="grid gap-4">
-             <div>
-             <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Value</span></h1>
-            <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                The core values of us.
-              </p>
-               </div>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                {
-                  title: "Playability",
-                  body: "Every decision is tested at the table or in build—no theory-only design.",
-                },
-                {
-                  title: "Clarity",
-                  body: "Readable rules, clear UI, and learnable systems that still have depth.",
-                },
-                {
-                  title: "Charm",
-                  body: "A warm tone, delightful moments, and worlds you want to return to.",
-                },
-              ].map((card) => (
-                <div
-                  key={card.title}
-                  className="rounded-3xl border border-black/10 bg-surface p-6 shadow-sm dark:border-white/10 "
-                >
-                  <div className="font-semibold tracking-tight">{card.title}</div>
-                  <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                    {card.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="grid gap-4">
             <div>
                <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Team</span></h1>
               <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
@@ -119,6 +84,41 @@ export default function AboutUsPage() {
                     className="object-cover"
                     sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
                   />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="grid gap-4">
+             <div>
+             <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Value</span></h1>
+            <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                The core values of us.
+              </p>
+               </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  title: "Playability",
+                  body: "Every decision is tested at the table or in build—no theory-only design.",
+                },
+                {
+                  title: "Clarity",
+                  body: "Readable rules, clear UI, and learnable systems that still have depth.",
+                },
+                {
+                  title: "Charm",
+                  body: "A warm tone, delightful moments, and worlds you want to return to.",
+                },
+              ].map((card) => (
+                <div
+                  key={card.title}
+                  className="rounded-3xl border border-black/10 bg-surface p-6 shadow-sm dark:border-white/10 "
+                >
+                  <div className="font-semibold tracking-tight">{card.title}</div>
+                  <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                    {card.body}
+                  </p>
                 </div>
               ))}
             </div>
