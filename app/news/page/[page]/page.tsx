@@ -4,21 +4,13 @@ import { notFound, redirect } from "next/navigation";
 import PageHeader from "@/app/_components/PageHeader";
 import NewsCard from "@/app/_components/NewsCard";
 import Reveal from "@/app/_components/Reveal";
-import { getAllNews, getNewsPagination } from "@/lib/news";
+import { getNewsPagination } from "@/lib/news";
 
 const PAGE_SIZE = 3;
 
 export const metadata = {
   title: "News",
 };
-
-export async function generateStaticParams() {
-  const totalItems = getAllNews().length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
-  return Array.from({ length: totalPages }, (_, index) => ({
-    page: String(index + 1),
-  }));
-}
 
 function Pagination({
   currentPage,
@@ -93,7 +85,7 @@ export default async function NewsPage({
   if (!Number.isFinite(pageNumber) || !Number.isInteger(pageNumber)) notFound();
   if (pageNumber <= 0) redirect("/news/page/1");
 
-  const { items, totalPages, currentPage } = getNewsPagination(pageNumber, PAGE_SIZE);
+  const { items, totalPages, currentPage } = await getNewsPagination(pageNumber, PAGE_SIZE);
   if (pageNumber > totalPages) redirect(`/news/page/${totalPages}`);
 
   return (

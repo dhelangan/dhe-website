@@ -16,6 +16,7 @@ export default function ThemeScript() {
 
   return (
     <Script
+    suppressHydrationWarning={true}
       id="theme-script"
       strategy="beforeInteractive"
       dangerouslySetInnerHTML={{ __html: code }}

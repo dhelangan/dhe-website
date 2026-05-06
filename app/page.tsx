@@ -28,7 +28,7 @@ type Post = {
 };
 
 export default async function Home() {
-  const latestNews = getLatestNews(4);
+  const latestNews = await getLatestNews(4);
   const team = await getTeamMembers();
   const portfolio = await getAllPortfolio();
 

@@ -3,13 +3,7 @@ import { notFound } from "next/navigation";
 import ZoomableImage from "../../../_components/ZoomableImage";
 import Reveal from "../../../_components/Reveal";
 
-import { formatNewsDate, getAllNews, getNewsBySlug, slugifyNewsTitle } from "@/lib/news";
-
-export async function generateStaticParams() {
-  return getAllNews().map((item) => ({
-    title: slugifyNewsTitle(item.title),
-  }));
-}
+import { formatNewsDate, getNewsBySlug } from "@/lib/news";
 
 export default async function NewsReadPage({
   params,
@@ -17,7 +11,7 @@ export default async function NewsReadPage({
   params: Promise<{ title: string }>;
 }) {
   const { title } = await params;
-  const newsItem = getNewsBySlug(title);
+  const newsItem = await getNewsBySlug(title);
   if (!newsItem) notFound();
 
   return (
