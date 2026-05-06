@@ -1,5 +1,6 @@
-﻿import Image from "next/image";
 import Link from "next/link";
+
+import LazyImage from "./LazyImage";
 
 type ContentCardProps = {
   href: string;
@@ -22,12 +23,13 @@ export default function ContentCard({
       className="group flex gap-4 rounded-2xl border border-black/10 bg-surface p-4 shadow-sm transition-colors hover:bg-black/[.03] dark:border-white/10"
     >
       <div className="relative aspect-[4/3] w-40 overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]">
-        <Image
+        <LazyImage
           src={imageSrc}
           alt=""
           fill
           className="object-cover"
           sizes="112px"
+          loading="lazy"
         />
       </div>
       <div className="min-w-0 flex-1">

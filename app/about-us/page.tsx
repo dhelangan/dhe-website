@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import PageHeader from "../_components/PageHeader";
 import TeamGrid from "../_components/TeamGrid";
+import ZoomableImage from "../_components/ZoomableImage";
 
 import { getTeamMembers } from "@/lib/team";
 
@@ -74,18 +74,13 @@ export default async function AboutUsPage() {
                 "/thumbnails/team-designer.svg",
                 "/thumbnails/team-engineer.svg",
               ].map((src) => (
-                <div
+                <ZoomableImage
                   key={src}
-                  className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] shadow-sm dark:border-white/10 dark:bg-white/[.06]"
-                >
-                  <Image
-                    src={src}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
-                  />
-                </div>
+                  src={src}
+                  alt="Gallery image"
+                  sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
+                  containerClassName="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] shadow-sm dark:border-white/10 dark:bg-white/[.06]"
+                />
               ))}
             </div>
           </section>

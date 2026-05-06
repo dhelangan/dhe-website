@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ZoomableImage from "../../../_components/ZoomableImage";
 
 import {
   formatPortfolioPlatform,
@@ -112,18 +112,13 @@ export default async function PortfolioReadPage({
             <h2 className="text-lg font-semibold tracking-tight">Gallery</h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {item.gallerySrcs.map((src) => (
-                <div
+                <ZoomableImage
                   key={src}
-                  className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]"
-                >
-                  <Image
-                    src={src}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
-                  />
-                </div>
+                  src={src}
+                  alt={`${item.title} gallery image`}
+                  sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
+                  containerClassName="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]"
+                />
               ))}
             </div>
           </section>

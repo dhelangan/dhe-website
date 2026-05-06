@@ -1,9 +1,10 @@
-﻿import Image from "next/image";
-import Link from "next/link";
+﻿import Link from "next/link";
 import Carousel from "./_components/Carousel";
 import TeamCarousel from "./_components/TeamCarousel";
 import ContentCard from "./_components/ContentCard";
 import NewsCard from "./_components/NewsCard";
+import LazyImage from "./_components/LazyImage";
+import ZoomableImage from "./_components/ZoomableImage";
 
 import { getLatestNews } from "@/lib/news";
 import { getTeamMembers } from "@/lib/team";
@@ -112,52 +113,50 @@ export default async function Home() {
             <Carousel
               label="Pinned games"
               autoplayMs={7000}
-              slides={pinnedGames.map((game) => (
-                <div key={game.title} className="grid gap-6 p-6 sm:grid-cols-[1.2fr_0.8fr] sm:items-center sm:gap-10 sm:p-8">
-                  <div className="grid gap-4">
+              slides={pinnedGames.map((game, slideIndex) => (
+                <div
+                  key={game.title}
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-black/[.06] dark:bg-white/[.06] sm:aspect-[21/9]"
+                >
+                  <LazyImage
+                    src={game.coverSrc}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="100vw"
+                    priority={slideIndex === 0}
+                    loading={slideIndex === 0 ? "eager" : "lazy"}
+                  />
+
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/85 via-white/20 to-transparent dark:from-black/80 dark:via-black/30" />
+
+                  <div className="absolute inset-x-0 bottom-0 z-10 p-2 sm:p-8">
                     <div className="flex flex-wrap gap-2">
                       {game.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full border border-black/10 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-700 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-200"
+                          className="rounded-full border border-black/10 bg-white/70 px-3 py-1 text-xs font-medium text-zinc-900 backdrop-blur dark:border-white/10 dark:bg-black/40 dark:text-zinc-100"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                        {game.title}
-                      </h3>
-                      <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                        {game.tagline}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3">
+
+                    <span className="inline-block bg-surface/80 p-2 rounded-md mt-4 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-white sm:text-3xl">
+                      {game.title}
+                    </span>
+                    <p className="bg-surface/80 p-2 rounded-md mt-2 max-w-2xl text-sm leading-6 text-zinc-800 dark:text-zinc-200 line-clamp-2 sm:line-clamp-5">
+                      {game.tagline}
+                    </p>
+
+                    <div className="mt-5 flex flex-wrap items-center gap-3">
                       <Link
                         href={game.href}
                         className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
                       >
                         See Details
                       </Link>
-                      <Link
-                        href="/contact"
-                        className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
-                      >
-                        Partner With Us
-                      </Link>
                     </div>
-                  </div>
-
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10 bg-zinc-100 dark:border-white/10 dark:bg-zinc-900">
-                    <Image
-                      src={game.coverSrc}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 640px) 40vw, 100vw"
-                      priority
-                    />
                   </div>
                 </div>
               ))}
@@ -261,16 +260,12 @@ export default async function Home() {
                 </div>
               </div>
 
-               <div className="lg:flex-1 md:w-full sm:w-full relative aspect-[2/1] overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]">
-                    <Image
-                      src="/thumbnails/team-creative.svg"
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 640px) 40vw, 100vw"
-                      priority
-                    />
-                  </div>
+               <ZoomableImage
+                 src="/thumbnails/team-creative.svg"
+                 alt="About Dhelangan Studio"
+                 sizes="(min-width: 1024px) 40vw, 100vw"
+                 containerClassName="lg:flex-1 md:w-full sm:w-full relative aspect-[2/1] overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]"
+               />
             </div>
            
           </section>

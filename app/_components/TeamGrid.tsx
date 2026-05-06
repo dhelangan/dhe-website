@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
 import { useEffect, useState } from "react";
+
+import LazyImage from "./LazyImage";
 
 import type { TeamLink, TeamMember } from "@/lib/team";
 
@@ -33,7 +34,14 @@ export default function TeamGrid({ members }: TeamGridProps) {
           >
             <div className="block space-y-4 mx-auto items-center gap-4">
               <div className="mx-auto relative size-25 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
-                <Image src={member.imageSrc} alt="" fill className="object-cover" sizes="56px" />
+                <LazyImage
+                  src={member.imageSrc}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="56px"
+                  loading="lazy"
+                />
               </div>
               <div className="text-center">
                 <div className="truncate font-semibold tracking-tight">{member.name}</div>
@@ -108,7 +116,14 @@ function MemberModal({
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="relative size-14 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
-                <Image src={member.imageSrc} alt="" fill className="object-cover" sizes="56px" />
+                <LazyImage
+                  src={member.imageSrc}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="56px"
+                  loading="lazy"
+                />
               </div>
               <div className="min-w-0">
                 <div className="truncate text-lg font-semibold tracking-tight">{member.name}</div>

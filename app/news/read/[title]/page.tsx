@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ZoomableImage from "../../../_components/ZoomableImage";
 
 import { formatNewsDate, getAllNews, getNewsBySlug, slugifyNewsTitle } from "@/lib/news";
 
@@ -42,16 +42,13 @@ export default async function NewsReadPage({
             </p>
           </header>
 
-          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
-            <Image
-              src={newsItem.imageSrc}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="(min-width: 768px) 720px, 100vw"
-              priority
-            />
-          </div>
+          <ZoomableImage
+            src={newsItem.imageSrc}
+            alt={newsItem.title}
+            sizes="(min-width: 768px) 720px, 100vw"
+            containerClassName="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]"
+            priority
+          />
 
           <article className="grid gap-4 text-sm leading-7 text-zinc-800 dark:text-zinc-200">
             {newsItem.content.map((paragraph) => (
@@ -63,4 +60,3 @@ export default async function NewsReadPage({
     </div>
   );
 }
-

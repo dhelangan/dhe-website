@@ -1,5 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
+
+import LazyImage from "./LazyImage";
 
 import {
   formatPortfolioStatus,
@@ -15,12 +16,13 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
       className="group flex w-full gap-4 overflow-hidden rounded-3xl border border-black/10 bg-surface p-4 shadow-sm transition-colors hover:bg-black/[.03] dark:border-white/10"
     >
       <div className="relative aspect-[4/3] w-30 shrink-0 overflow-hidden rounded-2xl bg-black/[.06] dark:bg-white/[.06] sm:w-80">
-        <Image
+        <LazyImage
           src={item.thumbnailSrc}
           alt=""
           fill
           className="object-cover"
           sizes="160px"
+          loading="lazy"
         />
       </div>
 
@@ -46,4 +48,3 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
     </Link>
   );
 }
-
