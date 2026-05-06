@@ -1,4 +1,5 @@
-﻿import PageHeader from "../_components/PageHeader";
+import PageHeader from "../_components/PageHeader";
+import Reveal from "../_components/Reveal";
 
 export const metadata = {
   title: "Contact",
@@ -9,13 +10,19 @@ export default function ContactPage() {
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 p-0">
         <div className="grid gap-10">
-          <PageHeader
-            title="Contact"
-            description="Tell us about your project. We’ll reply with next steps and a quick timeline."
-          />
+          <Reveal>
+            <PageHeader
+              title="Contact"
+              description="Tell us about your project. We’ll reply with next steps and a quick timeline."
+            />
+          </Reveal>
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <section className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 ">
+            <Reveal
+              as="section"
+              className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 "
+              delayMs={60}
+            >
               <h2 className="text-lg font-semibold tracking-tight">Send a message</h2>
               <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                 This is a static form placeholder. Hook it up to your preferred
@@ -52,9 +59,13 @@ export default function ContactPage() {
                   Send (placeholder)
                 </button>
               </form>
-            </section>
+            </Reveal>
 
-            <section className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 ">
+            <Reveal
+              as="section"
+              className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 "
+              delayMs={90}
+            >
               <h2 className="text-lg font-semibold tracking-tight">Quick links</h2>
               <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                 Prefer email? Reach us at{' '}
@@ -78,12 +89,11 @@ export default function ContactPage() {
                   Location: Indonesia (remote-friendly)
                 </div>
               </div>
-            </section>
+            </Reveal>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
 

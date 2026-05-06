@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageHeader from "../_components/PageHeader";
 import TeamGrid from "../_components/TeamGrid";
 import ZoomableImage from "../_components/ZoomableImage";
+import Reveal from "../_components/Reveal";
 
 import { getTeamMembers } from "@/lib/team";
 
@@ -16,12 +17,14 @@ export default async function AboutUsPage() {
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 py-0">
         <div className="grid gap-10">
+          <Reveal>
           <PageHeader
             title="About Us"
             description="We’re a small game studio building tabletop and digital experiences with clear systems, strong feel, and welcoming worlds."
           />
+          </Reveal>
 
-          <section className="grid gap-4 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 ">
+          <Reveal as="section" className="grid gap-4 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 " delayMs={60}>
             <h2 className="text-lg font-semibold tracking-tight">What we do?</h2>
             <p className="text-sm leading-6 text-zinc-800 dark:text-zinc-200">
               We prototype, design, and produce games—from paper tests to playable
@@ -42,9 +45,9 @@ export default async function AboutUsPage() {
                 Production planning & handoff
               </li>
             </ul>
-          </section>
+          </Reveal>
 
-          <section className="grid gap-4">
+          <Reveal as="section" className="grid gap-4" delayMs={90}>
             <div>
                <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Team</span></h1>
               <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
@@ -53,9 +56,9 @@ export default async function AboutUsPage() {
             </div>
 
             <TeamGrid members={team} />
-          </section>
+          </Reveal>
 
-          <section className="grid gap-4">
+          <Reveal as="section" className="grid gap-4" delayMs={120}>
             <div>
                <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Gallery</span></h1>
               <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
@@ -83,9 +86,9 @@ export default async function AboutUsPage() {
                 />
               ))}
             </div>
-          </section>
+          </Reveal>
 
-          <section className="grid gap-4">
+          <Reveal as="section" className="grid gap-4" delayMs={150}>
              <div>
              <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Value</span></h1>
             <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
@@ -118,9 +121,9 @@ export default async function AboutUsPage() {
                 </div>
               ))}
             </div>
-          </section>
+          </Reveal>
 
-          <section className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10  sm:flex-row sm:items-center">
+          <Reveal as="section" className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10  sm:flex-row sm:items-center" delayMs={180}>
             <div>
               <h2 className="text-lg font-semibold tracking-tight">Want to collaborate?</h2>
               <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
@@ -133,7 +136,7 @@ export default async function AboutUsPage() {
             >
               Contact
             </Link>
-          </section>
+          </Reveal>
         </div>
       </div>
     </div>

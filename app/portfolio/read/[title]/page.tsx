@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ZoomableImage from "../../../_components/ZoomableImage";
+import Reveal from "../../../_components/Reveal";
 
 import {
   formatPortfolioPlatform,
@@ -73,6 +74,7 @@ export default async function PortfolioReadPage({
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
         <div className="grid gap-8">
+          <Reveal>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Link
               href="/portfolio"
@@ -98,17 +100,22 @@ export default async function PortfolioReadPage({
               ))}
             </div>
           </div>
+          </Reveal>
 
-          <header className="grid gap-2">
+          <Reveal as="header" className="grid gap-2" delayMs={40}>
             <h1 className="text-3xl font-semibold tracking-tight">{item.title}</h1>
             <p className="max-w-3xl text-base leading-7 text-zinc-700 dark:text-zinc-300">
               {item.summary}
             </p>
-          </header>
+          </Reveal>
 
-          {item.youtubeUrl ? <YouTubeEmbed url={item.youtubeUrl} /> : null}
+          {item.youtubeUrl ? (
+            <Reveal delayMs={70}>
+              <YouTubeEmbed url={item.youtubeUrl} />
+            </Reveal>
+          ) : null}
 
-          <section className="grid gap-4">
+          <Reveal as="section" className="grid gap-4" delayMs={100}>
             <h2 className="text-lg font-semibold tracking-tight">Gallery</h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {item.gallerySrcs.map((src) => (
@@ -121,16 +128,16 @@ export default async function PortfolioReadPage({
                 />
               ))}
             </div>
-          </section>
+          </Reveal>
 
-          <article className="grid gap-4 text-sm leading-7 text-zinc-800 dark:text-zinc-200">
+          <Reveal as="article" className="grid gap-4 text-sm leading-7 text-zinc-800 dark:text-zinc-200" delayMs={130}>
             {item.content.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
-          </article>
+          </Reveal>
 
           {item.availableOn ? (
-            <section className="rounded-3xl border border-black/10 bg-surface p-6 shadow-sm dark:border-white/10">
+            <Reveal as="section" className="rounded-3xl border border-black/10 bg-surface p-6 shadow-sm dark:border-white/10" delayMs={160}>
               <h2 className="text-lg font-semibold tracking-tight">Available on</h2>
               <div className="mt-4 flex flex-wrap gap-3">
                 {item.availableOn.itch ? <StoreButton href={item.availableOn.itch} label="Itch.io" /> : null}
@@ -142,7 +149,7 @@ export default async function PortfolioReadPage({
                   <StoreButton key={o.href} href={o.href} label={o.label} />
                 ))}
               </div>
-            </section>
+            </Reveal>
           ) : null}
         </div>
       </div>

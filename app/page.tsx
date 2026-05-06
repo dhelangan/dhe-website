@@ -5,6 +5,7 @@ import ContentCard from "./_components/ContentCard";
 import NewsCard from "./_components/NewsCard";
 import LazyImage from "./_components/LazyImage";
 import ZoomableImage from "./_components/ZoomableImage";
+import Reveal from "./_components/Reveal";
 
 import { getLatestNews } from "@/lib/news";
 import { getTeamMembers } from "@/lib/team";
@@ -69,7 +70,7 @@ export default async function Home() {
       <div className="block mx-auto w-full px-4">
         <div className="space-y-8">
 
-          <section className="intro rounded-lg p-4 block space-y-8">
+          <Reveal as="section" className="intro rounded-lg p-4 block space-y-8">
             <div className="flex flex-col gap-2">
               <p className="text-sm font-bold text-black">
                 Board Game + Video Game Studio
@@ -98,9 +99,9 @@ export default async function Home() {
                 Our Services
               </Link>
             </div>
-          </section>
+          </Reveal>
 
-          <section className="block">
+          <Reveal as="section" className="block" delayMs={50}>
             <div className="flex items-end justify-between gap-4">
               <div className="mb-4">
                 <h1 className="text-2xl font-semibold tracking-tight">Featured <span className="text-accent-orange">Game</span></h1>
@@ -161,9 +162,9 @@ export default async function Home() {
                 </div>
               ))}
             />
-          </section>
+          </Reveal>
 
-          <section className="block">
+          <Reveal as="section" className="block" delayMs={80}>
             <div className="mb-4">
               <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Works</span></h1>
               <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
@@ -208,9 +209,9 @@ export default async function Home() {
                 </div>
               </div>
             </div>
-          </section>
+          </Reveal>
 
-          <section className="block">
+          <Reveal as="section" className="block" delayMs={110}>
             <div className="mb-4">
               <h1 className="text-2xl font-semibold tracking-tight">
                 Latest <span className="text-accent-orange">News</span>
@@ -234,9 +235,13 @@ export default async function Home() {
                 More news
               </Link>
             </div>
-          </section>
+          </Reveal>
 
-          <section className="block rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10">
+          <Reveal
+            as="section"
+            className="block rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10"
+            delayMs={140}
+          >
             <div className="group lg:flex lg:space-x-4 md:space-y-4 sm:space-y-4 md:block sm:block">
               <div className="min-w-0 lg:flex-1 md:w-full sm:w-full">
                 <div className="block space-y-4">
@@ -271,9 +276,9 @@ export default async function Home() {
                />
             </div>
            
-          </section>
+          </Reveal>
 
-          <section className="block">
+          <Reveal as="section" className="block" delayMs={170}>
             <div className="mb-4">
               <h1 className="text-2xl font-semibold tracking-tight">Meet the <span className="text-accent-orange">Team</span></h1>
               <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
@@ -289,9 +294,13 @@ export default async function Home() {
                 </div>
               ))}
             /> */}
-          </section>
+          </Reveal>
 
-          <section className="block space-y-8 rounded-3xl border border-black/10 bg-surface p-8 text-center shadow-sm dark:border-white/10">
+          <Reveal
+            as="section"
+            className="block space-y-8 rounded-3xl border border-black/10 bg-surface p-8 text-center shadow-sm dark:border-white/10"
+            delayMs={200}
+          >
             <h2 className="text-xl font-semibold tracking-tight">
               Have a project in mind?
             </h2>
@@ -307,7 +316,7 @@ export default async function Home() {
                 Contact Us
               </Link>
             </div>
-          </section>
+          </Reveal>
         </div>
       </div>
     </div>

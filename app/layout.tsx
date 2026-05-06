@@ -1,7 +1,8 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import SiteFooter from "./_components/SiteFooter";
 import SiteHeader from "./_components/SiteHeader";
+import ThemeScript from "./_components/ThemeScript";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,7 +32,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-full overflow-x-hidden">
         <SiteHeader />
         <main className="container mx-auto mt-20">{children}</main>
@@ -40,4 +45,3 @@ export default function RootLayout({
     </html>
   );
 }
-

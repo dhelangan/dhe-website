@@ -1,5 +1,6 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import PageHeader from "../_components/PageHeader";
+import Reveal from "../_components/Reveal";
 
 export const metadata = {
   title: "Services",
@@ -29,12 +30,14 @@ export default function ServicesPage() {
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 p-0">
         <div className="grid gap-10">
-          <PageHeader
-            title="Services"
-            description="From early prototypes to production-ready builds, we help teams ship playful experiences."
-          />
+          <Reveal>
+            <PageHeader
+              title="Services"
+              description="From early prototypes to production-ready builds, we help teams ship playful experiences."
+            />
+          </Reveal>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <Reveal className="grid gap-4 sm:grid-cols-2" delayMs={60}>
             {services.map((service) => (
               <div
                 key={service.title}
@@ -46,9 +49,9 @@ export default function ServicesPage() {
                 </p>
               </div>
             ))}
-          </div>
+          </Reveal>
 
-          <div className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 ">
+          <Reveal className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 " delayMs={90}>
             <h2 className="text-lg font-semibold tracking-tight">How we start</h2>
             <ol className="mt-4 grid gap-3 text-sm text-zinc-800 dark:text-zinc-200 sm:grid-cols-3">
               <li className="rounded-2xl border border-black/10 bg-background p-4 dark:border-white/10">
@@ -69,11 +72,9 @@ export default function ServicesPage() {
                 Request a quote
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </div>
   );
 }
-
-

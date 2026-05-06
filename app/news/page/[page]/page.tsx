@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 
 import PageHeader from "@/app/_components/PageHeader";
 import NewsCard from "@/app/_components/NewsCard";
+import Reveal from "@/app/_components/Reveal";
 import { getAllNews, getNewsPagination } from "@/lib/news";
 
 const PAGE_SIZE = 3;
@@ -99,12 +100,14 @@ export default async function NewsPage({
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 p-0">
         <div className="grid gap-10">
-          <PageHeader
-            title="News"
-            description="Updates and announcements from Dhelangan Studio."
-          />
+          <Reveal>
+            <PageHeader
+              title="News"
+              description="Updates and announcements from Dhelangan Studio."
+            />
+          </Reveal>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Reveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" delayMs={60}>
             {items.map((item) => (
               <NewsCard
                 key={item.title}
@@ -113,12 +116,13 @@ export default async function NewsPage({
                 imageSrc={item.imageSrc}
               />
             ))}
-          </div>
+          </Reveal>
 
-          <Pagination currentPage={currentPage} totalPages={totalPages} />
+          <Reveal delayMs={90}>
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
+          </Reveal>
         </div>
       </div>
     </div>
   );
 }
-

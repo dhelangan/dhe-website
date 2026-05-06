@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ZoomableImage from "../../../_components/ZoomableImage";
+import Reveal from "../../../_components/Reveal";
 
 import { formatNewsDate, getAllNews, getNewsBySlug, slugifyNewsTitle } from "@/lib/news";
 
@@ -23,6 +24,7 @@ export default async function NewsReadPage({
     <div className="bg-background pt-4">
       <div className="mx-auto w-full max-w-3xl px-4 p-0">
         <div className="grid gap-6">
+          <Reveal>
           <div className="flex items-center justify-between gap-3">
             <Link
               href="/news"
@@ -34,27 +36,30 @@ export default async function NewsReadPage({
               {formatNewsDate(newsItem.date)}
             </div>
           </div>
+          </Reveal>
 
-          <header className="grid gap-2">
+          <Reveal as="header" className="grid gap-2" delayMs={40}>
             <h1 className="text-3xl font-semibold tracking-tight">{newsItem.title}</h1>
             <p className="text-base leading-7 text-zinc-700 dark:text-zinc-300">
               {newsItem.excerpt}
             </p>
-          </header>
+          </Reveal>
 
-          <ZoomableImage
-            src={newsItem.imageSrc}
-            alt={newsItem.title}
-            sizes="(min-width: 768px) 720px, 100vw"
-            containerClassName="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]"
-            priority
-          />
+          <Reveal delayMs={70}>
+            <ZoomableImage
+              src={newsItem.imageSrc}
+              alt={newsItem.title}
+              sizes="(min-width: 768px) 720px, 100vw"
+              containerClassName="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]"
+              priority
+            />
+          </Reveal>
 
-          <article className="grid gap-4 text-sm leading-7 text-zinc-800 dark:text-zinc-200">
+          <Reveal as="article" className="grid gap-4 text-sm leading-7 text-zinc-800 dark:text-zinc-200" delayMs={100}>
             {newsItem.content.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
-          </article>
+          </Reveal>
         </div>
       </div>
     </div>

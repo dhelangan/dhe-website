@@ -1,5 +1,6 @@
 import PageHeader from "../_components/PageHeader";
 import PortfolioCard from "../_components/PortfolioCard";
+import Reveal from "../_components/Reveal";
 
 import PortfolioFilters from "./_components/PortfolioFilters";
 
@@ -67,11 +68,14 @@ export default async function PortfolioPage({
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 p-0">
         <div className="grid gap-8">
+          <Reveal>
           <PageHeader
             title="Portfolio"
             description="A selection of tabletop and digital work—prototypes, slices, and in-progress projects."
           />
+          </Reveal>
 
+          <Reveal delayMs={60}>
           <PortfolioFilters
             initialType={type}
             initialStatus={status}
@@ -80,17 +84,18 @@ export default async function PortfolioPage({
             initialSort={sort}
             genreOptions={genreOptions}
           />
+          </Reveal>
 
-          <div className="grid gap-4">
+          <Reveal className="grid gap-4" delayMs={90}>
             {sorted.map((item) => (
               <PortfolioCard key={item.title} item={item} />
             ))}
-          </div>
+          </Reveal>
 
           {sorted.length === 0 ? (
-            <div className="rounded-3xl border border-black/10 bg-surface p-8 text-sm text-zinc-700 dark:border-white/10 dark:text-zinc-300">
+            <Reveal className="rounded-3xl border border-black/10 bg-surface p-8 text-sm text-zinc-700 dark:border-white/10 dark:text-zinc-300" delayMs={120}>
               No projects match those filters.
-            </div>
+            </Reveal>
           ) : null}
         </div>
       </div>

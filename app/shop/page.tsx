@@ -1,5 +1,6 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import PageHeader from "../_components/PageHeader";
+import Reveal from "../_components/Reveal";
 
 export const metadata = {
   title: "Shop",
@@ -10,12 +11,14 @@ export default function ShopPage() {
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 p-0">
         <div className="grid gap-10">
-          <PageHeader
-            title="Shop"
-            description="Coming soon: print-and-play packs, merch, and digital downloads."
-          />
+          <Reveal>
+            <PageHeader
+              title="Shop"
+              description="Coming soon: print-and-play packs, merch, and digital downloads."
+            />
+          </Reveal>
 
-          <div className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 ">
+          <Reveal className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 " delayMs={60}>
             <h2 className="text-lg font-semibold tracking-tight">In the meantime</h2>
             <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
               If you’d like a prototype kit or a custom component pack, reach out
@@ -29,11 +32,10 @@ export default function ShopPage() {
                 Contact
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </div>
   );
 }
-
 

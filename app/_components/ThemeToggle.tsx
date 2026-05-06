@@ -8,18 +8,33 @@ function getSystemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    queueMicrotask(() => setMounted(true));
+  }, []);
+  return mounted;
+}
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "light";
+  const mounted = useMounted();
+  const [theme, setTheme] = useState<Theme>("light");
+
+  useEffect(() => {
     const stored = window.localStorage.getItem("theme");
-    if (stored === "light" || stored === "dark") return stored;
-    return getSystemTheme();
-  });
+    if (stored === "light" || stored === "dark") {
+      queueMicrotask(() => setTheme(stored));
+      return;
+    }
+    queueMicrotask(() => setTheme(getSystemTheme()));
+  }, []);
 
   // Apply class
   useEffect(() => {
+    if (!mounted) return;
     document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
+    document.documentElement.style.colorScheme = theme;
+  }, [mounted, theme]);
 
   // Listen system changes (only if no manual override)
   useEffect(() => {
@@ -37,6 +52,20 @@ export default function ThemeToggle() {
     () => (theme === "dark" ? "Switch to light mode" : "Switch to dark mode"),
     [theme]
   );
+
+  if (!mounted) {
+    return (
+      <button
+        type="button"
+        className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-black/10 bg-background px-3 text-sm font-semibold text-zinc-800 transition-colors dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-200"
+        aria-label="Theme"
+        title="Theme"
+        disabled
+      >
+        <span className="hidden sm:inline">Theme</span>
+      </button>
+    );
+  }
 
   return (
     <button
