@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import LazyImage from "./LazyImage";
+import Portal from "./Portal";
 
 import type { TeamLink, TeamMember } from "@/lib/team";
 
@@ -85,6 +86,8 @@ function MemberModal({
   modal: ModalState;
   onClose: () => void;
 }) {
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
     if (!modal.open) return;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -94,6 +97,20 @@ function MemberModal({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [modal.open, onClose]);
 
+  useEffect(() => {
+    if (!modal.open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [modal.open]);
+
+  useEffect(() => {
+    if (!modal.open) return;
+    requestAnimationFrame(() => closeButtonRef.current?.focus());
+  }, [modal.open]);
+
   if (!modal.open) return null;
 
   const { member } = modal;
@@ -102,17 +119,18 @@ function MemberModal({
   const otherLinks = (member.links ?? []).filter((l) => !isSocialLink(l));
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 p-4 sm:items-center"
-      onMouseDown={onClose}
-    >
+    <Portal>
       <div
-        className="w-full max-w-lg overflow-hidden rounded-3xl border border-black/10 bg-surface shadow-xl dark:border-white/10"
-        onMouseDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 p-4 sm:items-center"
+        onClick={onClose}
       >
-        <div className="p-6">
+        <div
+          className="w-full max-w-lg overflow-hidden rounded-3xl border border-black/10 bg-surface shadow-xl dark:border-white/10"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="relative size-14 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
@@ -133,6 +151,7 @@ function MemberModal({
 
             <button
               type="button"
+              ref={closeButtonRef}
               className="touch-manipulation inline-flex h-9 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
               onClick={onClose}
             >
@@ -210,7 +229,8 @@ function MemberModal({
 
         </div>
       </div>
-    </div>
+      </div>
+    </Portal>
   );
 }
 

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import LazyImage from "./LazyImage";
+import Portal from "./Portal";
 
 type ZoomableImageProps = {
   src: string;
@@ -24,6 +25,7 @@ export default function ZoomableImage({
   const [open, setOpen] = useState(false);
   const [scale, setScale] = useState(1);
   const dialogId = useId();
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const close = () => {
     setOpen(false);
@@ -37,6 +39,20 @@ export default function ZoomableImage({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    requestAnimationFrame(() => closeButtonRef.current?.focus());
   }, [open]);
 
   const scaleLabel = useMemo(() => `${Math.round(scale * 100)}%`, [scale]);
@@ -64,17 +80,18 @@ export default function ZoomableImage({
       </button>
 
       {open ? (
+        <Portal>
         <div
           id={dialogId}
           role="dialog"
           aria-modal="true"
           className="fixed inset-0 z-[80] bg-black/70 p-4 sm:p-8"
-          onMouseDown={close}
+          onClick={close}
         >
           <div className="relative mx-auto flex h-full w-full max-w-6xl items-center justify-center">
             <div
               className="relative h-full w-full overflow-hidden rounded-2xl bg-black"
-              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
               onWheel={(e) => {
                 e.preventDefault();
                 const delta = e.deltaY;
@@ -102,6 +119,7 @@ export default function ZoomableImage({
                 </button>
                 <button
                   type="button"
+                  ref={closeButtonRef}
                   className="inline-flex h-9 items-center justify-center rounded-full bg-white/10 px-4 text-sm font-semibold text-white transition-colors hover:bg-white/20"
                   onClick={close}
                 >
@@ -112,7 +130,7 @@ export default function ZoomableImage({
               <div className="relative h-full w-full">
                 <div
                   className="absolute inset-0 flex items-center justify-center"
-                  onMouseDown={close}
+                  onClick={close}
                   style={{ transform: `scale(${scale})` }}
                 >
                   <div className="relative h-full w-full">
@@ -131,6 +149,7 @@ export default function ZoomableImage({
             </div>
           </div>
         </div>
+        </Portal>
       ) : null}
     </>
   );
