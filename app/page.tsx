@@ -27,7 +27,7 @@ type Post = {
 };
 
 export default async function Home() {
-  const latestNews = getLatestNews(3);
+  const latestNews = getLatestNews(4);
   const team = await getTeamMembers();
   const portfolio = await getAllPortfolio();
 
@@ -50,7 +50,7 @@ export default async function Home() {
       subtitle: item.summary,
       imageSrc: item.thumbnailSrc,
       href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
-      badge: "Board",
+      badge: item.status,
     }));
 
   const digitalPosts: Post[] = portfolio
@@ -61,7 +61,7 @@ export default async function Home() {
       subtitle: item.summary,
       imageSrc: item.thumbnailSrc,
       href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
-      badge: "Digital",
+      badge: item.status,
     }));
 
   return (
@@ -142,7 +142,7 @@ export default async function Home() {
                       ))}
                     </div>
 
-                    <span className="inline-block bg-surface/80 p-2 rounded-md mt-4 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-white sm:text-3xl">
+                    <span className="inline-block bg-surface/80 p-2 rounded-md mt-4 text-2xl font-extrabold tracking-tight text-zinc-950 dark:text-white sm:text-3xl">
                       {game.title}
                     </span>
                     <p className="bg-surface/80 p-2 rounded-md mt-2 max-w-2xl text-sm leading-6 text-zinc-800 dark:text-zinc-200 line-clamp-2 sm:line-clamp-5">
@@ -220,7 +220,7 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-4 grid-cols-2">
               {latestNews.map((item) => (
                 <NewsCard key={item.title} title={item.title} date={item.date} imageSrc={item.imageSrc} />
               ))}
@@ -248,12 +248,15 @@ export default async function Home() {
                   <p className="max-w-3xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                    Jl. XX I No.67, Desa XX, Kab XX, Kec XX, Daerah Istimewa Yogyakarta XXXXX
                   </p>
+                   <p className="max-w-3xl text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                   Email : dhelangan@gmail.com
+                  </p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 mt-4 mb-4">
                   <Link
                     href="/about-us"
-                    className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                    className="inline-flex h-10 items-center justify-center rounded-full border border-black/10 text-surface bg-accent-orange px-4 text-sm font-medium transition-colors hover:bg-accent-red"
                   >
                     Learn more
                   </Link>
@@ -264,7 +267,7 @@ export default async function Home() {
                  src="/thumbnails/team-creative.svg"
                  alt="About Dhelangan Studio"
                  sizes="(min-width: 1024px) 40vw, 100vw"
-                 containerClassName="lg:flex-1 md:w-full sm:w-full relative aspect-[2/1] overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]"
+                 containerClassName="lg:flex-1 w-full relative aspect-[2/1] overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]"
                />
             </div>
            

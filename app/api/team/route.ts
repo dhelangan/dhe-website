@@ -90,8 +90,12 @@ export async function GET() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
-  const { data, error } = await supabase.from("team").select("*").eq("active", true);
-
+  const { data, error } = await supabase
+  .from("team")
+  .select("*")
+  .eq("active", true)
+  .order("id", { ascending: true });
+  
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   const members = (data ?? [])

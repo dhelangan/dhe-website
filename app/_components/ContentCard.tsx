@@ -36,7 +36,7 @@ export default function ContentCard({
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="truncate font-semibold tracking-tight">{title}</h3>
           {badge ? (
-            <span className="rounded-full border border-black/10 bg-background px-2 py-0.5 text-xs font-semibold text-foreground dark:border-white/10">
+            <span className="rounded-full border capitalize border-black/10 bg-accent-orange px-2 py-0.5 text-xs font-semibold text-surface dark:border-white/10">
               {badge}
             </span>
           ) : null}
