@@ -10,6 +10,7 @@ import Reveal from "./_components/Reveal";
 import { getLatestNews } from "@/lib/news";
 import { getTeamMembers } from "@/lib/team";
 import { getAllPortfolio, slugifyPortfolioTitle } from "@/lib/portfolio";
+import { getAllGallery } from "@/lib/gallery";
 
 type PinnedGame = {
   title: string;
@@ -31,6 +32,12 @@ export default async function Home() {
   const latestNews = await getLatestNews(4);
   const team = await getTeamMembers();
   const portfolio = await getAllPortfolio();
+  const gallery = await getAllGallery();
+
+  const aboutImage =
+    gallery.length > 0
+      ? gallery[Math.floor(Math.random() * gallery.length)]!.image
+      : "/thumbnails/team-creative.svg";
 
   const featuredItems = portfolio.filter((p) => p.featured);
   const pinnedGames: PinnedGame[] = (featuredItems.length ? featuredItems : portfolio)
@@ -269,7 +276,7 @@ export default async function Home() {
               </div>
 
                <ZoomableImage
-                 src="/thumbnails/team-creative.svg"
+                 src={aboutImage}
                  alt="About Dhelangan Studio"
                  sizes="(min-width: 1024px) 40vw, 100vw"
                  containerClassName="lg:flex-1 w-full relative aspect-[2/1] overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]"

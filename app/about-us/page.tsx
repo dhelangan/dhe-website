@@ -6,6 +6,7 @@ import ZoomableImage from "../_components/ZoomableImage";
 import Reveal from "../_components/Reveal";
 
 import { getTeamMembers } from "@/lib/team";
+import { getAllGallery } from "@/lib/gallery";
 
 export const metadata = {
   title: "About Us",
@@ -13,6 +14,7 @@ export const metadata = {
 
 export default async function AboutUsPage() {
   const team = await getTeamMembers();
+  const gallery = await getAllGallery();
   return (
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 py-0">
@@ -67,19 +69,10 @@ export default async function AboutUsPage() {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                "/thumbnails/pinned-ember-guild.svg",
-                "/thumbnails/pinned-neon-drift.svg",
-                "/thumbnails/pinned-skybound-stories.svg",
-                "/thumbnails/digital-controller.svg",
-                "/thumbnails/board-balancing.svg",
-                "/thumbnails/team-creative.svg",
-                "/thumbnails/team-designer.svg",
-                "/thumbnails/team-engineer.svg",
-              ].map((src) => (
+              {gallery.map((item) => (
                 <ZoomableImage
-                  key={src}
-                  src={src}
+                  key={item.id}
+                  src={item.image}
                   alt="Gallery image"
                   sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
                   containerClassName="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] shadow-sm dark:border-white/10 dark:bg-white/[.06]"

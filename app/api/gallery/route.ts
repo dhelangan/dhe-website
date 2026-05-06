@@ -7,8 +7,10 @@ export async function GET() {
   const supabase = createClient(cookieStore)
 
  const { data, error } = await supabase
-  .from('gallery')
-  .select().order("id", { ascending: true });
+  .from('team-gallery')
+  .select() 
+  .eq('published', true)
+  .order("id", { ascending: true });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
