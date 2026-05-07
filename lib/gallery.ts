@@ -41,7 +41,7 @@ async function fetchGalleryFromApi(): Promise<GalleryItem[]> {
         published: Boolean(v.published),
       } satisfies GalleryItem;
     })
-    .filter((v): v is GalleryItem => Boolean(v) && Number.isFinite(v.id) && Boolean(v.image));
+    .filter((v): v is GalleryItem => Boolean(v) && Number.isFinite(v?.id) && Boolean(v?.image));
 }
 
 export async function getAllGallery() {
