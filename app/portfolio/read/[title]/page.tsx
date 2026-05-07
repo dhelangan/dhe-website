@@ -10,10 +10,7 @@ import {
   getPortfolioBySlug,
 } from "@/lib/portfolio";
 
-export async function generateStaticParams() {
-  // Data is fetched from `/api/portfolio` at runtime; avoid static generation here.
-  return [];
-}
+export const dynamic = "force-dynamic";
 
 function YouTubeEmbed({ url }: { url: string }) {
   let embedUrl: string | null = null;
