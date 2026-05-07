@@ -1,154 +1,77 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import PageHeader from "../_components/PageHeader";
 import Reveal from "../_components/Reveal";
+import ReviewsCarousel from "./ReviewsCarousel";
 
 export const metadata = {
   title: "Services",
 };
 
-const stats = [
-  { label: "Years of experience", value: "10+" },
-  { label: "Number of client", value: "30+" },
-  { label: "Project delivered", value: "60+" },
-  { label: "Rating", value: "5.0/5" },
-];
+type ServiceItem = {
+  id: number;
+  illustration?: string | null;
+  category?: string | null;
+  title?: string | null;
+  description?: string | null;
+};
 
-const services = [
-  {
-    title: "Service 1",
-    category: "Art",
-    body: "Character, prop, and scene illustration with consistent style + delivery-ready files.",
-  },
-  {
-    title: "Service 2",
-    category: "Brand",
-    body: "Visual identity systems that translate cleanly across social, web, and print.",
-  },
-  {
-    title: "Service 3",
-    category: "Product",
-    body: "User flows, wireframes, and high-fidelity UI for web + mobile.",
-  },
-  {
-    title: "Service 4",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
+type ProjectItem = {
+  id: number;
+  thumbnail?: string | null;
+  title?: string | null;
+  description?: string | null;
+  category?: string | null;
+};
 
-  {
-    title: "Service 5",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
-  
-  {
-    title: "Service 6",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
-  
-  {
-    title: "Service 7",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
-  
-  {
-    title: "Service 8",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
-  
-  {
-    title: "Service 9",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
-  
-  {
-    title: "Service 10",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
-  
-  {
-    title: "Service 11",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
-  
-  {
-    title: "Service 12",
-    category: "Engineering",
-    body: "Modern, responsive websites with performance and SEO baked in.",
-  },
-];
+type QnaItem = {
+  id: number;
+  question?: string | null;
+  answer?: string | null;
+};
 
-const deliveredProjects = [
-  { title: "Project 1", category: "Game Development" },
-  { title: "Project 2", category: "Game Design" },
-  { title: "Project 3", category: "3D Model" },
-  { title: "Project 4", category: "2D Art" },
-  { title: "Project 5", category: "Music Composer" },
-  { title: "Project 6", category: "Script Writing" }
-];
+type ReviewItem = {
+  id: number;
+  review?: string | null;
+  source?: string | null;
+  client?: string | null;
+  star?: number | null;
+};
 
-const qna = [
-  {
-    q: "How long does a typical project take?",
-    a: "Timelines vary by scope. After a short discovery call, we provide a clear schedule with milestones and review rounds.",
-  },
-  {
-    q: "Do you offer revisions?",
-    a: "Yes. Each service includes review rounds (defined up front) to keep feedback structured and delivery predictable.",
-  },
-  {
-    q: "Can you work with an existing brand?",
-    a: "Absolutely. We can match and extend existing brand guidelines, or refresh them while keeping what already works.",
-  },
-];
+type ServicesApiResponse = {
+  services: ServiceItem[];
+  projects: ProjectItem[];
+  qna: QnaItem[];
+  reviews: ReviewItem[];
+};
 
-const reviews = [
-  {
-    text: "Fast turnaround and great communication. The final output exceeded expectations.",
-    source: "Google Reviews",
-    profile: "A. Client",
-    stars: 5,
-  },
-  {
-    text: "The process was clear from start to finish, and the design system is very easy to maintain.",
-    source: "Upwork",
-    profile: "B. Client",
-    stars: 5,
-  },
-  
-  {
-    text: "The process was clear from start to finish, and the design system is very easy to maintain.",
-    source: "Upwork",
-    profile: "C. Client",
-    stars: 5,
-  },
-  
-  {
-    text: "The process was clear from start to finish, and the design system is very easy to maintain.",
-    source: "Upwork",
-    profile: "D. Client",
-    stars: 5,
-  },
-  
-  {
-    text: "The process was clear from start to finish, and the design system is very easy to maintain.",
-    source: "Upwork",
-    profile: "E. Client",
-    stars: 5,
-  },
+function toPublicAssetPath(value?: string | null) {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+}
 
-];
+async function getServicesData(): Promise<ServicesApiResponse> {
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
+  const proto = h.get("x-forwarded-proto") ?? "http";
+  const baseUrl = `${proto}://${host}`;
+  const cookie = h.get("cookie") ?? undefined;
+
+  const res = await fetch(`${baseUrl}/api/services`, {
+    headers: cookie ? { cookie } : undefined,
+    next: { revalidate: 60 },
+  });
+
+  if (!res.ok) throw new Error(`Failed to load /api/services (${res.status})`);
+  return (await res.json()) as ServicesApiResponse;
+}
 
 function Stars({ value }: { value: number }) {
   const clamped = Math.max(0, Math.min(5, Math.round(value)));
   return (
-    <div className="flex items-center gap-1" aria-label={`${clamped} out of 5 stars`}>
+    <div className="flex items-center gap-1 text-2xl" aria-label={`${clamped} out of 5 stars`}>
       {Array.from({ length: 5 }).map((_, i) => (
         <span
           key={i}
@@ -162,7 +85,35 @@ function Stars({ value }: { value: number }) {
   );
 }
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const data = await getServicesData();
+  const services = data.services ?? [];
+  const projects = data.projects ?? [];
+  const qna = data.qna ?? [];
+  const reviews = data.reviews ?? [];
+
+  const projectCount = projects.length;
+  const clientCount = reviews.length;
+  const avgRating =
+    reviews.length > 0 ? reviews.reduce((sum, r) => sum + (r.star ?? 0), 0) / reviews.length : 0;
+
+  const stats = [
+    { label: "Years of experience", value: "5+" },
+    { label: "Number of Client", value: clientCount > 0 ? `${clientCount}+` : "—" },
+    { label: "Number of Project Delivered", value: projectCount > 0 ? `${projectCount}+` : "—" },
+    { label: "Rating", value: avgRating > 0 ? `${avgRating.toFixed(1)}/5` : "—" },
+  ];
+
+  const starCounts = [1, 2, 3, 4, 5].reduce<Record<number, number>>((acc, star) => {
+    acc[star] = 0;
+    return acc;
+  }, {});
+
+  for (const r of reviews) {
+    const star = typeof r.star === "number" ? Math.round(r.star) : 0;
+    if (star >= 1 && star <= 5) starCounts[star] = (starCounts[star] ?? 0) + 1;
+  }
+
   return (
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 p-0">
@@ -175,16 +126,15 @@ export default function ServicesPage() {
           </Reveal>
 
           <Reveal delayMs={40}>
-            <section className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10">
-              <h2 className="text-lg font-semibold tracking-tight">Stats</h2>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <section className="rounded-3xl border border-black/10 bg-surface p-2 shadow-sm dark:border-white/10">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
                     className="rounded-2xl border border-black/10 bg-background p-5 dark:border-white/10"
                   >
-                    <div className="text-2xl font-semibold tracking-tight">{stat.value}</div>
-                    <div className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">{stat.label}</div>
+                    <div className="text-center text-4xl text-accent-orange font-extrabold tracking-tight">{stat.value}</div>
+                    <div className="text-center mt-2 text-sm text-zinc-700 dark:text-zinc-300">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -195,9 +145,9 @@ export default function ServicesPage() {
             <section className="grid gap-4">
               <div className="flex items-end justify-between gap-6">
                 <div className="grid gap-1">
-                  <h2 className="text-lg font-semibold tracking-tight">Services</h2>
-                  <p className="text-sm text-zinc-700 dark:text-zinc-300">
-                    Pick what you need, or combine services into a single package.
+                  <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Services</span></h1>
+                  <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                      Pick what you need, or combine services into a single package.
                   </p>
                 </div>
                 <Link
@@ -208,27 +158,37 @@ export default function ServicesPage() {
                 </Link>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
                 {services.map((service) => (
                   <div
-                    key={service.title}
-                    className="rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10"
+                    key={service.id}
+                    className="rounded-3xl border border-black/10 bg-surface p-2 shadow-sm dark:border-white/10"
                   >
                     <div className="grid gap-4">
-                      <div className="aspect-[16/9] w-full rounded-2xl border border-black/10 bg-background dark:border-white/10">
-                        <div className="flex h-full items-center justify-center text-sm text-zinc-600 dark:text-zinc-300">
-                          Illustration
-                        </div>
+                      <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
+                        {toPublicAssetPath(service.illustration) ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={toPublicAssetPath(service.illustration) ?? ""}
+                            alt={service.title ?? "Service illustration"}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-sm text-zinc-600 dark:text-zinc-300">
+                            Illustration
+                          </div>
+                        )}
                       </div>
 
                       <div>
-                        <div className="text-xs font-medium uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
-                          {service.category}
+                        <div className="text-center text-xs font-medium uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
+                          {service.category ?? ""}
                         </div>
-                        <h3 className="mt-1 text-lg font-semibold tracking-tight">{service.title}</h3>
-                        <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                          {service.body}
-                        </p>
+                        <h3 className="text-center mt-1 text-lg font-semibold tracking-tight">{service.title ?? ""}</h3>
+                        {/* <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                          {service.description ?? ""}
+                        </p> */}
                       </div>
                     </div>
                   </div>
@@ -249,26 +209,41 @@ export default function ServicesPage() {
           <Reveal delayMs={80}>
             <section className="grid gap-4">
               <div className="grid gap-1">
-                <h2 className="text-lg font-semibold tracking-tight">Project delivered</h2>
-                <p className="text-sm text-zinc-700 dark:text-zinc-300">
-                  A small selection of recent deliveries.
-                </p>
+                <h1 className="text-2xl font-semibold tracking-tight">Project <span className="text-accent-orange">Delivered</span></h1>
+                  <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                    A small selection of recent deliveries.
+                  </p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {deliveredProjects.map((project) => (
+                {projects.map((project) => (
                   <div
-                    key={project.title}
-                    className="rounded-3xl border border-black/10 bg-surface p-6 shadow-sm dark:border-white/10"
+                    key={project.id}
+                    className="rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10"
                   >
-                    <div className="aspect-[16/10] w-full rounded-2xl border border-black/10 bg-background dark:border-white/10">
-                      <div className="flex h-full items-center justify-center text-sm text-zinc-600 dark:text-zinc-300">
-                        Thumbnail
-                      </div>
+                    <div className="aspect-[16/10] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
+                      {toPublicAssetPath(project.thumbnail) ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={toPublicAssetPath(project.thumbnail) ?? ""}
+                          alt={project.title ?? "Project thumbnail"}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-sm text-zinc-600 dark:text-zinc-300">
+                          Thumbnail
+                        </div>
+                      )}
                     </div>
                     <div className="mt-5">
-                      <div className="text-sm font-semibold tracking-tight">{project.title}</div>
-                      <div className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">{project.category}</div>
+                      <div className="text-sm font-semibold tracking-tight">{project.title ?? ""}</div>
+                      <div className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">{project.category ?? ""}</div>
+                      {project.description ? (
+                        <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                          {project.description}
+                        </p>
+                      ) : null}
                     </div>
                   </div>
                 ))}
@@ -277,23 +252,38 @@ export default function ServicesPage() {
           </Reveal>
 
           <Reveal delayMs={100}>
-            <section className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10">
-              <h2 className="text-lg font-semibold tracking-tight">QnA</h2>
-              <div className="mt-5 grid gap-3">
+
+            <section className="grid gap-4 ">
+            <div className="flex items-end justify-between gap-6">
+                <div className="grid gap-1">
+                  <h1 className="text-2xl font-semibold tracking-tight">Question And <span className="text-accent-orange">Answer</span></h1>
+                  <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                    Frequently asked questions about our services and process.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-3 rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10 md:grid-cols-1">
                 {qna.map((item) => (
                   <details
-                    key={item.q}
-                    className="group rounded-2xl border border-black/10 bg-background p-5 dark:border-white/10"
+                    key={item.id}
+                    className="group rounded-2xl border border-black/10 bg-background p-4 dark:border-white/10"
                   >
                     <summary className="cursor-pointer list-none font-semibold tracking-tight">
                       <div className="flex items-start justify-between gap-4">
-                        <span>{item.q}</span>
-                        <span className="mt-0.5 text-zinc-600 transition-transform group-open:rotate-45 dark:text-zinc-300" aria-hidden="true">
+                        <span>{item.question ?? ""}</span>
+                        <span
+                          key={item.id}
+                          className="mt-0.5 text-zinc-600 transition-transform group-open:rotate-45 dark:text-zinc-300"
+                          aria-hidden="true"
+                        >
                           +
                         </span>
                       </div>
                     </summary>
-                    <p className="mt-3 text-sm leading-6 text-zinc-800 dark:text-zinc-200">{item.a}</p>
+                    <p className="mt-3 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                      {item.answer ?? ""}
+                    </p>
                   </details>
                 ))}
               </div>
@@ -301,47 +291,60 @@ export default function ServicesPage() {
           </Reveal>
 
           <Reveal delayMs={120}>
-            <section className="grid gap-4">
+            <section className="grid gap-4 ">
               <div className="grid gap-1">
-                <h2 className="text-lg font-semibold tracking-tight">Customer reviews</h2>
-                <p className="text-sm text-zinc-700 dark:text-zinc-300">
+                <h1 className="text-2xl font-semibold tracking-tight">Customer <span className="text-accent-orange">Reviews</span></h1>
+                <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                   Overall reviews and highlights from past customers.
                 </p>
               </div>
 
-              <div className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10">
-                <div className="flex flex-wrap items-end justify-between gap-6">
-                  <div>
-                    <div className="text-3xl font-semibold tracking-tight">Overall reviews</div>
-                    <div className="mt-2 flex items-center gap-3">
-                      <Stars value={5} />
-                      <div className="text-sm text-zinc-700 dark:text-zinc-300">Based on recent feedback</div>
+              <div className="grid gap-4 lg:grid-cols-3 rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10">
+                <div className="p-1">
+                  <div className="text-lg font-semibold tracking-tight">Overall reviews</div>
+                  <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
+                    <div>
+                      <div className="text-4xl font-semibold tracking-tight">
+                        {reviews.length > 0 ? avgRating.toFixed(1) : "—"}
+                      </div>
+                      <div className="mt-1 flex items-center gap-3">
+                        <Stars value={avgRating || 0} />
+                        <div className="text-sm text-zinc-700 dark:text-zinc-300">
+                          {reviews.length > 0 ? `${reviews.length} reviews` : "No reviews yet"}
+                        </div>
+                      </div>
                     </div>
+                    
                   </div>
-                  <Link
-                    href="/contact"
-                    className="inline-flex h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-                  >
-                    Start a project
-                  </Link>
+
+                  <div className="mt-4 grid gap-1">
+                    {[5, 4, 3, 2, 1].map((star) => {
+                      const count = starCounts[star] ?? 0;
+                      const pct = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+                      return (
+                        <div key={star} className="grid gap-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold">{star}</span>
+                              <span className="text-zinc-600 dark:text-zinc-300">star</span>
+                            </div>
+                            <span className="text-zinc-600 dark:text-zinc-300">{count}</span>
+                          </div>
+                          <div className="h-2 w-full rounded-full bg-black/10 dark:bg-white/10">
+                            <div
+                              className="h-2 rounded-full bg-amber-500"
+                              style={{ width: `${pct}%` }}
+                              aria-hidden="true"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  {reviews.map((review) => (
-                    <div
-                      key={`${review.profile}-${review.source}`}
-                      className="rounded-2xl border border-black/10 bg-background p-6 dark:border-white/10"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="text-sm font-semibold tracking-tight">{review.profile}</div>
-                        <Stars value={review.stars} />
-                      </div>
-                      <p className="mt-3 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                        {review.text}
-                      </p>
-                      <div className="mt-4 text-sm text-zinc-700 dark:text-zinc-300">{review.source}</div>
-                    </div>
-                  ))}
+                <div className="lg:col-span-2">
+                  <ReviewsCarousel reviews={reviews} />
                 </div>
               </div>
             </section>
@@ -351,3 +354,4 @@ export default function ServicesPage() {
     </div>
   );
 }
+
