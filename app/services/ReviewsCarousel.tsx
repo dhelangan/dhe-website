@@ -35,7 +35,7 @@ function chunk<T>(items: T[], size: number) {
 
 export default function ReviewsCarousel({
   reviews,
-  defaultAvatarSrc = "/thumbnails/team-creative.svg",
+  defaultAvatarSrc = "/thumbnails/default-avatar.png",
 }: {
   reviews: ReviewItem[];
   defaultAvatarSrc?: string;

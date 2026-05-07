@@ -1,8 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import { headers } from "next/headers";
 import PageHeader from "../_components/PageHeader";
 import Reveal from "../_components/Reveal";
 import ReviewsCarousel from "./ReviewsCarousel";
+import ZoomableImage from "../_components/ZoomableImage";
 
 export const metadata = {
   title: "Services",
@@ -134,7 +136,7 @@ export default async function ServicesPage() {
                     className="rounded-2xl border border-black/10 bg-background p-5 dark:border-white/10"
                   >
                     <div className="text-center text-4xl text-accent-orange font-extrabold tracking-tight">{stat.value}</div>
-                    <div className="text-center mt-2 text-sm text-zinc-700 dark:text-zinc-300">{stat.label}</div>
+                    <div className="text-center mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-bold">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -166,19 +168,15 @@ export default async function ServicesPage() {
                   >
                     <div className="grid gap-4">
                       <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
-                        {toPublicAssetPath(service.illustration) ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={toPublicAssetPath(service.illustration) ?? ""}
+                        
+                          <Image
+                            src={service.illustration ?? ""}
                             alt={service.title ?? "Service illustration"}
+                            width={360}
+                            height={360}
                             className="h-full w-full object-cover"
                             loading="lazy"
                           />
-                        ) : (
-                          <div className="flex h-full items-center justify-center text-sm text-zinc-600 dark:text-zinc-300">
-                            Illustration
-                          </div>
-                        )}
                       </div>
 
                       <div>
@@ -222,7 +220,7 @@ export default async function ServicesPage() {
                     className="rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10"
                   >
                     <div className="aspect-[16/10] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
-                      {toPublicAssetPath(project.thumbnail) ? (
+                      {/* {toPublicAssetPath(project.thumbnail) ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={toPublicAssetPath(project.thumbnail) ?? ""}
@@ -235,6 +233,14 @@ export default async function ServicesPage() {
                           Thumbnail
                         </div>
                       )}
+                       */}
+                       <ZoomableImage
+                          key={project.id}
+                          src={project.thumbnail ?? ""}
+                          alt={project.title ?? "Project thumbnail"}
+                          sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
+                          containerClassName="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-black/10 bg-black/[.06] shadow-sm dark:border-white/10 dark:bg-white/[.06]"
+                        />
                     </div>
                     <div className="mt-5">
                       <div className="text-sm font-semibold tracking-tight">{project.title ?? ""}</div>
