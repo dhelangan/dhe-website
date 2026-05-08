@@ -152,12 +152,25 @@ export default async function ServicesPage() {
                       Pick what you need, or combine services into a single package.
                   </p>
                 </div>
-                <Link
-                  href="/contact"
-                  className="hidden h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10] sm:inline-flex"
-                >
-                  Request a quote
-                </Link>
+                
+                <div className="flex justify-end gap-4">
+                  <a
+                    href="https://www.fiverr.com/achmadjodhy/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hidden h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10] sm:inline-flex"
+                  >
+                    Fiverr
+                  </a>
+                  <a
+                    href="https://fastwork.id/user/dhelangan"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hidden h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10] sm:inline-flex"
+                  >
+                    Fastwork
+                  </a>
+                </div>
               </div>
 
               <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
@@ -193,13 +206,23 @@ export default async function ServicesPage() {
                 ))}
               </div>
 
-              <div className="sm:hidden">
-                <Link
-                  href="/contact"
-                  className="inline-flex h-11 w-full items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
+              <div className="sm:hidden grid grid-cols-2 gap-2">
+                <a
+                  href="https://www.fiverr.com/achmadjodhy/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="fiverr inline-flex h-11 w-full items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
                 >
-                  Request a quote
-                </Link>
+                  Fiverr
+                </a>
+                <a
+                  href="https://fastwork.id/user/dhelangan"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="fastwork inline-flex h-11 w-full items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
+                >
+                  Fastwork
+                </a>
               </div>
             </section>
           </Reveal>

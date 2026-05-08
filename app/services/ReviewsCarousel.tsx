@@ -87,10 +87,10 @@ export default function ReviewsCarousel({
         {current.map((review) => (
           <div
             key={review.id}
-            className="rounded-2xl h-72 border border-black/10 bg-background p-4 dark:border-white/10"
+            className="relative rounded-2xl h-72 border border-black/10 bg-background p-4 dark:border-white/10"
           >
             <span className="px-2 py-1 rounded-2xl  dark:text-white text-sm font-semibold text-center bg-accent-orange text-black">{review.source ?? ""}</span>
-
+            <svg className="absolute top-2 right-2 w-9 h-9 text-foreground/40" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="#999999" d="M.78 8.89c0-3.07 1.53-4.3 4.3-4.34L5.38 6C3.78 6.17 3 7 3.1 8.31h1.44V12H.78Zm5.9 0c0-3.07 1.53-4.3 4.3-4.34l.3 1.45C9.68 6.17 8.89 7 9 8.31h1.44V12H6.68Zm10.26 6.22c0 3.07-1.53 4.3-4.3 4.34L12.35 18c1.6-.16 2.39-1 2.28-2.3h-1.45V12h3.76Zm5.9 0c0 3.07-1.53 4.3-4.3 4.34l-.3-1.45c1.6-.16 2.39-1 2.28-2.3h-1.44V12h3.76Z"></path></svg>
             <div className="flex items-stretch justify-between gap-4 mt-2">
               
               <div className="flex items-center gap-3">
