@@ -80,7 +80,7 @@ export async function POST(request: Request) {
     auth: { user: smtpUser, pass: smtpPass },
   });
 
-  const to = "bytes.salmaniyah@gmail.com";
+  const to = "dhelangan@gmail.com";
   const subject = `New contact message from ${payload.name}`;
 
   const text = [
