@@ -1,5 +1,6 @@
 import PageHeader from "../_components/PageHeader";
 import Reveal from "../_components/Reveal";
+import ContactForm from "./ContactForm";
 
 export const metadata = {
   title: "Contact",
@@ -25,40 +26,10 @@ export default function ContactPage() {
             >
               <h2 className="text-lg font-semibold tracking-tight">Send a message</h2>
               <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                This is a static form placeholder. Hook it up to your preferred
-                provider (email, API route, or CRM).
+                Send a message and we will get back to you.
               </p>
 
-              <form className="mt-6 grid gap-4">
-                <label className="grid gap-2 text-sm font-medium">
-                  Name
-                  <input
-                    className="h-11 rounded-2xl border border-black/10 bg-background px-4 text-sm outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
-                    placeholder="Your name"
-                  />
-                </label>
-                <label className="grid gap-2 text-sm font-medium">
-                  Email
-                  <input
-                    type="email"
-                    className="h-11 rounded-2xl border border-black/10 bg-background px-4 text-sm outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
-                    placeholder="you@example.com"
-                  />
-                </label>
-                <label className="grid gap-2 text-sm font-medium">
-                  Message
-                  <textarea
-                    className="min-h-32 rounded-2xl border border-black/10 bg-background px-4 py-3 text-sm outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
-                    placeholder="What are you building? What help do you need?"
-                  />
-                </label>
-                <button
-                  type="button"
-                  className="inline-flex h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-                >
-                  Send (placeholder)
-                </button>
-              </form>
+              <ContactForm />
             </Reveal>
 
             <Reveal
@@ -70,10 +41,10 @@ export default function ContactPage() {
               <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
                 Prefer email? Reach us at{' '}
                 <a
-                  href="mailto:hello@dhelangan.studio"
+                  href="mailto:dhelangan@gmail.com"
                   className="font-medium text-foreground underline underline-offset-4"
                 >
-                  hello@dhelangan.studio
+                  dhelangan@gmail.com
                 </a>
                 .
               </p>
@@ -88,6 +59,16 @@ export default function ContactPage() {
                 <div className="rounded-2xl border border-black/10 bg-background p-4 dark:border-white/10">
                   Location: Indonesia (remote-friendly)
                 </div>
+              </div>
+
+              <div className="mt-6 overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
+                <iframe
+                  title="Google Maps location"
+                  src="https://www.google.com/maps?q=Indonesia&output=embed"
+                  className="h-64 w-full"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
             </Reveal>
           </div>
