@@ -8,6 +8,7 @@ type ContactPayload = {
   email: string;
   messageText: string;
   messageHtml: string;
+  action: string;
   captchaToken: string;
 };
 
@@ -80,6 +81,7 @@ export async function POST(request: Request) {
   const messageHtmlRaw = isNonEmptyString(v.messageHtml) ? safeText(v.messageHtml, 20_000) : "";
   const messageHtml = sanitizeHtml(messageHtmlRaw);
   const messageText = safeText(stripHtmlToText(messageHtml), 5000);
+  const action = isNonEmptyString(v.action) ? safeText(v.action, 50) : "contact";
   const captchaToken = isNonEmptyString(v.captchaToken) ? safeText(v.captchaToken, 5000) : "";
 
   if (!name || !email || !messageText) {
@@ -111,9 +113,17 @@ export async function POST(request: Request) {
       cache: "no-store",
     });
 
-    const verifyJson = (await verify.json().catch(() => null)) as { success?: boolean } | null;
+    const verifyJson = (await verify.json().catch(() => null)) as
+      | { success?: boolean; score?: number; action?: string }
+      | null;
     if (!verify.ok || !verifyJson?.success) {
       return Response.json({ ok: false, error: "Captcha verification failed. Please try again." }, { status: 400 });
+    }
+    if (typeof verifyJson.score === "number" && verifyJson.score < 0.3) {
+      return Response.json({ ok: false, error: "Captcha score too low. Please try again." }, { status: 400 });
+    }
+    if (verifyJson.action && verifyJson.action !== action) {
+      return Response.json({ ok: false, error: "Captcha action mismatch. Please try again." }, { status: 400 });
     }
   } catch {
     return Response.json({ ok: false, error: "Captcha verification failed. Please try again." }, { status: 400 });
@@ -140,7 +150,7 @@ export async function POST(request: Request) {
   const smtpPort = Number(smtpPortRaw);
   const smtpSecure = smtpSecureRaw ? smtpSecureRaw.toLowerCase() === "true" : smtpPort === 465;
 
-  const payload: ContactPayload = { name, email, messageText, messageHtml, captchaToken };
+  const payload: ContactPayload = { name, email, messageText, messageHtml, action, captchaToken };
 
   const transporter = nodemailer.createTransport({
     host: smtpHost,
@@ -149,7 +159,7 @@ export async function POST(request: Request) {
     auth: { user: smtpUser, pass: smtpPass },
   });
 
-  const to = "dhelangan@gmail.com";
+  const to = "bytes.salmaniyah@gmail.com";
   const subject = `New contact message from ${payload.name}`;
 
   const text = [

@@ -18,10 +18,10 @@ export default function ContactPage() {
             />
           </Reveal>
 
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-10">
             <Reveal
               as="section"
-              className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 "
+              className="col-span-5 sm:col-span-6 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 "
               delayMs={60}
             >
               <h2 className="text-lg font-semibold tracking-tight">Send a message</h2>
@@ -34,7 +34,7 @@ export default function ContactPage() {
 
             <Reveal
               as="section"
-              className="rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 "
+              className="col-span-5 sm:col-span-4 rounded-3xl border border-black/10 bg-surface p-8 shadow-sm dark:border-white/10 "
               delayMs={90}
             >
               <h2 className="text-lg font-semibold tracking-tight">Quick links</h2>

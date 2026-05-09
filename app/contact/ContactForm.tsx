@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Recaptcha from "./Recaptcha";
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor"
+import { useRecaptchaV3 } from "./useRecaptchaV3";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -13,18 +14,20 @@ export default function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [messageHtml, setMessageHtml] = useState("");
-  const [captchaToken, setCaptchaToken] = useState<string>("");
-  const [captchaReset, setCaptchaReset] = useState(0);
+  const [messageText, setMessageText] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+
+  const recaptcha = useRecaptchaV3("contact");
 
   const canSubmit = useMemo(() => {
     if (!name.trim()) return false;
     if (!email.trim() || !isValidEmail(email)) return false;
-    if (!messageHtml.replace(/<[^>]+>/g, "").trim()) return false;
-    if (!captchaToken.trim()) return false;
+    if (!messageText.trim()) return false;
+    if (!recaptcha.siteKeyConfigured) return false;
+    if (!recaptcha.ready) return false;
     return true;
-  }, [name, email, messageHtml, captchaToken]);
+  }, [name, email, messageText, recaptcha.siteKeyConfigured, recaptcha.ready]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,6 +37,7 @@ export default function ContactForm() {
     setError(null);
 
     try {
+      const captchaToken = await recaptcha.getToken();
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -41,6 +45,7 @@ export default function ContactForm() {
           name: name.trim(),
           email: email.trim(),
           messageHtml,
+          action: "contact",
           captchaToken: captchaToken.trim(),
         }),
       });
@@ -56,11 +61,10 @@ export default function ContactForm() {
       setName("");
       setEmail("");
       setMessageHtml("");
-      setCaptchaToken("");
-      setCaptchaReset((v) => v + 1);
+      setMessageText("");
     } catch {
       setStatus("error");
-      setError("Network error. Please try again.");
+      setError(recaptcha.error ?? "Network error. Please try again.");
     }
   }
 
@@ -91,20 +95,15 @@ export default function ContactForm() {
       </label>
       <label className="grid gap-2 text-sm font-medium">
         Message
-        <textarea
-          value={messageHtml}
-          onChange={(e) => setMessageHtml(e.target.value)}
-          className="min-h-32 rounded-2xl border border-black/10 bg-background px-4 py-3 text-sm outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
-          placeholder="What are you building? What help do you need?"
-          required
-        />
+        <div className="rounded-2xl border border-black/10 bg-background px-0 outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
+        >
+          <SimpleEditor onChange={(e) => {setMessageHtml(e.html); setMessageText(e.text)}} />
+        </div>
       </label>
-
-      <Recaptcha
-        onToken={setCaptchaToken}
-        onExpired={() => setCaptchaToken("")}
-        resetSignal={captchaReset}
-      />
+        
+      <div className="text-xs text-zinc-600 dark:text-zinc-300">
+        Protected by reCAPTCHA {recaptcha.ready ? "" : "(Loading)"}
+      </div>
 
       {status === "sent" && (
         <div className="rounded-2xl border border-black/10 bg-background p-4 text-sm text-zinc-800 dark:border-white/10 dark:text-zinc-200">
