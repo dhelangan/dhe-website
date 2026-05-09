@@ -8,7 +8,7 @@ export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-10 border-t border-black/10 bg-surface dark:border-white/10">
+    <footer className="border-t border-black/10 bg-surface dark:border-white/10">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-5">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-3">
