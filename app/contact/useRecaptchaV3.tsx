@@ -19,7 +19,10 @@ const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 function getGrecaptcha() {
   if (typeof window === "undefined") return undefined;
-  return window.grecaptcha ?? window.grecaptcha?.enterprise;
+  if (window.grecaptcha?.ready || window.grecaptcha?.execute) {
+    return window.grecaptcha;
+  }
+  return window.grecaptcha?.enterprise;
 }
 
 function loadRecaptchaV3(siteKey: string) {
