@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor"
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { useRecaptchaV3 } from "./useRecaptchaV3";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -25,9 +25,8 @@ export default function ContactForm() {
     if (!email.trim() || !isValidEmail(email)) return false;
     if (!messageText.trim()) return false;
     if (!recaptcha.siteKeyConfigured) return false;
-    if (!recaptcha.ready) return false;
     return true;
-  }, [name, email, messageText, recaptcha.siteKeyConfigured, recaptcha.ready]);
+  }, [name, email, messageText, recaptcha.siteKeyConfigured]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -62,9 +61,10 @@ export default function ContactForm() {
       setEmail("");
       setMessageHtml("");
       setMessageText("");
-    } catch {
+    } catch (e) {
       setStatus("error");
-      setError(recaptcha.error ?? "Network error. Please try again.");
+      const msg = e instanceof Error ? e.message : "";
+      setError(recaptcha.error ?? (msg || "Network error. Please try again."));
     }
   }
 
@@ -95,9 +95,15 @@ export default function ContactForm() {
       </label>
       <label className="grid gap-2 text-sm font-medium">
         Message
-        <div className="rounded-2xl border border-black/10 bg-background px-0 outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
+        <div className="w-full max-w-full overflow-hidden rounded-2xl border border-black/10 bg-background px-0 outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
         >
-          <SimpleEditor/>
+          <SimpleEditor
+            content=""
+            onChange={({ html, text }) => {
+              setMessageHtml(html);
+              setMessageText(text);
+            }}
+          />
         </div>
       </label>
         

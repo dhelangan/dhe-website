@@ -39,7 +39,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full overflow-x-hidden">
         <SiteHeader />
-        <main className="container mx-auto mt-20">{children}</main>
+        <main className="mx-auto mt-20">{children}</main>
         <SiteFooter />
       </body>
     </html>

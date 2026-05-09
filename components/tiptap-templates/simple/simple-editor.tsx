@@ -72,7 +72,7 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
 
-import content from "@/components/tiptap-templates/simple/data/content.json"
+import defaultContent from "@/components/tiptap-templates/simple/data/content.json"
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -85,15 +85,16 @@ const MainToolbarContent = ({
 }) => {
   return (
     <>
-      <Spacer />
-
+    
       <ToolbarGroup>
-        <UndoRedoButton action="undo" />
-        <UndoRedoButton action="redo" />
+        <TextAlignButton align="left" />
+        <TextAlignButton align="center" />
+        <TextAlignButton align="right" />
+        <TextAlignButton align="justify" />
       </ToolbarGroup>
 
       <ToolbarSeparator />
-
+      
       <ToolbarGroup>
         <HeadingDropdownMenu modal={false} levels={[1, 2, 3, 4]} />
         <ListDropdownMenu
@@ -121,18 +122,8 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <TextAlignButton align="left" />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
-      </ToolbarGroup>
-
-      <Spacer />
-
-      {isMobile && <ToolbarSeparator />}
-
-      <ToolbarGroup>
-        <ThemeToggle />
+        <UndoRedoButton action="undo" />
+        <UndoRedoButton action="redo" />
       </ToolbarGroup>
     </>
   )
@@ -167,8 +158,15 @@ const MobileToolbarContent = ({
   </>
 )
 
-export function SimpleEditor() {
-  const isMobile = useIsBreakpoint()
+export function SimpleEditor({
+  content,
+  onChange,
+}: {
+  content?: unknown
+  onChange?: (value: { html: string; text: string }) => void
+}) {
+  // Match toolbar CSS breakpoint (`toolbar.scss` switches behavior at 480px).
+  const isMobile = useIsBreakpoint("max", 480)
   const { height } = useWindowSize()
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
     "main"
@@ -204,7 +202,13 @@ export function SimpleEditor() {
       Subscript,
       Selection
     ],
-    content,
+    content: content ?? defaultContent,
+    onCreate({ editor }) {
+      onChange?.({ html: editor.getHTML(), text: editor.getText() })
+    },
+    onUpdate({ editor }) {
+      onChange?.({ html: editor.getHTML(), text: editor.getText() })
+    },
   })
 
   const rect = useCursorVisibility({
