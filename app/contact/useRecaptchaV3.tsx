@@ -72,11 +72,14 @@ export function useRecaptchaV3(action: string) {
         if (canceled) return;
         const g = getGrecaptcha();
         const readyFn = g?.ready;
-        if (typeof readyFn !== "function") {
+        const executeFn = g?.execute;
+
+        if (typeof readyFn === "function") {
+          await new Promise<void>((resolve) => readyFn(resolve));
+        } else if (typeof executeFn !== "function") {
           throw new Error("reCAPTCHA failed to initialize");
         }
 
-        await new Promise<void>((resolve) => readyFn(resolve));
         if (canceled) return;
         setReady(true);
       } catch (e) {
@@ -97,15 +100,19 @@ export function useRecaptchaV3(action: string) {
     const g = getGrecaptcha();
     const readyFn = g?.ready;
     const executeFn = g?.execute;
-    if (typeof readyFn !== "function" || typeof executeFn !== "function") {
+    if (typeof executeFn !== "function") {
       throw new Error("reCAPTCHA not ready");
     }
 
-    return await new Promise<string>((resolve, reject) => {
-      readyFn(() => {
-        executeFn(SITE_KEY, { action }).then(resolve).catch(reject);
+    if (typeof readyFn === "function") {
+      return await new Promise<string>((resolve, reject) => {
+        readyFn(() => {
+          executeFn(SITE_KEY, { action }).then(resolve).catch(reject);
+        });
       });
-    });
+    }
+
+    return await executeFn(SITE_KEY, { action });
   }, [action, ready]);
 
   return { ready, error, getToken, siteKeyConfigured: Boolean(SITE_KEY) };

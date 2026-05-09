@@ -25,8 +25,10 @@ export default function ContactForm() {
     if (!email.trim() || !isValidEmail(email)) return false;
     if (!messageText.trim()) return false;
     if (!recaptcha.siteKeyConfigured) return false;
+    if (!recaptcha.ready) return false;
+    if (recaptcha.error) return false;
     return true;
-  }, [name, email, messageText, recaptcha.siteKeyConfigured]);
+  }, [name, email, messageText, recaptcha.siteKeyConfigured, recaptcha.ready, recaptcha.error]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -108,7 +110,12 @@ export default function ContactForm() {
       </label>
         
       <div className="text-xs text-zinc-600 dark:text-zinc-300">
-        Protected by reCAPTCHA {recaptcha.ready ? "" : "(Loading)"}
+        Protected by reCAPTCHA{' '}
+        {recaptcha.error
+          ? `(Error: ${recaptcha.error})`
+          : recaptcha.ready
+          ? "(Ready)"
+          : "(Loading)"}
       </div>
 
       {status === "sent" && (
