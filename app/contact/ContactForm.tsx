@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import Recaptcha from "./Recaptcha";
-import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
 
 type Status = "idle" | "sending" | "sent" | "error";
 
