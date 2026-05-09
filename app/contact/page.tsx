@@ -1,12 +1,15 @@
 import PageHeader from "../_components/PageHeader";
 import Reveal from "../_components/Reveal";
 import ContactForm from "./ContactForm";
+import Script from "next/script";
 
 export const metadata = {
   title: "Contact",
 };
 
 export default function ContactPage() {
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
   return (
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 p-0">
@@ -74,6 +77,13 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
+      {siteKey ? (
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`}
+          strategy="beforeInteractive"
+          data-recaptcha-v3="true"
+        />
+      ) : null}
     </div>
   );
 }
