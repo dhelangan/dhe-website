@@ -172,13 +172,64 @@ export async function POST(request: Request) {
   ].join("\n");
 
   try {
+    const htmlEmail = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    .header-item { margin: 8px 0; }
+    .header-label { font-weight: 600; color: #666; }
+    .divider { border: none; border-top: 1px solid #ddd; margin: 20px 0; }
+    .message-content { padding: 20px 0; }
+    .message-content p { margin: 12px 0; }
+    .message-content strong { font-weight: 600; }
+    .message-content em { font-style: italic; }
+    .message-content u { text-decoration: underline; }
+    .message-content a { color: #0066cc; text-decoration: none; }
+    .message-content a:hover { text-decoration: underline; }
+    .message-content ul, .message-content ol { margin: 12px 0; padding-left: 24px; }
+    .message-content li { margin: 6px 0; }
+    .message-content blockquote { border-left: 4px solid #ddd; margin: 12px 0; padding-left: 16px; color: #666; font-style: italic; }
+    .message-content code { background-color: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; }
+    .message-content pre { background-color: #f5f5f5; padding: 12px; border-radius: 4px; overflow-x: auto; }
+    .footer { font-size: 12px; color: #999; margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-item">
+        <span class="header-label">From:</span> ${payload.name}
+      </div>
+      <div class="header-item">
+        <span class="header-label">Email:</span> <a href="mailto:${payload.email}">${payload.email}</a>
+      </div>
+    </div>
+    
+    <div class="message-content">
+      ${payload.messageHtml}
+    </div>
+    
+    <div class="footer">
+      Sent at: ${new Date().toISOString()}
+    </div>
+  </div>
+</body>
+</html>
+    `.trim();
+
     await transporter.sendMail({
       to,
       from: fromEmail,
       replyTo: payload.email,
       subject,
       text,
-      html: `<p><strong>Name:</strong> ${payload.name}</p><p><strong>Email:</strong> ${payload.email}</p><hr />${payload.messageHtml}`,
+      html: htmlEmail,
     });
   } catch {
     return Response.json({ ok: false, error: "Failed to send email. Check SMTP settings." }, { status: 502 });
