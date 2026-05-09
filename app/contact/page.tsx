@@ -79,9 +79,9 @@ export default function ContactPage() {
       </div>
       {siteKey ? (
         <Script
-          src={`https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`}
+          src="https://www.google.com/recaptcha/api.js?render=explicit"
           strategy="beforeInteractive"
-          data-recaptcha-v3="true"
+          data-recaptcha-v2="true"
         />
       ) : null}
     </div>

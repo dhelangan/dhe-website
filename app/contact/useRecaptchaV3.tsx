@@ -1,36 +1,44 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
-    grecaptcha?: {
-      ready?: (cb: () => void) => void;
-      execute?: (siteKey: string, options: { action: string }) => Promise<string>;
-      enterprise?: {
-        ready?: (cb: () => void) => void;
-        execute?: (siteKey: string, options: { action: string }) => Promise<string>;
-      };
-    };
+    grecaptcha?: RecaptchaClient;
   }
 }
+
+type RecaptchaClient = {
+  ready?: (cb: () => void) => void;
+  execute?: (siteKey: string, options: { action: string }) => Promise<string>;
+  render?: (container: string | HTMLElement, params: RecaptchaRenderParameters) => number;
+  reset?: (widgetId?: number) => void;
+  getResponse?: (widgetId?: number) => string;
+  enterprise?: RecaptchaClient;
+};
+
+type RecaptchaRenderParameters = {
+  sitekey: string;
+  callback: (token: string) => void;
+  "expired-callback"?: () => void;
+  theme?: "light" | "dark";
+  size?: "compact" | "normal" | "invisible";
+  badge?: "bottomright" | "bottomleft" | "inline";
+};
 
 const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 function getGrecaptcha() {
   if (typeof window === "undefined") return undefined;
-  if (window.grecaptcha?.ready || window.grecaptcha?.execute) {
-    return window.grecaptcha;
-  }
-  return window.grecaptcha?.enterprise;
+  return window.grecaptcha?.enterprise ?? window.grecaptcha;
 }
 
-function loadRecaptchaV3(siteKey: string) {
+function loadRecaptchaV2() {
   return new Promise<void>((resolve, reject) => {
-    const existing = document.querySelector<HTMLScriptElement>('script[data-recaptcha-v3="true"]');
+    const existing = document.querySelector<HTMLScriptElement>('script[data-recaptcha-v2="true"]');
     if (existing) {
       const g = getGrecaptcha();
-      if (existing.dataset.loaded === "true" || typeof g?.execute === "function") {
+      if (existing.dataset.loaded === "true" || typeof g?.render === "function") {
         resolve();
         return;
       }
@@ -38,11 +46,12 @@ function loadRecaptchaV3(siteKey: string) {
       existing.addEventListener("error", () => reject(new Error("Failed to load reCAPTCHA")), { once: true });
       return;
     }
+
     const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`;
+    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
     script.async = true;
     script.defer = true;
-    script.dataset.recaptchaV3 = "true";
+    script.dataset.recaptchaV2 = "true";
     script.addEventListener(
       "load",
       () => {
@@ -56,64 +65,99 @@ function loadRecaptchaV3(siteKey: string) {
   });
 }
 
-export function useRecaptchaV3(action: string) {
+export function useRecaptchaV2() {
+  const widgetIdRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [ready, setReady] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(() =>
     SITE_KEY ? null : "reCAPTCHA site key is missing",
   );
 
   useEffect(() => {
     let canceled = false;
-    if (!SITE_KEY) return;
 
-    (async () => {
+    const siteKey = SITE_KEY;
+    if (!siteKey) return;
+    const renderKey = siteKey as string;
+
+    async function initialize() {
       try {
-        await loadRecaptchaV3(SITE_KEY);
+        await loadRecaptchaV2();
         if (canceled) return;
-        const g = getGrecaptcha();
-        const readyFn = g?.ready;
-        const executeFn = g?.execute;
 
-        if (typeof readyFn === "function") {
-          await new Promise<void>((resolve) => readyFn(resolve));
-        } else if (typeof executeFn !== "function") {
+        const grecaptcha = getGrecaptcha();
+        if (!grecaptcha || typeof grecaptcha.render !== "function") {
           throw new Error("reCAPTCHA failed to initialize");
         }
 
-        if (canceled) return;
-        setReady(true);
+        const renderFn = grecaptcha.render.bind(grecaptcha);
+        const resetFn = typeof grecaptcha.reset === "function" ? grecaptcha.reset.bind(grecaptcha) : undefined;
+
+        const renderWidget = () => {
+          if (canceled || widgetIdRef.current !== null || !containerRef.current) return;
+
+          widgetIdRef.current = renderFn(containerRef.current, {
+            sitekey: renderKey,
+            callback: (value: string) => {
+              if (canceled) return;
+              setToken(value);
+              setError(null);
+            },
+            "expired-callback": () => {
+              if (canceled) return;
+              setToken(null);
+              if (typeof resetFn === "function" && widgetIdRef.current !== null) {
+                resetFn(widgetIdRef.current);
+              }
+            },
+            theme: "light",
+          });
+
+          setReady(true);
+        };
+
+        if (typeof grecaptcha.ready === "function") {
+          grecaptcha.ready(renderWidget);
+        } else {
+          renderWidget();
+        }
       } catch (e) {
         if (canceled) return;
         setError(e instanceof Error ? e.message : "Failed to load reCAPTCHA");
       }
-    })();
+    }
+
+    initialize();
 
     return () => {
       canceled = true;
     };
   }, []);
 
-  const getToken = useCallback(async () => {
+  const getToken = useCallback(() => {
     if (!SITE_KEY) throw new Error("reCAPTCHA not configured");
     if (!ready) throw new Error("reCAPTCHA not ready");
+    if (!token) throw new Error("Please complete the captcha.");
 
-    const g = getGrecaptcha();
-    const readyFn = g?.ready;
-    const executeFn = g?.execute;
-    if (typeof executeFn !== "function") {
-      throw new Error("reCAPTCHA not ready");
+    return token;
+  }, [ready, token]);
+
+  const reset = useCallback(() => {
+    const grecaptcha = getGrecaptcha();
+    if (typeof grecaptcha?.reset === "function") {
+      grecaptcha.reset(widgetIdRef.current ?? undefined);
     }
+    setToken(null);
+  }, []);
 
-    if (typeof readyFn === "function") {
-      return await new Promise<string>((resolve, reject) => {
-        readyFn(() => {
-          executeFn(SITE_KEY, { action }).then(resolve).catch(reject);
-        });
-      });
-    }
-
-    return await executeFn(SITE_KEY, { action });
-  }, [action, ready]);
-
-  return { ready, error, getToken, siteKeyConfigured: Boolean(SITE_KEY) };
+  return {
+    ready,
+    error,
+    token,
+    getToken,
+    reset,
+    siteKeyConfigured: Boolean(SITE_KEY),
+    containerRef,
+  };
 }

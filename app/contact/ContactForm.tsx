@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
-import { useRecaptchaV3 } from "./useRecaptchaV3";
+import { useRecaptchaV2 } from "./useRecaptchaV3";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -18,7 +18,7 @@ export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
-  const recaptcha = useRecaptchaV3("contact");
+  const recaptcha = useRecaptchaV2();
 
   const canSubmit = useMemo(() => {
     if (!name.trim()) return false;
@@ -26,9 +26,10 @@ export default function ContactForm() {
     if (!messageText.trim()) return false;
     if (!recaptcha.siteKeyConfigured) return false;
     if (!recaptcha.ready) return false;
+    if (!recaptcha.token) return false;
     if (recaptcha.error) return false;
     return true;
-  }, [name, email, messageText, recaptcha.siteKeyConfigured, recaptcha.ready, recaptcha.error]);
+  }, [name, email, messageText, recaptcha.siteKeyConfigured, recaptcha.ready, recaptcha.token, recaptcha.error]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -63,6 +64,7 @@ export default function ContactForm() {
       setEmail("");
       setMessageHtml("");
       setMessageText("");
+      recaptcha.reset();
     } catch (e) {
       setStatus("error");
       const msg = e instanceof Error ? e.message : "";
@@ -109,12 +111,15 @@ export default function ContactForm() {
         </div>
       </label>
         
+      <div ref={recaptcha.containerRef} className="mt-4" />
       <div className="text-xs text-zinc-600 dark:text-zinc-300">
         Protected by reCAPTCHA{' '}
         {recaptcha.error
           ? `(Error: ${recaptcha.error})`
+          : recaptcha.token
+          ? "(Verified)"
           : recaptcha.ready
-          ? "(Ready)"
+          ? "(Please verify)"
           : "(Loading)"}
       </div>
 
