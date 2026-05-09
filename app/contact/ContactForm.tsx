@@ -97,7 +97,7 @@ export default function ContactForm() {
         Message
         <div className="rounded-2xl border border-black/10 bg-background px-0 outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
         >
-          <SimpleEditor onChange={(e) => {setMessageHtml(e.html); setMessageText(e.text)}} />
+          <SimpleEditor/>
         </div>
       </label>
         
