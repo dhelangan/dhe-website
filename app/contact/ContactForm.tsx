@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Recaptcha from "./Recaptcha";
+import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -12,18 +13,19 @@ function isValidEmail(value: string) {
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [messageHtml, setMessageHtml] = useState("");
   const [captchaToken, setCaptchaToken] = useState<string>("");
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
   const canSubmit = useMemo(() => {
     if (!name.trim()) return false;
     if (!email.trim() || !isValidEmail(email)) return false;
-    if (!message.trim()) return false;
+    if (!messageHtml.replace(/<[^>]+>/g, "").trim()) return false;
     if (!captchaToken.trim()) return false;
     return true;
-  }, [name, email, message, captchaToken]);
+  }, [name, email, messageHtml, captchaToken]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -39,7 +41,7 @@ export default function ContactForm() {
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
-          message: message.trim(),
+          messageHtml,
           captchaToken: captchaToken.trim(),
         }),
       });
@@ -54,8 +56,9 @@ export default function ContactForm() {
       setStatus("sent");
       setName("");
       setEmail("");
-      setMessage("");
+      setMessageHtml("");
       setCaptchaToken("");
+      setCaptchaReset((v) => v + 1);
     } catch {
       setStatus("error");
       setError("Network error. Please try again.");
@@ -90,15 +93,19 @@ export default function ContactForm() {
       <label className="grid gap-2 text-sm font-medium">
         Message
         <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={messageHtml}
+          onChange={(e) => setMessageHtml(e.target.value)}
           className="min-h-32 rounded-2xl border border-black/10 bg-background px-4 py-3 text-sm outline-none ring-0 focus:border-black/20 dark:border-white/10 dark:focus:border-white/20"
           placeholder="What are you building? What help do you need?"
           required
         />
       </label>
 
-      <Recaptcha onToken={setCaptchaToken} onExpired={() => setCaptchaToken("")} />
+      <Recaptcha
+        onToken={setCaptchaToken}
+        onExpired={() => setCaptchaToken("")}
+        resetSignal={captchaReset}
+      />
 
       {status === "sent" && (
         <div className="rounded-2xl border border-black/10 bg-background p-4 text-sm text-zinc-800 dark:border-white/10 dark:text-zinc-200">

@@ -6,7 +6,8 @@ export const runtime = "nodejs";
 type ContactPayload = {
   name: string;
   email: string;
-  message: string;
+  messageText: string;
+  messageHtml: string;
   captchaToken: string;
 };
 
@@ -20,6 +21,40 @@ function isValidEmail(value: string) {
 
 function safeText(value: string, maxLen: number) {
   return value.trim().slice(0, maxLen);
+}
+
+function stripHtmlToText(html: string) {
+  return html
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<\/(p|div|li|br|h[1-6])>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function sanitizeHtml(input: string) {
+  let html = input;
+  html = html.replace(/<script[\s\S]*?<\/script>/gi, "");
+  html = html.replace(/<style[\s\S]*?<\/style>/gi, "");
+  // Remove event handler attributes (onload, onclick, etc.)
+  html = html.replace(/\son[a-z]+\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi, "");
+  // Drop iframes and other risky tags
+  html = html.replace(/<\/?(iframe|object|embed|form|input|button|textarea|select|option)[^>]*>/gi, "");
+  // Keep only a small set of tags; strip the rest.
+  html = html.replace(/<(\/?)([a-z0-9-]+)([^>]*)>/gi, (m, slash: string, tag: string, attrs: string) => {
+    const t = String(tag).toLowerCase();
+    const allowed = new Set(["b", "strong", "i", "em", "u", "p", "br", "ul", "ol", "li", "a"]);
+    if (!allowed.has(t)) return "";
+    if (t !== "a") return `<${slash}${t}>`;
+    // For <a>, preserve safe href only.
+    const hrefMatch = attrs.match(/\shref\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/i);
+    const hrefRaw = hrefMatch?.[2] ?? hrefMatch?.[3] ?? hrefMatch?.[4] ?? "";
+    const href = typeof hrefRaw === "string" ? hrefRaw.trim() : "";
+    const safeHref = /^https?:\/\//i.test(href) ? href : "";
+    return safeHref ? `<${slash}${t} href="${safeHref}">` : `<${slash}${t}>`;
+  });
+  return html.trim();
 }
 
 function getEnv(name: string) {
@@ -42,10 +77,12 @@ export async function POST(request: Request) {
   const v = body as Record<string, unknown>;
   const name = isNonEmptyString(v.name) ? safeText(v.name, 120) : "";
   const email = isNonEmptyString(v.email) ? safeText(v.email, 200) : "";
-  const message = isNonEmptyString(v.message) ? safeText(v.message, 5000) : "";
+  const messageHtmlRaw = isNonEmptyString(v.messageHtml) ? safeText(v.messageHtml, 20_000) : "";
+  const messageHtml = sanitizeHtml(messageHtmlRaw);
+  const messageText = safeText(stripHtmlToText(messageHtml), 5000);
   const captchaToken = isNonEmptyString(v.captchaToken) ? safeText(v.captchaToken, 5000) : "";
 
-  if (!name || !email || !message) {
+  if (!name || !email || !messageText) {
     return Response.json({ ok: false, error: "Name, email, and message are required." }, { status: 400 });
   }
   if (!isValidEmail(email)) {
@@ -103,7 +140,7 @@ export async function POST(request: Request) {
   const smtpPort = Number(smtpPortRaw);
   const smtpSecure = smtpSecureRaw ? smtpSecureRaw.toLowerCase() === "true" : smtpPort === 465;
 
-  const payload: ContactPayload = { name, email, message, captchaToken };
+  const payload: ContactPayload = { name, email, messageText, messageHtml, captchaToken };
 
   const transporter = nodemailer.createTransport({
     host: smtpHost,
@@ -119,7 +156,7 @@ export async function POST(request: Request) {
     `Name: ${payload.name}`,
     `Email: ${payload.email}`,
     "",
-    payload.message,
+    payload.messageText,
     "",
     `Sent at: ${new Date().toISOString()}`,
   ].join("\n");
@@ -131,6 +168,7 @@ export async function POST(request: Request) {
       replyTo: payload.email,
       subject,
       text,
+      html: `<p><strong>Name:</strong> ${payload.name}</p><p><strong>Email:</strong> ${payload.email}</p><hr />${payload.messageHtml}`,
     });
   } catch {
     return Response.json({ ok: false, error: "Failed to send email. Check SMTP settings." }, { status: 502 });
