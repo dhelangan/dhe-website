@@ -7,6 +7,7 @@ type ContactPayload = {
   name: string;
   email: string;
   message: string;
+  captchaToken: string;
 };
 
 function isNonEmptyString(value: unknown): value is string {
@@ -42,12 +43,43 @@ export async function POST(request: Request) {
   const name = isNonEmptyString(v.name) ? safeText(v.name, 120) : "";
   const email = isNonEmptyString(v.email) ? safeText(v.email, 200) : "";
   const message = isNonEmptyString(v.message) ? safeText(v.message, 5000) : "";
+  const captchaToken = isNonEmptyString(v.captchaToken) ? safeText(v.captchaToken, 5000) : "";
 
   if (!name || !email || !message) {
     return Response.json({ ok: false, error: "Name, email, and message are required." }, { status: 400 });
   }
   if (!isValidEmail(email)) {
     return Response.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
+  }
+  if (!captchaToken) {
+    return Response.json({ ok: false, error: "Please complete the captcha." }, { status: 400 });
+  }
+
+  const recaptchaSecret = getEnv("RECAPTCHA_SECRET_KEY");
+  if (!recaptchaSecret) {
+    return Response.json(
+      { ok: false, error: "Captcha is not configured on the server. Set RECAPTCHA_SECRET_KEY." },
+      { status: 500 }
+    );
+  }
+
+  try {
+    const verify = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: recaptchaSecret,
+        response: captchaToken,
+      }).toString(),
+      cache: "no-store",
+    });
+
+    const verifyJson = (await verify.json().catch(() => null)) as { success?: boolean } | null;
+    if (!verify.ok || !verifyJson?.success) {
+      return Response.json({ ok: false, error: "Captcha verification failed. Please try again." }, { status: 400 });
+    }
+  } catch {
+    return Response.json({ ok: false, error: "Captcha verification failed. Please try again." }, { status: 400 });
   }
 
   const smtpHost = getEnv("SMTP_HOST");
@@ -71,7 +103,7 @@ export async function POST(request: Request) {
   const smtpPort = Number(smtpPortRaw);
   const smtpSecure = smtpSecureRaw ? smtpSecureRaw.toLowerCase() === "true" : smtpPort === 465;
 
-  const payload: ContactPayload = { name, email, message };
+  const payload: ContactPayload = { name, email, message, captchaToken };
 
   const transporter = nodemailer.createTransport({
     host: smtpHost,

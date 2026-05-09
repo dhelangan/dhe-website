@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Recaptcha from "./Recaptcha";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -12,6 +13,7 @@ export default function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [captchaToken, setCaptchaToken] = useState<string>("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -19,8 +21,9 @@ export default function ContactForm() {
     if (!name.trim()) return false;
     if (!email.trim() || !isValidEmail(email)) return false;
     if (!message.trim()) return false;
+    if (!captchaToken.trim()) return false;
     return true;
-  }, [name, email, message]);
+  }, [name, email, message, captchaToken]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,6 +40,7 @@ export default function ContactForm() {
           name: name.trim(),
           email: email.trim(),
           message: message.trim(),
+          captchaToken: captchaToken.trim(),
         }),
       });
 
@@ -51,6 +55,7 @@ export default function ContactForm() {
       setName("");
       setEmail("");
       setMessage("");
+      setCaptchaToken("");
     } catch {
       setStatus("error");
       setError("Network error. Please try again.");
@@ -93,6 +98,8 @@ export default function ContactForm() {
         />
       </label>
 
+      <Recaptcha onToken={setCaptchaToken} onExpired={() => setCaptchaToken("")} />
+
       {status === "sent" && (
         <div className="rounded-2xl border border-black/10 bg-background p-4 text-sm text-zinc-800 dark:border-white/10 dark:text-zinc-200">
           Message sent. We’ll reply soon.
@@ -114,4 +121,3 @@ export default function ContactForm() {
     </form>
   );
 }
-
