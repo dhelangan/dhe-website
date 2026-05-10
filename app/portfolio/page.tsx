@@ -3,6 +3,7 @@ import PortfolioCard from "../_components/PortfolioCard";
 import Reveal from "../_components/Reveal";
 
 import PortfolioFilters from "./_components/PortfolioFilters";
+import PortfolioStatusTabs from "./_components/PortfolioStatusTabs";
 
 import {
   filterPortfolio,
@@ -84,6 +85,10 @@ export default async function PortfolioPage({
             initialSort={sort}
             genreOptions={genreOptions}
           />
+          </Reveal>
+
+          <Reveal delayMs={120}>
+          <PortfolioStatusTabs currentStatus={status} />
           </Reveal>
 
           <Reveal className="grid gap-4" delayMs={90}>
