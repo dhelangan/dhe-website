@@ -34,15 +34,10 @@ export default async function Home() {
   const portfolio = await getAllPortfolio();
   const gallery = await getAllGallery();
 
-const indexImage =
-  gallery.length > 1
-    ? gallery.length % gallery.length
-    : 1;
-
-const aboutImage =
-  gallery.length > 0
-    ? gallery[indexImage]!.image
-    : "/thumbnails/team-creative.svg";
+  const aboutImage =
+    gallery.length > 0
+      ? gallery[Math.floor(Math.random() * gallery.length)]!.image
+      : "/thumbnails/team-creative.svg";
 
   const featuredItems = portfolio.filter((p) => p.featured);
   const pinnedGames: PinnedGame[] = (featuredItems.length ? featuredItems : portfolio)
@@ -82,8 +77,8 @@ const aboutImage =
       <div className="block mx-auto w-full px-4">
         <div className="space-y-8">
 
-          <Reveal as="section" className="intro rounded-lg p-4 block space-y-4 bg-cover bg-bottom-right sm:space-y-8 sm:bg-contain sm:bg-top-right " delayMs={20}>
-            <div className="flex flex-col gap-2">
+          <Reveal as="section" className="intro rounded-lg block space-y-4 bg-cover bg-bottom-right sm:space-y-8 sm:bg-contain sm:bg-top-right " delayMs={20}>
+            <div className="flex flex-col gap-2 px-4 pt-4 pb-0 ">
               <p className="text-sm font-bold text-black">
                 Board Game + Video Game Studio
               </p>
@@ -97,7 +92,7 @@ const aboutImage =
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 px-4 pt-0 pb-4 ">
               <Link
                 href="/portfolio"
                 className="inline-flex h-10 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
@@ -129,7 +124,7 @@ const aboutImage =
               slides={pinnedGames.map((game, slideIndex) => (
                 <div
                   key={game.title}
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-black/[.06] dark:bg-white/[.06] sm:aspect-[25/5]"
+                  className="relative aspect-[16/9] h-[350px] w-full overflow-hidden rounded-2xl bg-black/[.06] dark:bg-white/[.06]"
                 >
                   <LazyImage
                     src={game.coverSrc}
@@ -176,7 +171,7 @@ const aboutImage =
             />
           </Reveal>
 
-          <Reveal as="section" className="block" delayMs={80}>
+          <Reveal as="section" className="grid gap-6" delayMs={80}>
             <div className="mb-4">
               <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Works</span></h1>
               <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
@@ -184,7 +179,7 @@ const aboutImage =
               </p>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className="grid gap-4 lg:grid-cols-2">
               <div className="grid gap-3 items-start content-start">
                 <div className="flex items-baseline justify-between h-8">
                   <h3 className="text-base font-semibold tracking-tight">Board Games</h3>
@@ -214,7 +209,7 @@ const aboutImage =
                     View all
                   </Link>
                 </div>
-                <div className="grid gap-3">
+                <div className="grid gap-3 items-stretch">
                   {digitalPosts.map((post) => (
                     <ContentCard key={post.title} {...post} />
                   ))}

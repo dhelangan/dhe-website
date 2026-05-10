@@ -19,7 +19,7 @@ export default function NewsCard({ title, date, imageSrc, href }: NewsCardProps)
       href={resolvedHref}
       className="group overflow-hidden rounded-2xl border border-black/10 bg-surface shadow-sm transition-colors hover:bg-black/[.03] dark:border-white/10"
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/[.06] dark:bg-white/[.06]">
+      <div className="relative aspect-[12/14] w-full overflow-hidden bg-black/[.06] dark:bg-white/[.06]">
         <LazyImage
           src={imageSrc}
           alt=""
