@@ -88,20 +88,15 @@ const MainToolbarContent = ({
     
       <ToolbarGroup>
         <TextAlignButton align="left" />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
       </ToolbarGroup>
 
       <ToolbarSeparator />
       
       <ToolbarGroup>
-        <HeadingDropdownMenu modal={false} levels={[1, 2, 3, 4]} />
         <ListDropdownMenu
           modal={false}
-          types={["bulletList", "orderedList", "taskList"]}
+          types={["bulletList", "orderedList"]}
         />
-        <BlockquoteButton />
       </ToolbarGroup>
 
       <ToolbarSeparator />

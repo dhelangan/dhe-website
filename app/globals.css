@@ -45,9 +45,7 @@ body {
 .intro {
   background-color: #f5b603;
   background-image: url(/thumbnails/dhelangan.png);
-  background-position: right -20px center;
   background-repeat: no-repeat;
-  background-size: cover;
   background-attachment: scroll;
   background-origin: content-box;
   background-blend-mode: soft-light;

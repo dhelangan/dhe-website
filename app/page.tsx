@@ -34,10 +34,15 @@ export default async function Home() {
   const portfolio = await getAllPortfolio();
   const gallery = await getAllGallery();
 
-  const aboutImage =
-    gallery.length > 0
-      ? gallery[Math.floor(Math.random() * gallery.length)]!.image
-      : "/thumbnails/team-creative.svg";
+const indexImage =
+  gallery.length > 1
+    ? gallery.length % gallery.length
+    : 1;
+
+const aboutImage =
+  gallery.length > 0
+    ? gallery[indexImage]!.image
+    : "/thumbnails/team-creative.svg";
 
   const featuredItems = portfolio.filter((p) => p.featured);
   const pinnedGames: PinnedGame[] = (featuredItems.length ? featuredItems : portfolio)
@@ -77,15 +82,15 @@ export default async function Home() {
       <div className="block mx-auto w-full px-4">
         <div className="space-y-8">
 
-          <Reveal as="section" className="intro rounded-lg p-4 block space-y-8">
+          <Reveal as="section" className="intro rounded-lg p-4 block space-y-4 bg-cover bg-bottom-right sm:space-y-8 sm:bg-contain sm:bg-top-right " delayMs={20}>
             <div className="flex flex-col gap-2">
               <p className="text-sm font-bold text-black">
                 Board Game + Video Game Studio
               </p>
-              <h1 className="text-4xl font-extrabold tracking-tight text-black my-6 sm:text-4xl">
+              <h1 className="text-2xl font-extrabold tracking-tight text-black my-2 sm:my-6 sm:text-4xl">
                 We build playful worlds<br/>on the board and on the screen.
               </h1>
-              <p className="max-w-2xl text-base leading-7 text-black">
+              <p className="hidden sm:block max-w-2xl text-base leading-7 text-black">
                 Dhelangan Studio crafts board games, interactive experiences, and
                 production-ready prototypes. Explore our pinned project, browse
                 recent posts, and meet the team.
@@ -124,7 +129,7 @@ export default async function Home() {
               slides={pinnedGames.map((game, slideIndex) => (
                 <div
                   key={game.title}
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-black/[.06] dark:bg-white/[.06] sm:aspect-[21/9]"
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-black/[.06] dark:bg-white/[.06] sm:aspect-[25/5]"
                 >
                   <LazyImage
                     src={game.coverSrc}

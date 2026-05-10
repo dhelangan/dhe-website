@@ -97,9 +97,7 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
   }
 
   const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) {
-    throw new Error(`Failed to load team members: ${res.status} ${res.statusText}`);
-  }
+  if (!res.ok) throw new Error(`Failed to load portfolio: ${res.status} ${res.statusText}`);
 
   const data = (await res.json()) as TeamApiMember[];
   return (data ?? []).map(toTeamMember);
