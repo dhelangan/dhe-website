@@ -34,14 +34,34 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
     }
 
     return chunks.map((chunk, chunkIndex) => (
-      <div key={`team-slide-${chunkIndex}`} className="p-6 sm:p-8">
+      <div key={`team-slide-${chunkIndex}`} className="p-4 bg-[#d3d3d3] dark:bg-[#211f27]">
         <div className="grid gap-4 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-4">
           {chunk.map((member) => (
             
             <div
                         key={member.name}
-                        className="rounded-3xl border border-black/10 bg-surface p-5 shadow-sm dark:border-white/10"
+                        className=""
                       >
+                        <button
+                            type="button"
+                            onClick={() => setModal({ open: true, member })}
+                            className="group p-4 w-full overflow-hidden rounded-2xl border border-black/10 bg-surface shadow-sm transition-colors hover:bg-black/[.03] dark:border-white/10"
+                            >
+                        <div className="mb-5 grid gap-3">
+                          {member.division?.length ? (
+                            <div className="flex gap-2 ">
+                              {member.division.map((division) => (
+                                <span
+                                  key={division}
+                                  className="inline-flex text-center rounded-full border border-black/10 bg-background px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-700 dark:border-white/10 dark:text-zinc-200"
+                                >
+                                  {division}
+                                </span>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+
                         <div className="block space-y-4 mx-auto items-center gap-4">
                           <div className="mx-auto relative size-25 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
                             <LazyImage
@@ -60,25 +80,16 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                         </div>
             
                         {member.highlights?.length ? (
-                          <ul className="mt-4 grid gap-2 text-sm text-zinc-800 dark:text-zinc-200">
+                          <ul className="mt-4 grid gap-3 text-xs text-zinc-800 dark:text-zinc-200 border-t-1 border-black/10 pt-4 dark:border-white/10">
                             {member.highlights.slice(0, 3).map((h) => (
                               <li key={h} className="flex gap-2">
                                 <span className="mt-2 size-1.5 shrink-0 rounded-full bg-accent-orange" />
-                                <span className="line-clamp-2">{h}</span>
+                                <span className="line-clamp-2 font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-200">{h}</span>
                               </li>
                             ))}
                           </ul>
                         ) : null}
-            
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          <button
-                            type="button"
-                            className="mx-auto item-center mt-4 touch-manipulation inline-flex h-9 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-                            onClick={() => setModal({ open: true, member })}
-                          >
-                            Details
-                          </button>
-                        </div>
+                        </button>
                       </div>
           ))}
         </div>
@@ -147,6 +158,8 @@ function MemberModal({
           <div className="p-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
+                  
+                
                   <div className="relative size-14 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
                     <LazyImage
                       src={member.imageSrc}
@@ -166,10 +179,12 @@ function MemberModal({
                 <button
                   type="button"
                   ref={closeButtonRef}
-                  className="touch-manipulation inline-flex h-9 items-center justify-center rounded-full border border-black/10 bg-background px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
+                  className="touch-manipulation inline-flex h-9 items-center justify-center rounded-full border border-black/10 bg-accent-orange px-4 text-sm font-medium transition-colors hover:bg-black/[.04] dark:border-white/10 dark:hover:bg-white/[.06]"
                   onClick={onClose}
                 >
-                  Close
+                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 30 30">
+    <path d="M 7 4 C 6.744125 4 6.4879687 4.0974687 6.2929688 4.2929688 L 4.2929688 6.2929688 C 3.9019687 6.6839688 3.9019687 7.3170313 4.2929688 7.7070312 L 11.585938 15 L 4.2929688 22.292969 C 3.9019687 22.683969 3.9019687 23.317031 4.2929688 23.707031 L 6.2929688 25.707031 C 6.6839688 26.098031 7.3170313 26.098031 7.7070312 25.707031 L 15 18.414062 L 22.292969 25.707031 C 22.682969 26.098031 23.317031 26.098031 23.707031 25.707031 L 25.707031 23.707031 C 26.098031 23.316031 26.098031 22.682969 25.707031 22.292969 L 18.414062 15 L 25.707031 7.7070312 C 26.098031 7.3170312 26.098031 6.6829688 25.707031 6.2929688 L 23.707031 4.2929688 C 23.316031 3.9019687 22.682969 3.9019687 22.292969 4.2929688 L 15 11.585938 L 7.7070312 4.2929688 C 7.5115312 4.0974687 7.255875 4 7 4 z"></path>
+</svg>
                 </button>
               </div>
     

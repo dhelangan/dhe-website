@@ -29,10 +29,72 @@ export default function TeamGrid({ members }: TeamGridProps) {
     <>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {members.map((member) => (
+          // <div
+          //   key={member.name}
+          //   className="rounded-3xl border border-black/10 bg-surface p-5 shadow-sm dark:border-white/10"
+          // >
+          //   <div className="block space-y-4 mx-auto items-center gap-4">
+          //     <div className="mx-auto relative size-25 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
+          //       <LazyImage
+          //         src={member.imageSrc}
+          //         alt=""
+          //         fill
+          //         className="object-cover"
+          //         sizes="56px"
+          //         loading="lazy"
+          //       />
+          //     </div>
+          //     <div className="text-center">
+          //       <div className="truncate font-semibold tracking-tight">{member.name}</div>
+          //       <div className="truncate text-sm text-zinc-700 dark:text-zinc-300">{member.role}</div>
+          //     </div>
+          //   </div>
+
+          //   {member.highlights?.length ? (
+          //     <ul className="mt-4 grid gap-2 text-sm text-zinc-800 dark:text-zinc-200">
+          //       {member.highlights.slice(0, 3).map((h) => (
+          //         <li key={h} className="flex gap-2">
+          //           <span className="mt-2 size-1.5 shrink-0 rounded-full bg-accent-orange" />
+          //           <span className="line-clamp-2">{h}</span>
+          //         </li>
+          //       ))}
+          //     </ul>
+          //   ) : null}
+
+          //   <div className="mt-4 flex flex-wrap gap-2">
+          //     <button
+          //       type="button"
+          //       className="mx-auto item-center mt-4 touch-manipulation inline-flex h-9 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
+          //       onClick={() => setModal({ open: true, member })}
+          //     >
+          //       Details
+          //     </button>
+          //   </div>
+          // </div>
           <div
             key={member.name}
-            className="rounded-3xl border border-black/10 bg-surface p-5 shadow-sm dark:border-white/10"
+            className=""
           >
+            <button
+                type="button"
+                onClick={() => setModal({ open: true, member })}
+                className="group p-4 w-full overflow-hidden rounded-2xl border border-black/10 bg-surface shadow-sm transition-colors hover:bg-black/[.03] dark:border-white/10"
+                >
+            <div className="mb-5 grid gap-3">
+              {member.division?.length ? (
+                <div className="flex gap-2 ">
+                  {member.division.map((division) => (
+                    <span
+                      key={division}
+                      className="inline-flex text-center rounded-full border border-black/10 bg-background px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-700 dark:border-white/10 dark:text-zinc-200"
+                    >
+                      {division}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
             <div className="block space-y-4 mx-auto items-center gap-4">
               <div className="mx-auto relative size-25 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
                 <LazyImage
@@ -51,25 +113,16 @@ export default function TeamGrid({ members }: TeamGridProps) {
             </div>
 
             {member.highlights?.length ? (
-              <ul className="mt-4 grid gap-2 text-sm text-zinc-800 dark:text-zinc-200">
+              <ul className="mt-4 grid gap-3 text-xs text-zinc-800 dark:text-zinc-200 border-t-1 border-black/10 pt-4 dark:border-white/10">
                 {member.highlights.slice(0, 3).map((h) => (
                   <li key={h} className="flex gap-2">
                     <span className="mt-2 size-1.5 shrink-0 rounded-full bg-accent-orange" />
-                    <span className="line-clamp-2">{h}</span>
+                    <span className="line-clamp-2 font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-200">{h}</span>
                   </li>
                 ))}
               </ul>
             ) : null}
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              <button
-                type="button"
-                className="mx-auto item-center mt-4 touch-manipulation inline-flex h-9 items-center justify-center rounded-full bg-accent-orange px-4 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-                onClick={() => setModal({ open: true, member })}
-              >
-                Details
-              </button>
-            </div>
+            </button>
           </div>
         ))}
       </div>
