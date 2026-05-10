@@ -1,3 +1,8 @@
+export type ShopLink = {
+  label: string;
+  href: string;
+};
+
 export type ShopProduct = {
   id: string;
   title: string;
@@ -6,6 +11,7 @@ export type ShopProduct = {
   currency: string;
   url: string;
   images: string[];
+  links?: ShopLink[];
 };
 
 async function getBaseUrlFromHeaders(): Promise<string | null> {
@@ -31,6 +37,49 @@ function asStringArray(value: unknown): string[] {
   if (Array.isArray(value)) return value.filter((v) => typeof v === "string" && v.trim()) as string[];
   if (typeof value === "string" && value.trim()) return [value];
   return [];
+}
+
+function parseShopLink(value: string): ShopLink | null {
+  const raw = value.trim();
+  if (!raw) return null;
+
+  const separatorIndex = raw.indexOf(":");
+  if (separatorIndex === -1) return null;
+
+  const label = raw.slice(0, separatorIndex).trim();
+  const href = raw.slice(separatorIndex + 1).trim();
+  if (!label || !href) return null;
+
+  return { label, href };
+}
+
+function normalizeShopLink(value: unknown): ShopLink | null {
+  if (typeof value === "string") return parseShopLink(value);
+  if (value && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    const href = pickFirstString(record, ["href", "url", "link"]);
+    const label = pickFirstString(record, ["label", "name", "source"]);
+    if (!href) return null;
+    return { label: label || "Open", href };
+  }
+  return null;
+}
+
+function parseShopLinks(value: unknown): ShopLink[] {
+  const rawValues: unknown[] = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+    ? (() => {
+        try {
+          const parsed = JSON.parse(value);
+          return Array.isArray(parsed) ? parsed : [value];
+        } catch {
+          return [value];
+        }
+      })()
+    : [];
+
+  return rawValues.map(normalizeShopLink).filter((link): link is ShopLink => Boolean(link));
 }
 
 function pickFirstString(record: Record<string, unknown>, keys: string[]) {
@@ -74,7 +123,8 @@ export async function fetchShopProducts(): Promise<ShopProduct[]> {
     const description = pickFirstString(v, ["description", "desc", "product_description"]);
     const price = pickFirstString(v, ["price", "price_text", "amount"]);
     const currency = pickFirstString(v, ["currency", "price_currency"]) || "IDR";
-    const url = pickFirstString(v, ["url", "link", "product_url", "source_url"]);
+    const links = parseShopLinks(v.links ?? v.link ?? v.links);
+    const url = pickFirstString(v, ["url", "link", "product_url", "source_url"]) || links[0]?.href || "";
     const images = collectImages(v);
 
     out.push({
@@ -85,6 +135,7 @@ export async function fetchShopProducts(): Promise<ShopProduct[]> {
       currency,
       url,
       images,
+      links: links.length ? links : undefined,
     });
   }
 

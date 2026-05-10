@@ -37,16 +37,31 @@ export default function ProductCard({ product }: { product: ShopProduct }) {
   const prev = () => setActive((v) => (images.length === 0 ? 0 : (v - 1 + images.length) % images.length));
   const next = () => setActive((v) => (images.length === 0 ? 0 : (v + 1) % images.length));
 
-  const ctaLabel = isTokopediaUrl(product.url) ? "Tokopedia" : isShopeeUrl(product.url) ? "Shopee" : "Open";
+  const links = product.links ?? [];
+  const hasLinks = links.length > 0;
+  const fallbackLabel = isTokopediaUrl(product.url) ? "Tokopedia" : isShopeeUrl(product.url) ? "Shopee" : "Open";
+
+  function getLinkButtonClass(label: string) {
+    const normalized = label.toLowerCase();
+    if (normalized.includes("shopee")) {
+      return "inline-flex items-center justify-center rounded-full bg-[#ee4d2d] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#d33b29]";
+    }
+    if (normalized.includes("tokopedia")) {
+      return "inline-flex items-center justify-center rounded-full bg-[#00ac4f] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#00923c]";
+    }
+    return "inline-flex items-center justify-center rounded-full bg-accent-orange px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]";
+  }
 
   return (
     <div className="w-full rounded-3xl border border-black/10 bg-surface p-6 shadow-sm dark:border-white/10">
       <div className="grid gap-6 md:grid-cols-[280px_1fr]">
         <div className="grid gap-3">
           <div className="overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             {activeSrc ? (
-              <img src={activeSrc} alt="" className="h-64 w-full object-cover" loading="lazy" />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={activeSrc} alt="" className="h-64 w-full object-cover" loading="lazy" />
+              </>
             ) : (
               <div className="grid h-64 place-items-center text-sm text-zinc-600 dark:text-zinc-300">No image</div>
             )}
@@ -123,19 +138,20 @@ export default function ProductCard({ product }: { product: ShopProduct }) {
             </p>
           )}
 
-          <div className="mt-2 flex items-end justify-end">
-            {product.url ? (
-              <a
-                href={product.url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-accent-orange px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-              >
-                {ctaLabel}
-              </a>
-            ) : (
-              <span className="text-xs text-zinc-600 dark:text-zinc-300">No product link</span>
-            )}
+          <div className="mt-2 flex flex-wrap items-end justify-end gap-2">
+            {(links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={getLinkButtonClass(link.label)}
+                >
+                  {link.label}
+                </a>
+              ))
+            )} 
+           
           </div>
         </div>
       </div>
