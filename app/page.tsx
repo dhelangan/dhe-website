@@ -26,6 +26,9 @@ type Post = {
   imageSrc: string;
   href: string;
   badge?: string;
+  type?: string;
+  platforms?: string[];
+  genres?: string[];
 };
 
 export default async function Home() {
@@ -59,6 +62,9 @@ export default async function Home() {
       imageSrc: item.thumbnailSrc,
       href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
       badge: item.status,
+      type: item.type,
+      platforms: item.platforms,
+      genres: item.genres,
     }));
 
   const digitalPosts: Post[] = portfolio
@@ -70,6 +76,9 @@ export default async function Home() {
       imageSrc: item.thumbnailSrc,
       href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
       badge: item.status,
+      type: item.type,
+      platforms: item.platforms,
+      genres: item.genres,
     }));
 
   return (
