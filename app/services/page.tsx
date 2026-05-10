@@ -153,7 +153,7 @@ export default async function ServicesPage() {
                   </p>
                 </div>
                 
-                <div className="flex justify-end gap-4">
+                {/* <div className="flex justify-end gap-4">
                   <a
                     href="https://www.fiverr.com/achmadjodhy/"
                     target="_blank"
@@ -170,7 +170,7 @@ export default async function ServicesPage() {
                   >
                     Fastwork
                   </a>
-                </div>
+                </div> */}
               </div>
 
               <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
@@ -206,7 +206,7 @@ export default async function ServicesPage() {
                 ))}
               </div>
 
-              <div className="sm:hidden grid grid-cols-2 gap-2">
+              {/* <div className="sm:hidden grid grid-cols-2 gap-2">
                 <a
                   href="https://www.fiverr.com/achmadjodhy/"
                   target="_blank"
@@ -223,11 +223,98 @@ export default async function ServicesPage() {
                 >
                   Fastwork
                 </a>
-              </div>
+              </div> */}
             </section>
           </Reveal>
 
           <Reveal delayMs={80}>
+            <section className="grid gap-4">
+              <div className="grid gap-1">
+                  <h1 className="text-2xl font-semibold tracking-tight">Freelance <span className="text-accent-orange">Sites</span></h1>
+                  <p className="mt-1 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
+                    Find me on these freelance platforms for more services and custom offers.
+                  </p>
+                </div>
+
+              <div className="grid gap-3 sm:grid-cols-3 grid-cols-1">
+                
+                  <div
+                    className="rounded-2xl border border-black/10 bg-surface p-4 max-h-70 dark:border-white/10"
+                  >
+                    <div className="max-h-45">
+                       <Image
+                            src="/logo/fiverr.jpg"
+                            alt="Fiverr"
+                            width={360}
+                            height={360}
+                            className="w-full object-cover h-45"
+                            loading="lazy"
+                          />
+                    </div>
+                    <div className="text-center mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-bold">
+                      <a
+                        href="https://fiverr.com/achmadjodhy/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="fiverr inline-flex h-11 w-full items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
+                      >
+                      Visit Fiverr
+                    </a>
+                  </div>
+                  </div>
+                  <div
+                    className="rounded-2xl border border-black/10 bg-surface p-4 max-h-70 dark:border-white/10"
+                  >
+                    <div className="max-h-45 text-center text-4xl text-accent-orange font-extrabold tracking-tight">
+                       <Image
+                            src="/logo/fastwork.jpg"
+                            alt="Fastwork"
+                            width={360}
+                            height={360}
+                            className="w-full object-cover h-45"
+                            loading="lazy"
+                          />
+                    </div>
+                    <div className="h-65 text-center mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-bold">
+                      <a
+                        href="https://fastwork.id/user/dhelangan"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="fastwork inline-flex h-11 w-full items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
+                      >
+                      Visit Fastwork
+                    </a>
+                  </div>
+                  </div>
+                  <div
+                    className="rounded-2xl border border-black/10 bg-surface p-4 max-h-70 dark:border-white/10"
+                  >
+                    <div className="max-h-45 text-center text-4xl text-accent-orange font-extrabold tracking-tight">
+                       <Image
+                            src="/logo/upwork.jpg"
+                            alt="Upwork"
+                            width={360}
+                            height={360}
+                            className="w-full object-cover h-45"
+                            loading="lazy"
+                          />
+                    </div>
+                    <div className="text-center mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-bold">
+                      <a
+                        href="https://www.upwork.com/agencies/1569445868351041536/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="upwork inline-flex h-11 w-full items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
+                      >
+                      Visit Upwork
+                    </a>
+                  </div>
+                  </div>
+                </div>
+            </section>
+          </Reveal>
+
+          <Reveal delayMs={100}>
             <section className="grid gap-4">
               <div className="grid gap-1">
                 <h1 className="text-2xl font-semibold tracking-tight">Project <span className="text-accent-orange">Delivered</span></h1>
@@ -243,20 +330,7 @@ export default async function ServicesPage() {
                     className="rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10"
                   >
                     <div className="aspect-[16/10] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
-                      {/* {toPublicAssetPath(project.thumbnail) ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={toPublicAssetPath(project.thumbnail) ?? ""}
-                          alt={project.title ?? "Project thumbnail"}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-sm text-zinc-600 dark:text-zinc-300">
-                          Thumbnail
-                        </div>
-                      )}
-                       */}
+
                        <ZoomableImage
                           key={project.id}
                           src={project.thumbnail ?? ""}
@@ -280,7 +354,7 @@ export default async function ServicesPage() {
             </section>
           </Reveal>
 
-          <Reveal delayMs={100}>
+          <Reveal delayMs={120}>
 
             <section className="grid gap-4 ">
             <div className="flex items-end justify-between gap-6">
@@ -319,7 +393,7 @@ export default async function ServicesPage() {
             </section>
           </Reveal>
 
-          <Reveal delayMs={120}>
+          <Reveal delayMs={140}>
             <section className="grid gap-4 ">
               <div className="grid gap-1">
                 <h1 className="text-2xl font-semibold tracking-tight">Customer <span className="text-accent-orange">Reviews</span></h1>
