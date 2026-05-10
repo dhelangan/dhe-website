@@ -173,7 +173,7 @@ export default async function Home() {
 
           <Reveal as="section" className="grid gap-6" delayMs={80}>
             <div className="mb-4">
-              <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Works</span></h1>
+              <h1 className="text-2xl font-semibold tracking-tight">Our <span className="text-accent-orange">Games</span></h1>
               <p className="mt-1 text-sm text-zinc-800 dark:text-zinc-200">
                 Board games alongside digital products.
               </p>
@@ -182,10 +182,10 @@ export default async function Home() {
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="grid gap-3 items-start content-start">
                 <div className="flex items-baseline justify-between h-8">
-                  <h3 className="text-base font-semibold tracking-tight">Board Games</h3>
+                  <h2 className="text-base font-semibold tracking-tight">Board Games</h2>
                   <Link
                     href="/portfolio?type=board"
-                    className="text-sm font-medium text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
+                    className="text-sm capitalize font-bold text-accent-orange transition-colors hover:text-accent-red"
                   >
                     View all
                   </Link>
@@ -201,10 +201,10 @@ export default async function Home() {
 
               <div className="grid gap-3 items-start content-start">
                 <div className="flex items-baseline justify-between h-8">
-                  <h3 className="text-base font-semibold tracking-tight">Digital Games</h3>
+                  <h2 className="text-base font-semibold tracking-tight">Digital Games</h2>
                   <Link
                     href="/portfolio?type=digital"
-                    className="text-sm font-medium text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
+                    className="text-sm capitalize font-bold text-accent-orange transition-colors hover:text-accent-red"
                   >
                     View all
                   </Link>
