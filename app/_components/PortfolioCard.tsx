@@ -3,6 +3,7 @@ import Link from "next/link";
 import LazyImage from "./LazyImage";
 
 import {
+  formatPortfolioPlatform,
   formatPortfolioStatus,
   formatPortfolioType,
   slugifyPortfolioTitle,
@@ -34,12 +35,30 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
           <span className="rounded-full border border-black/10 bg-background px-2 py-0.5 text-xs font-semibold text-foreground dark:border-white/10">
             {formatPortfolioStatus(item.status)}
           </span>
+          {item.platforms.map((p) => (
+            <span
+              key={p}
+              className="rounded-full border border-black/10 bg-background px-2 py-0.5 text-xs font-semibold text-foreground dark:border-white/10"
+            >
+              {formatPortfolioPlatform(p)}
+            </span>
+          ))}
+
+          {item.genres.map((g) => (
+                <span
+                  key={g}
+                  className="rounded-full border border-black/10 bg-background px-2 py-0.5 text-xs font-semibold text-foreground dark:border-white/10"
+                >
+                  {g.toString()}
+                </span>
+              ))}
         </div>
 
         <h2 className="mt-2 truncate text-lg font-semibold tracking-tight">{item.title}</h2>
         <p className="mt-1 line-clamp-2 text-sm leading-6 text-zinc-700 dark:text-zinc-300">
           {item.summary}
         </p>
+        
 
         <div className="mt-3 text-sm font-semibold text-accent-orange transition-colors group-hover:text-accent-red">
           View project →

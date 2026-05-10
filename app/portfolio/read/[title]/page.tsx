@@ -95,6 +95,14 @@ export default async function PortfolioReadPage({
                   {formatPortfolioPlatform(p)}
                 </span>
               ))}
+              {item.genres.map((g) => (
+                <span
+                  key={g}
+                  className="rounded-full border border-black/10 bg-surface px-2 py-0.5 text-xs font-semibold dark:border-white/10"
+                >
+                  {g.toString()}
+                </span>
+              ))}
             </div>
           </div>
           </Reveal>
