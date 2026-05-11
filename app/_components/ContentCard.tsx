@@ -43,7 +43,7 @@ export default function ContentCard({
         <div className="grid-cols-1 sm:grid-cols-2 relative aspect-[5/3] w-full overflow-hidden rounded-xl bg-black/[.06] dark:bg-white/[.06]">
           <LazyImage
             src={imageSrc}
-            alt=""
+            alt={`${title} cover image`}
             fill
             className="object-cover"
             sizes="112px"
@@ -52,7 +52,7 @@ export default function ContentCard({
         </div>
         <div className="min-w-0 grid-cols-1 sm:grid-cols-2 w-full">
           
-          <div className="flex flex-wrap items-center gap-2 ">
+          <div className="flex flex-wrap items-center gap-2 capitalize">
             <span className="rounded-full border border-black/10 bg-background px-2 py-0.5 text-xs font-semibold text-foreground dark:border-white/10">
               {type}
             </span>
@@ -76,7 +76,7 @@ export default function ContentCard({
                 ))}
           </div>
 
-          <p className="mt-2 line-clamp-6 text-sm text-zinc-700 dark:text-zinc-300">
+          <p className="mt-2 line-clamp-4 text-sm text-zinc-700 dark:text-zinc-300">
             {subtitle}
           </p>
           <div className="mt-3 text-sm font-semibold text-accent-orange transition-colors group-hover:text-accent-red">

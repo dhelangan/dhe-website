@@ -63,8 +63,8 @@ export default async function Home() {
       href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
       badge: item.status,
       type: item.type,
-      platforms: item.platforms,
-      genres: item.genres,
+      platforms: item.platforms.slice(0, 1),
+      genres: item.genres.slice(0, 1) ,
     }));
 
   const digitalPosts: Post[] = portfolio
@@ -77,8 +77,8 @@ export default async function Home() {
       href: `/portfolio/read/${slugifyPortfolioTitle(item.title)}`,
       badge: item.status,
       type: item.type,
-      platforms: item.platforms,
-      genres: item.genres,
+      platforms: item.platforms.slice(0, 1) ,
+      genres: item.genres.slice(0, 1) ,
     }));
 
   return (
