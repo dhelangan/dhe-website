@@ -152,25 +152,6 @@ export default async function ServicesPage() {
                       Pick what you need, or combine services into a single package.
                   </p>
                 </div>
-                
-                {/* <div className="flex justify-end gap-4">
-                  <a
-                    href="https://www.fiverr.com/achmadjodhy/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hidden h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10] sm:inline-flex"
-                  >
-                    Fiverr
-                  </a>
-                  <a
-                    href="https://fastwork.id/user/dhelangan"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hidden h-11 items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10] sm:inline-flex"
-                  >
-                    Fastwork
-                  </a>
-                </div> */}
               </div>
 
               <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
@@ -206,24 +187,6 @@ export default async function ServicesPage() {
                 ))}
               </div>
 
-              {/* <div className="sm:hidden grid grid-cols-2 gap-2">
-                <a
-                  href="https://www.fiverr.com/achmadjodhy/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="fiverr inline-flex h-11 w-full items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-                >
-                  Fiverr
-                </a>
-                <a
-                  href="https://fastwork.id/user/dhelangan"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="fastwork inline-flex h-11 w-full items-center justify-center rounded-full bg-accent-orange px-6 text-sm font-semibold text-black transition-colors hover:bg-[#ff6f10]"
-                >
-                  Fastwork
-                </a>
-              </div> */}
             </section>
           </Reveal>
 
@@ -241,13 +204,13 @@ export default async function ServicesPage() {
                   <div
                     className="rounded-2xl border border-black/10 bg-surface p-4 max-h-70 dark:border-white/10"
                   >
-                    <div className="max-h-45">
+                    <div className="max-h-45 rounded-2xl">
                        <Image
-                            src="/logo/fiverr.jpg"
+                            src="/logo/fiverr.png"
                             alt="Fiverr"
                             width={360}
                             height={360}
-                            className="w-full object-cover h-45"
+                            className="w-full object-cover h-45 rounded-2xl mix-blend-difference"
                             loading="lazy"
                           />
                     </div>
@@ -265,17 +228,17 @@ export default async function ServicesPage() {
                   <div
                     className="rounded-2xl border border-black/10 bg-surface p-4 max-h-70 dark:border-white/10"
                   >
-                    <div className="max-h-45 text-center text-4xl text-accent-orange font-extrabold tracking-tight">
+                    <div className="rounded-2xl max-h-45 text-center text-4xl text-accent-orange font-extrabold tracking-tight">
                        <Image
-                            src="/logo/fastwork.jpg"
+                            src="/logo/fastwork.png"
                             alt="Fastwork"
                             width={360}
                             height={360}
-                            className="w-full object-cover h-45"
+                            className="w-full object-cover h-45 rounded-2xl mix-blend-difference"
                             loading="lazy"
                           />
                     </div>
-                    <div className="h-65 text-center mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-bold">
+                    <div className="rounded-2xl h-65 text-center mt-2 text-sm text-zinc-700 dark:text-zinc-300 font-bold">
                       <a
                         href="https://fastwork.id/user/dhelangan"
                         target="_blank"
@@ -289,13 +252,13 @@ export default async function ServicesPage() {
                   <div
                     className="rounded-2xl border border-black/10 bg-surface p-4 max-h-70 dark:border-white/10"
                   >
-                    <div className="max-h-45 text-center text-4xl text-accent-orange font-extrabold tracking-tight">
+                    <div className="rounded-2xl max-h-45 text-center text-4xl text-accent-orange font-extrabold tracking-tight">
                        <Image
-                            src="/logo/upwork.jpg"
+                            src="/logo/upwork.png"
                             alt="Upwork"
                             width={360}
                             height={360}
-                            className="w-full object-cover h-45"
+                            className="w-full object-cover h-45 rounded-2xl mix-blend-difference"
                             loading="lazy"
                           />
                     </div>

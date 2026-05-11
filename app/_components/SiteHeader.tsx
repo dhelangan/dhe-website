@@ -33,7 +33,7 @@ export default function SiteHeader() {
           onClick={() => setOpen(false)}
         >
           <Image src="/logo.png" alt="Dhelangan Studio Logo" width={48} height={48} />
-          <span className="hidden text-lg font-extrabold tracking-widest sm:inline">Dhelangan Studio</span>
+          <Image src="/logo/dhelangan.png" alt="Dhelangan Studio Logo" width={125} height={48}  loading="lazy" className=" hidden sm:inline mix-blend-difference"/>
         </Link>
 
         <nav className="hidden items-center gap-5 text-md font-bold uppercase text-zinc-700 dark:text-zinc-300 md:flex">
