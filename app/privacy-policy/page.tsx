@@ -17,9 +17,8 @@ export default function PrivacyPolicyPage() {
             />
           </Reveal>
 
-          <Reveal
+          <section
             className="prose max-w-full wrap-break-word overflow-hidden rounded-3xl border border-black/10 bg-surface p-8 text-sm leading-7 text-zinc-700 shadow-sm dark:border-white/10 dark:text-zinc-300"
-            delayMs={60}
           >
             <div className="policy-text">
               <h1 className="text-accent-orange my-2 text-lg font-semibold tracking-tight">Privacy Policy</h1>
@@ -239,7 +238,7 @@ export default function PrivacyPolicyPage() {
               </li>
               </ul>
             </div>
-          </Reveal>
+          </section>
         </div>
       </div>
     </div>
