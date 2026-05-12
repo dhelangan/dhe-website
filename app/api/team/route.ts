@@ -94,7 +94,7 @@ export async function GET() {
   .from("team")
   .select("*")
   .eq("active", true)
-  .order("id", { ascending: true });
+  .order("order", { ascending: true });
   
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
