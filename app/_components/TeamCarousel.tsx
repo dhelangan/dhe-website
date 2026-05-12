@@ -62,7 +62,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                           ) : null}
                         </div>
 
-                        <div className="block space-y-4 mx-auto items-center gap-4">
+                        <div className="mb-2 border-b-1 border-black/10 pb-4 dark:border-white/10 block space-y-4 mx-auto items-center gap-4">
                           <div className="mx-auto relative size-25 shrink-0 overflow-hidden rounded-full border border-black/10 bg-black/[.06] dark:border-white/10 dark:bg-white/[.06]">
                             <LazyImage
                               src={member.imageSrc}
@@ -78,8 +78,12 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                             <div className="truncate text-sm text-zinc-700 dark:text-zinc-300">{member.role}</div>
                           </div>
                         </div>
+
+                        <div className="border-l-4 border-foreground bg-background mt-4 grid gap-3 text-xs text-zinc-800 dark:text-zinc-200 p-4">
+                          <span className="text-left leading-relaxed line-clamp-2 font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-200">{member.bio}</span>
+                        </div>
             
-                        {member.highlights?.length ? (
+                        {/* {member.highlights?.length ? (
                           <ul className="mt-4 grid gap-3 text-xs text-zinc-800 dark:text-zinc-200 border-t-1 border-black/10 pt-4 dark:border-white/10">
                             {member.highlights.slice(0, 3).map((h) => (
                               <li key={h} className="flex gap-2">
@@ -88,7 +92,7 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                               </li>
                             ))}
                           </ul>
-                        ) : null}
+                        ) : null} */}
                         </button>
                       </div>
           ))}

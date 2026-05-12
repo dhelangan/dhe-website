@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { headers } from "next/headers";
 import PageHeader from "../_components/PageHeader";
@@ -46,13 +45,6 @@ type ServicesApiResponse = {
   qna: QnaItem[];
   reviews: ReviewItem[];
 };
-
-function toPublicAssetPath(value?: string | null) {
-  if (!value) return null;
-  const trimmed = value.trim();
-  if (!trimmed) return null;
-  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
-}
 
 async function getServicesData(): Promise<ServicesApiResponse> {
   const h = await headers();
@@ -158,6 +150,7 @@ export default async function ServicesPage() {
                 {services.map((service) => (
                   <div
                     key={service.id}
+                    title={service.description ?? undefined}
                     className="rounded-3xl border border-black/10 bg-surface p-2 shadow-sm dark:border-white/10"
                   >
                     <div className="grid gap-4">
@@ -420,4 +413,3 @@ export default async function ServicesPage() {
     </div>
   );
 }
-
