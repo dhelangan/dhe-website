@@ -4,6 +4,11 @@ import PageHeader from "../_components/PageHeader";
 import Reveal from "../_components/Reveal";
 import ReviewsCarousel from "./ReviewsCarousel";
 import ZoomableImage from "../_components/ZoomableImage";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const metadata = {
   title: "Services",
@@ -147,36 +152,44 @@ export default async function ServicesPage() {
               </div>
 
               <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
+
                 {services.map((service) => (
-                  <div
-                    key={service.id}
-                    title={service.description ?? undefined}
-                    className="rounded-3xl border border-black/10 bg-surface p-2 shadow-sm dark:border-white/10"
-                  >
-                    <div className="grid gap-4">
-                      <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
-                        
-                          <Image
-                            src={service.illustration ?? ""}
-                            alt={service.title ?? "Service illustration"}
-                            width={360}
-                            height={360}
-                            className="h-full w-full object-cover"
-                            loading="lazy"
-                          />
+                  
+                  <Tooltip key={service.id}>
+                    <div
+                      className="rounded-3xl border border-black/10 bg-surface p-2 shadow-sm dark:border-white/10"
+                    >
+                      <div className="grid gap-4">
+                        <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
+                          
+                          <TooltipTrigger asChild>
+                            <Image
+                              src={service.illustration ?? ""}
+                              alt={service.title ?? "Service illustration"}
+                              width={360}
+                              height={360}
+                              className="h-full w-full object-cover"
+                              loading="lazy"
+                            />
+                          </TooltipTrigger>
+                        </div>
+
+                        <div>
+                          <div className="text-center text-xs font-medium uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
+                            {service.category ?? ""}
+                          </div>
+                          <h3 className="text-center mt-1 text-lg font-semibold tracking-tight">{service.title ?? ""}</h3>
+                          
+                        </div>
                       </div>
 
-                      <div>
-                        <div className="text-center text-xs font-medium uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
-                          {service.category ?? ""}
-                        </div>
-                        <h3 className="text-center mt-1 text-lg font-semibold tracking-tight">{service.title ?? ""}</h3>
-                        {/* <p className="mt-2 text-sm leading-6 text-zinc-800 dark:text-zinc-200">
-                          {service.description ?? ""}
-                        </p> */}
-                      </div>
-                    </div>
+                    <TooltipContent className="bg-background border-1 border-black/10 dark:border-white/10">
+                      <p className="text-sm font-semibold leading-6 text-zinc-800 dark:text-zinc-200">
+                        {service.description ?? ""}
+                      </p>
+                  </TooltipContent>
                   </div>
+                </Tooltip>
                 ))}
               </div>
 

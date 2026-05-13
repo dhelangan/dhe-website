@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Montserrat, Outfit } from "next/font/google";
 import SiteFooter from "./_components/SiteFooter";
 import SiteHeader from "./_components/SiteHeader";
 import ThemeScript from "./_components/ThemeScript";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+const outfitHeading = Outfit({subsets:['latin'],variable:'--font-heading'});
+
+const montserrat = Montserrat({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", montserrat.variable, outfitHeading.variable)}
       suppressHydrationWarning
     >
       <head>
@@ -39,7 +45,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-full overflow-x-hidden">
         <SiteHeader />
+        <TooltipProvider>
         <main className="mx-auto mt-20 pb-10 bg-background">{children}</main>
+        </TooltipProvider>
         <SiteFooter />
       </body>
     </html>
