@@ -183,7 +183,7 @@ export default async function ServicesPage() {
                         </div>
                       </div>
 
-                    <TooltipContent className="bg-background border-1 border-black/10 dark:border-white/10">
+                    <TooltipContent className="bg-background shadow-md border-1 border-black/10 dark:border-white/10">
                       <p className="text-sm font-semibold leading-6 text-zinc-800 dark:text-zinc-200">
                         {service.description ?? ""}
                       </p>
