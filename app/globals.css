@@ -130,8 +130,7 @@
     background-blend-mode: luminosity;
     background-color: #40989c;
     background-image: url(/thumbnails/banner4.png);
-    background-position-x: right -20px;
-    background-position-y: -150px;
+    background-position-x: right center;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -142,7 +141,7 @@
   background-blend-mode: luminosity;
     background-color: #6ac144;
     background-image: url(/thumbnails/banner3.png);
-    background-position:bottom top -90px;
+    background-position: right center;
     background-repeat: no-repeat;
     background-size: 100vw;
     background-attachment: fixed;
@@ -153,7 +152,7 @@
   background-blend-mode: luminosity;
     background-color: #ebc321;
     background-image: url(/thumbnails/banner2.png);
-    background-position: bottom top -20px;
+    background-position: right center;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -164,7 +163,7 @@
   background-blend-mode: luminosity;
     background-color: #ff0201;
     background-image: url(/thumbnails/banner1.png);
-    background-position: top center;
+    background-position: right center;
     background-repeat: no-repeat;
     background-size: 100vw;
     background-attachment: fixed;
