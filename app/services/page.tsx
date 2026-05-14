@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { headers } from "next/headers";
 import PageHeader from "../_components/PageHeader";
 import Reveal from "../_components/Reveal";
@@ -9,6 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { slugifyServiceTitle } from "@/lib/services";
 
 export const metadata = {
   title: "Services",
@@ -113,6 +115,12 @@ export default async function ServicesPage() {
     if (star >= 1 && star <= 5) starCounts[star] = (starCounts[star] ?? 0) + 1;
   }
 
+  function getServiceHref(service: ServiceItem) {
+    const rawTitle = (service.title ?? "").trim();
+    const slug = rawTitle ? slugifyServiceTitle(rawTitle) : `service-${service.id}`;
+    return `/services/read/${slug}`;
+  }
+
   return (
     <div className="bg-background">
       <div className="mx-auto w-full max-w-6xl px-4 p-0">
@@ -156,13 +164,13 @@ export default async function ServicesPage() {
                 {services.map((service) => (
                   
                   <Tooltip key={service.id}>
-                    <div
-                      className="rounded-3xl border border-black/10 bg-surface p-2 shadow-sm dark:border-white/10"
-                    >
-                      <div className="grid gap-4">
-                        <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
-                          
-                          <TooltipTrigger asChild>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href={getServiceHref(service)}
+                        className="block rounded-3xl border border-black/10 bg-surface p-2 shadow-sm transition-colors hover:bg-black/[.02] dark:border-white/10 dark:hover:bg-white/[.03]"
+                      >
+                        <div className="grid gap-4">
+                          <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-black/10 bg-background dark:border-white/10">
                             <Image
                               src={service.illustration ?? ""}
                               alt={service.title ?? "Service illustration"}
@@ -171,25 +179,26 @@ export default async function ServicesPage() {
                               className="h-full w-full object-cover"
                               loading="lazy"
                             />
-                          </TooltipTrigger>
-                        </div>
-
-                        <div>
-                          <div className="text-center text-xs font-medium uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
-                            {service.category ?? ""}
                           </div>
-                          <h3 className="text-center mt-1 text-lg font-semibold tracking-tight">{service.title ?? ""}</h3>
-                          
+
+                          <div>
+                            <div className="text-center text-xs font-medium uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
+                              {service.category ?? ""}
+                            </div>
+                            <h3 className="text-center mt-1 text-lg font-semibold tracking-tight">
+                              {service.title ?? ""}
+                            </h3>
+                          </div>
                         </div>
-                      </div>
+                      </Link>
+                    </TooltipTrigger>
 
                     <TooltipContent className="bg-background shadow-md border-1 border-black/10 dark:border-white/10">
                       <p className="text-sm font-semibold leading-6 text-zinc-800 dark:text-zinc-200">
                         {service.description ?? ""}
                       </p>
-                  </TooltipContent>
-                  </div>
-                </Tooltip>
+                    </TooltipContent>
+                  </Tooltip>
                 ))}
               </div>
 

@@ -69,15 +69,17 @@ export default async function PortfolioReadPage({
 
   return (
     <div className="bg-background">
-      <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
+      <div className="mx-auto w-full max-w-6xl pt-8 pb-4 px-4">
         <div className="grid gap-8">
           <Reveal>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Link
               href="/portfolio"
-              className="text-sm font-semibold text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
+              className="inline text-sm font-semibold text-zinc-700 transition-colors hover:text-foreground dark:text-zinc-300"
             >
-              ← Back to portfolio
+              <svg className="inline w-4 h-4 mr-2 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 1 1.3 6.326a.91.91 0 0 0 0 1.348L7 13"/>
+</svg>  Back to portfolio
             </Link>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -113,6 +115,12 @@ export default async function PortfolioReadPage({
               {item.summary}
             </p>
           </Reveal>
+
+          <Reveal
+              as="section"
+              className="block space-y-8 rounded-3xl border border-black/10 bg-surface p-4 shadow-sm dark:border-white/10"
+              delayMs={60}
+            >
 
           {item.youtubeUrl ? (
             <Reveal delayMs={70}>
@@ -156,6 +164,8 @@ export default async function PortfolioReadPage({
               </div>
             </Reveal>
           ) : null}
+
+          </Reveal>
         </div>
       </div>
     </div>
