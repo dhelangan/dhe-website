@@ -79,8 +79,9 @@ export default function TeamCarousel({ members }: TeamCarouselProps) {
                           </div>
                         </div>
 
-                        <div className="border-l-4 border-foreground bg-background mt-4 grid gap-3 text-xs text-zinc-800 dark:text-zinc-200 p-4">
-                          <span className="text-left leading-relaxed line-clamp-2 font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-200">{member.bio}</span>
+                        <div className="relative italic border-l-4 border-foreground bg-background mt-4 p-3 h-18">
+                          <svg className="absolute top-[-12.5px] right-0 w-8 h-8 text-foreground/1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="#999999" d="M.78 8.89c0-3.07 1.53-4.3 4.3-4.34L5.38 6C3.78 6.17 3 7 3.1 8.31h1.44V12H.78Zm5.9 0c0-3.07 1.53-4.3 4.3-4.34l.3 1.45C9.68 6.17 8.89 7 9 8.31h1.44V12H6.68Zm10.26 6.22c0 3.07-1.53 4.3-4.3 4.34L12.35 18c1.6-.16 2.39-1 2.28-2.3h-1.45V12h3.76Zm5.9 0c0 3.07-1.53 4.3-4.3 4.34l-.3-1.45c1.6-.16 2.39-1 2.28-2.3h-1.44V12h3.76Z"></path></svg>
+                          <span className="font-serif text-[10px] text-left leading-relaxed line-clamp-3 font-semibold capitalize tracking-[1.25px] text-zinc-700 dark:text-zinc-200">{member.bio}</span>
                         </div>
             
                         {/* {member.highlights?.length ? (
